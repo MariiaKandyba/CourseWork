@@ -1,0 +1,104 @@
+﻿<Window x:Class="TestDesigner.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="900">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top">
+            <ToolBar>
+                <Button>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/new-document.png" Width="50" Height="25" />
+                    </StackPanel>
+                </Button>
+                <Button>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/TestDesigner;component/Resources/diskette.png" Width="50" Height="30" />
+                    </StackPanel>
+                </Button>
+                <Button Name="OpenButton" Command="{Binding OpenClickCommand}" CommandParameter="{Binding}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/TestDesigner;component/Resources/folder.png" Width="50" Height="30" />
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </StackPanel>
+
+        <GroupBox Header="Test Information" Margin="0 50 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="380" Grid.Column="0">
+            <StackPanel>
+
+                <UniformGrid Rows="7" Columns="2">
+                    <Label Content="Title:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Title}" />
+
+                    <Label Content="Author:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Author}" />
+
+                    <Label Content="Description:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Description}" />
+
+                    <Label Content="Additional Information:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Info}" />
+
+                    <Label  Content="Count of questions:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox IsReadOnly="True" Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding QuestionCount}" />
+
+                    <Label Content="Max points for the test:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox  IsReadOnly="True" Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding MaxPoints}" />
+
+                    <Label Content="Min passage:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.PassPercent}" />
+                </UniformGrid>
+
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Questions" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Grid.Column="1">
+            <StackPanel>
+                <ToolBar Width="Auto">
+                    <Button Content="Button 1" />
+                    <Button Content="Button 2" />
+                </ToolBar>
+
+                <DataGrid Name="QuestionDataGrid" Height="200" AutoGenerateColumns="False" 
+                          ItemsSource="{Binding Test.Questions.Question}"
+                          SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Question" Binding="{Binding QuestionText}" Width="*" />
+                        <DataGridTextColumn Header="Points" Binding="{Binding Points}" Width="100" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Name="QuestionImage" Grid.Column="0" Width="100" Height="100" />
+
+                    <DataGrid Name="AnswersDataGrid" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding SelectedQuestion.Answers.Answer}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="TextAnswer" Binding="{Binding TextAnswer}" Width="*" />
+                            <DataGridTextColumn Header="IsRight" Binding="{Binding IsRight}" Width="100" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                </Grid>
+
+
+            </StackPanel>
+        </GroupBox>
+
+
+
+
+    </Grid>
+</Window>
