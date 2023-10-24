@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace TestDesigner.Models
@@ -62,7 +63,53 @@ namespace TestDesigner.Models
         public string Xsi { get; set; }
         [XmlAttribute(AttributeName = "xsd", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Xsd { get; set; }
+
+        public static Test LoadFileInfo(XElement test)
+        {
+            string author = test.Element("Author")?.Value;
+            string title = test.Element("Title")?.Value;
+            string description = test.Element("Description")?.Value;
+            string info = test.Element("Info")?.Value;
+            int passPercent = Convert.ToInt32(test.Element("PassPercent")?.Value);
+
+            var loadedTest = new Test
+            {
+                Author = author,
+                Title = title,
+                Description = description,
+                Info = info,
+                PassPercent = passPercent.ToString()
+            };
+
+            var questions = test.Element("Questions")?.Elements("Question")
+                .Select(q => new Question
+                {
+                    QuestionText = q.Element("QuestionText")?.Value,
+                    Points = q.Element("Points")?.Value,
+                    Img = q.Element("Img")?.Value,
+                    Answers = new Answers
+                    {
+                        Answer = q.Element("Answers")?.Elements("Answer")
+                            .Select(a => new Answer
+                            {
+                                TextAnswer = a.Element("TextAnswer")?.Value,
+                                IsRight = a.Element("IsRight")?.Value
+                            })
+                            .ToList()
+                    }
+                })
+                .ToList();
+
+            loadedTest.Questions = new Questions
+            {
+                Question = questions
+            };
+
+            return loadedTest;
+        }
     }
+
+
 
 
 }

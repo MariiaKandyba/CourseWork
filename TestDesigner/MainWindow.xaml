@@ -12,7 +12,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top">
             <ToolBar>
-                <Button>
+                <Button Name="CreateTestButton" Command="{Binding CreateTestCommand}" CommandParameter="{Binding}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/new-document.png" Width="50" Height="25" />
                     </StackPanel>
@@ -62,12 +62,25 @@
         <GroupBox Header="Questions" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Grid.Column="1">
             <StackPanel>
                 <ToolBar Width="Auto">
-                    <Button Content="Button 1" />
-                    <Button Content="Button 2" />
+                    <Button Command="{Binding AddQuestionCommand}" CommandParameter="{Binding}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/TestDesigner;component/Resources/plus.png" Width="50" Height="25" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenClickCommand}" CommandParameter="{Binding}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/TestDesigner;component/Resources/pencil.png" Width="50" Height="30" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenClickCommand}" CommandParameter="{Binding}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/TestDesigner;component/Resources/delete.png" Width="50" Height="30" />
+                        </StackPanel>
+                    </Button>
                 </ToolBar>
 
                 <DataGrid Name="QuestionDataGrid" Height="200" AutoGenerateColumns="False" 
-                          ItemsSource="{Binding Test.Questions.Question}"
+                          ItemsSource="{Binding Questions}"
                           SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Question" Binding="{Binding QuestionText}" Width="*" />
@@ -83,7 +96,8 @@
 
                     <Image Name="QuestionImage" Grid.Column="0" Width="100" Height="100" />
 
-                    <DataGrid Name="AnswersDataGrid" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding SelectedQuestion.Answers.Answer}">
+                    <DataGrid Name="AnswersDataGrid" Grid.Column="1" AutoGenerateColumns="False" 
+                              ItemsSource="{Binding SelectedQuestion.Answers.Answer}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="TextAnswer" Binding="{Binding TextAnswer}" Width="*" />
                             <DataGridTextColumn Header="IsRight" Binding="{Binding IsRight}" Width="100" />

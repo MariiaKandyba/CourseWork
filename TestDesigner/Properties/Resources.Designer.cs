@@ -63,6 +63,16 @@ namespace TestDesigner.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] delete {
+            get {
+                object obj = ResourceManager.GetObject("delete", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] diskette {
             get {
                 object obj = ResourceManager.GetObject("diskette", resourceCulture);
@@ -86,6 +96,26 @@ namespace TestDesigner.Properties {
         public static byte[] new_document {
             get {
                 object obj = ResourceManager.GetObject("new-document", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] pencil {
+            get {
+                object obj = ResourceManager.GetObject("pencil", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] plus {
+            get {
+                object obj = ResourceManager.GetObject("plus", resourceCulture);
                 return ((byte[])(obj));
             }
         }

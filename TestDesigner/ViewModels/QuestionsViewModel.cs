@@ -9,16 +9,49 @@ using System;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Text;
+using TestDesigner.Views;
 
 namespace TestDesigner.ViewModels
 {
     public class QuestionsViewModel : ObservableObject
     {
+        public IRelayCommand<Question> SelectionChangedCommand { get; }
+        public IRelayCommand<object> CreateTestCommand{ get; }
+        public IRelayCommand<object> AddQuestionCommand{ get; }
+
         public QuestionsViewModel()
         {
             OpenClickCommand = new RelayCommand<object>(OnOpenClick);
-
+            CreateTestCommand = new RelayCommand<object>(OnCreateClick);
+            AddQuestionCommand = new RelayCommand<object>(OnAddClick);
+            Test = new Test();
+            Test.Questions = new();
+            Test.Questions.Question = new();
         }
+
+
+
+        private void OnAddClick(object? obj)
+        {
+            NewQuestionWindow window = new NewQuestionWindow();
+            if (window.ShowDialog() == true)
+            {
+                Questions.Add(window.Question);
+                Test.Questions.Question.Add(window.Question);
+            }
+        }
+
+
+        private void OnCreateClick(object? obj)
+        {
+            Test = new Test();
+            Test.Questions = new();
+            Test.Questions.Question = new();
+            QuestionCount = 0;
+            MaxPoints = 0;
+           
+        }
+
         private int _questionCount;
         public int QuestionCount
         {
@@ -41,21 +74,25 @@ namespace TestDesigner.ViewModels
             set
             {
                 SetProperty(ref _test, value);
-
                 if (value != null)
                 {
-                    // Отримайте кількість запитань та загальну кількість максимальних балів з тесту
                     QuestionCount = value.Questions?.Question.Count ?? 0;
                     MaxPoints = value.Questions?.Question.Sum(q => int.Parse(q.Points)) ?? 0;
                 }
             }
         }
+        private ObservableCollection<Question> _questions = new ObservableCollection<Question>();
+
+        public ObservableCollection<Question> Questions
+        {
+            get { return _questions; }
+            set { SetProperty(ref _questions, value); }
+        }
 
 
 
-        public IRelayCommand<Question> SelectionChangedCommand { get; }
 
-       
+
         private Question _selectedQuestion;
         public  Question SelectedQuestion
         {
@@ -81,61 +118,10 @@ namespace TestDesigner.ViewModels
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "XML files (*.xml)|*.xml";
             if (openFileDialog.ShowDialog() == true)
-            {
-                string selectedFilePath = openFileDialog.FileName;
-                var test = LoadTestFromFile(selectedFilePath);
-                Test = test;
-            }
+                Test = Test.LoadFileInfo(XDocument.Load(openFileDialog.FileName).Root);
             return null;
         }
 
-        private Test LoadTestFromFile(string filePath)
-        {
-            XDocument xdoc = XDocument.Load(filePath);
-
-            var test = xdoc.Root; // Отримуємо корінь документа
-
-            string author = test.Element("Author")?.Value;
-            string title = test.Element("Title")?.Value;
-            string description = test.Element("Description")?.Value;
-            string info = test.Element("Info")?.Value;
-            int passPercent = Convert.ToInt32(test.Element("PassPercent")?.Value);
-
-            var loadedTest = new Test
-            {
-                Author = author,
-                Title = title,
-                Description = description,
-                Info = info,
-                PassPercent = passPercent.ToString()
-            };
-
-            var questions = test.Element("Questions")?.Elements("Question")
-                .Select(q => new Question
-                {
-                    QuestionText = q.Element("QuestionText")?.Value,
-                    Points = q.Element("Points")?.Value,
-                    Img = q.Element("Img")?.Value,
-                    Answers = new Answers
-                    {
-                        Answer = q.Element("Answers")?.Elements("Answer")
-                            .Select(a => new Answer
-                            {
-                                TextAnswer = a.Element("TextAnswer")?.Value,
-                                IsRight = a.Element("IsRight")?.Value
-                            })
-                            .ToList()
-                    }
-                })
-                .ToList();
-
-            loadedTest.Questions = new Questions
-            {
-                Question = questions
-            };
-
-            return loadedTest;
-        }
 
 
 
