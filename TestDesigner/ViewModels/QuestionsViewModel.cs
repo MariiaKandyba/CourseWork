@@ -10,59 +10,73 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Text;
 using TestDesigner.Views;
+using static System.Net.Mime.MediaTypeNames;
+using System.IO;
+using TestDesigner.Services;
+using System.Threading.Tasks;
 
 namespace TestDesigner.ViewModels
 {
     public class QuestionsViewModel : ObservableObject
     {
-        public IRelayCommand<Question> SelectionChangedCommand { get; }
+        private string _questionCount;
+        public string QuestionCount
+        {
+            get { return _questionCount; }
+            set { SetProperty(ref _questionCount, value); }
+        }
+
+        private string _maxPoints;
+        public string MaxPoints
+        {
+            get { return _maxPoints; }
+            set { SetProperty(ref _maxPoints, value); }
+        }
+        public IAsyncRelayCommand OpenTestCommand { get; }
+        public IAsyncRelayCommand SaveTestCommand { get; }
         public IRelayCommand<object> CreateTestCommand{ get; }
         public IRelayCommand<object> AddQuestionCommand{ get; }
-        public IRelayCommand<object> OpenClickCommand { get; }
         public IRelayCommand<object> EditQuestionCommand { get; }
         public IRelayCommand<object> DeleteQuestionCommand { get; }
-        public IRelayCommand<object> SaveTestCommand { get; }
 
+        private readonly ITestService _testService;
 
-        public QuestionsViewModel()
+        private ObservableCollection<Question> _questions = new ObservableCollection<Question>();
+
+        public ObservableCollection<Question> Questions
         {
-            OpenClickCommand = new RelayCommand<object>(OnOpenClick);
+            get { return _questions; }
+            set { SetProperty(ref _questions, value); }
+        }
+
+
+        public QuestionsViewModel(ITestService testService)
+        {
+            _testService = testService;
+
+            OpenTestCommand = new AsyncRelayCommand(OnOpenTestClick);
+            SaveTestCommand = new AsyncRelayCommand(OnSaveTestClick);
             CreateTestCommand = new RelayCommand<object>(OnCreateClick);
             AddQuestionCommand = new RelayCommand<object>(OnAddQuestionClick);
             EditQuestionCommand = new RelayCommand<object>(OnEditQuestionClick);
             DeleteQuestionCommand = new RelayCommand<object>(OnDeleteQuestionClick);
-            SaveTestCommand = new RelayCommand<object>(OnSaveTestClick);
-            Test = new Test();
-            Test.Questions = new();
-            Test.Questions.Question = new();
+            
         }
 
 
-        // питання
         private void OnAddQuestionClick(object? obj)
         {
-            NewQuestionWindow window = new NewQuestionWindow();
+            NewQuestionWindow window = new();
             if (window.ShowDialog() == true)
                 Questions.Add(window.Question);
         }
-        private void OnSaveTestClick(object? obj)
-        {
-            string testInfo = $"Author: {Test.Author}\n" +
-                  $"Title: {Test.Title}\n" +
-                  $"Description: {Test.Description}\n" +
-                  $"Passing Percent: {Test.PassPercent}\n" +
-                  $"Additional Information: {Test.Info}\n";
+      
 
-            MessageBox.Show(testInfo);
-
-        }
         private void OnDeleteQuestionClick(object? obj)
         {
-            MessageBoxResult result = MessageBox.Show("Ви впевнені, що хочете видалити це питання?", "Підтвердження видалення", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete the question?", "Підтвердження видалення", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
-            {
                 Questions.Remove(SelectedQuestion);
-            }
         }
 
 
@@ -79,37 +93,20 @@ namespace TestDesigner.ViewModels
 
         private void OnCreateClick(object? obj)
         {
-            Test = new Test();
-            Test.Questions = new();
-            Test.Questions.Question = new();
+            Test = new Test { Questions = new() { Question = new() { } } };
             QuestionCount = string.Empty;
             MaxPoints = string.Empty;
-
             Questions.Clear();
-            
-           
         }
 
-        private string _questionCount;
-        public string QuestionCount
-        {
-            get { return _questionCount; }
-            set { SetProperty(ref _questionCount, value); }
-        }
+        
 
-        private string _maxPoints;
-        public string MaxPoints
-        {
-            get { return _maxPoints; }
-            set { SetProperty(ref _maxPoints, value); }
-        }
-
-        private Test _test;
+        private Test _test = new Test();
 
         public Test Test
         {
             get { return _test; }
-            set { SetProperty(ref _test, value);  }
+            set { SetProperty(ref _test, value); UpdateQuestionCountAndMaxPoints(); }
         }
         private void UpdateQuestionCountAndMaxPoints()
         {
@@ -122,17 +119,7 @@ namespace TestDesigner.ViewModels
 
 
 
-        private ObservableCollection<Question> _questions = new ObservableCollection<Question>();
-
-        public ObservableCollection<Question> Questions
-        {
-            get { return _questions; }
-            set { SetProperty(ref _questions, value); }
-        }
-
-
-
-
+       
 
         private Question _selectedQuestion;
         public  Question SelectedQuestion
@@ -140,53 +127,27 @@ namespace TestDesigner.ViewModels
             get { return _selectedQuestion; }
             set { SetProperty(ref _selectedQuestion, value); }
         }
-      
 
-
-
-        
-
-        private void OnOpenClick(object parameter)
+        private async Task OnOpenTestClick()
         {
-            OpenFileDialogAndSelectFile();
-
-        }
-
-
-        public string OpenFileDialogAndSelectFile()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "XML files (*.xml)|*.xml";
+            var openFileDialog = new OpenFileDialog() { Filter = "XML files (*.xml)|*.xml" };
             if (openFileDialog.ShowDialog() == true)
             {
-                Test = Test.LoadFileInfo(XDocument.Load(openFileDialog.FileName).Root);
+                Test = await _testService.LoadTestFromFileAsync(openFileDialog.FileName);
                 Questions = new ObservableCollection<Question>(Test.Questions.Question);
             }
-            return null;
         }
 
-
-
-
+        private async Task OnSaveTestClick()
+        {
+            var saveFileDialog = new SaveFileDialog() { Filter = "XML files (*.xml)|*.xml" };
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                Test = await _testService.AssembleTestAsync(Test, Questions.ToList());
+                await _testService.SaveTestToFileAsync(Test, saveFileDialog.FileName);
+            }
+        }
     }
 }
 
-//QuestionCount = string.Empty;
-//MaxPoints = string.Empty;
 
-//private void UpdateQuestionCountAndMaxPoints()
-//{
-//    if (Test != null)
-//    {
-//        QuestionCount = Test.Questions?.Question.Count.ToString() ?? string.Empty;
-//        MaxPoints = Test.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
-//        PassPercent = Test.PassPercent;
-//    }
-//}
-
-//private string _passPercent;
-//public string PassPercent
-//{
-//    get { return _passPercent; }
-//    set { SetProperty(ref _passPercent, value); }
-//}
