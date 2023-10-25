@@ -18,26 +18,38 @@ namespace TestDesigner.ViewModels
         public IRelayCommand<Question> SelectionChangedCommand { get; }
         public IRelayCommand<object> CreateTestCommand{ get; }
         public IRelayCommand<object> AddQuestionCommand{ get; }
+        public IRelayCommand<object> OpenClickCommand { get; }
+        public IRelayCommand<object> EditQuestionCommand { get; }
+
 
         public QuestionsViewModel()
         {
             OpenClickCommand = new RelayCommand<object>(OnOpenClick);
             CreateTestCommand = new RelayCommand<object>(OnCreateClick);
-            AddQuestionCommand = new RelayCommand<object>(OnAddClick);
-            Test = new Test();
-            Test.Questions = new();
-            Test.Questions.Question = new();
+            AddQuestionCommand = new RelayCommand<object>(OnAddQuestionClick);
+            EditQuestionCommand = new RelayCommand<object>(OnEditQuestionClick);
+            //Test = new Test();
+            //Test.Questions = new();
+            //Test.Questions.Question = new();
         }
 
 
 
-        private void OnAddClick(object? obj)
+        private void OnAddQuestionClick(object? obj)
         {
             NewQuestionWindow window = new NewQuestionWindow();
             if (window.ShowDialog() == true)
             {
                 Questions.Add(window.Question);
-                Test.Questions.Question.Add(window.Question);
+            }
+        }
+        private void OnEditQuestionClick(object? obj)
+        {
+            NewQuestionWindow window = new NewQuestionWindow(SelectedQuestion);
+            if (window.ShowDialog() == true)
+            {
+                int index = Questions.IndexOf(SelectedQuestion);
+                if (index >= 0)  Questions[index] = window.Question;
             }
         }
 
@@ -47,20 +59,22 @@ namespace TestDesigner.ViewModels
             Test = new Test();
             Test.Questions = new();
             Test.Questions.Question = new();
-            QuestionCount = 0;
-            MaxPoints = 0;
+            QuestionCount = string.Empty;
+            MaxPoints = string.Empty;
+            Questions.Clear();
+            
            
         }
 
-        private int _questionCount;
-        public int QuestionCount
+        private string _questionCount;
+        public string QuestionCount
         {
             get { return _questionCount; }
             set { SetProperty(ref _questionCount, value); }
         }
 
-        private int _maxPoints;
-        public int MaxPoints
+        private string _maxPoints;
+        public string MaxPoints
         {
             get { return _maxPoints; }
             set { SetProperty(ref _maxPoints, value); }
@@ -76,8 +90,8 @@ namespace TestDesigner.ViewModels
                 SetProperty(ref _test, value);
                 if (value != null)
                 {
-                    QuestionCount = value.Questions?.Question.Count ?? 0;
-                    MaxPoints = value.Questions?.Question.Sum(q => int.Parse(q.Points)) ?? 0;
+                    QuestionCount = value.Questions?.Question.Count.ToString() ?? string.Empty;
+                    MaxPoints = value.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
                 }
             }
         }
@@ -101,7 +115,6 @@ namespace TestDesigner.ViewModels
         }
       
 
-        public IRelayCommand<object> OpenClickCommand { get; }
 
 
         
@@ -118,7 +131,10 @@ namespace TestDesigner.ViewModels
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "XML files (*.xml)|*.xml";
             if (openFileDialog.ShowDialog() == true)
+            {
                 Test = Test.LoadFileInfo(XDocument.Load(openFileDialog.FileName).Root);
+                Questions = new ObservableCollection<Question>(Test.Questions.Question);
+            }
             return null;
         }
 

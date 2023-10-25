@@ -67,12 +67,12 @@
                             <Image Source="/TestDesigner;component/Resources/plus.png" Width="50" Height="25" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding OpenClickCommand}" CommandParameter="{Binding}">
+                    <Button Command="{Binding EditQuestionCommand}" CommandParameter="{Binding}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/TestDesigner;component/Resources/pencil.png" Width="50" Height="30" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding OpenClickCommand}" CommandParameter="{Binding}">
+                    <Button Command="{Binding DeleteQuestionCommand}" CommandParameter="{Binding}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/TestDesigner;component/Resources/delete.png" Width="50" Height="30" />
                         </StackPanel>

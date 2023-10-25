@@ -28,9 +28,23 @@ namespace TestDesigner.Views
         public NewQuestionWindow(Question question = null!)
         {
             InitializeComponent();
-            Question = question ?? new Question();
-            Answers = new BindingList<Answer>();
-            AnswersDataGrid.ItemsSource = Answers;
+            if (question != null)
+            {
+                Question = question;
+                TextTB.Text = question.QuestionText;
+                PointsTB.Text = question.Points;
+                Answers = new BindingList<Answer>( question.Answers.Answer);
+
+            }
+            else
+            {
+                Question =  new Question();
+                Answers = new BindingList<Answer>();
+
+            }
+                AnswersDataGrid.ItemsSource = Answers;
+
+            
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
