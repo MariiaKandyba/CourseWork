@@ -14,24 +14,56 @@ using static System.Net.Mime.MediaTypeNames;
 using System.IO;
 using TestDesigner.Services;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace TestDesigner.ViewModels
 {
     public class QuestionsViewModel : ObservableObject
     {
+
+        private Test _test = new Test();
+        private ObservableCollection<Question> _questions = new ObservableCollection<Question>();
+        private Question _selectedQuestion;
         private string _questionCount;
+        private string _maxPoints;
+
+
+        public ObservableCollection<Question> Questions
+        {
+            get { return _questions; }
+            set { SetProperty(ref _questions, value); 
+                UpdateQuestionCountAndMaxPoints();
+            }
+        }
+
         public string QuestionCount
         {
             get { return _questionCount; }
             set { SetProperty(ref _questionCount, value); }
         }
 
-        private string _maxPoints;
         public string MaxPoints
         {
             get { return _maxPoints; }
             set { SetProperty(ref _maxPoints, value); }
         }
+
+        public Test Test
+        {
+            get { return _test; }
+            set
+            {
+                SetProperty(ref _test, value);
+                UpdateQuestionCountAndMaxPoints();
+            }
+        }
+        public Question SelectedQuestion
+        {
+            get { return _selectedQuestion; }
+            set { SetProperty(ref _selectedQuestion, value); }
+        }
+
+
         public IAsyncRelayCommand OpenTestCommand { get; }
         public IAsyncRelayCommand SaveTestCommand { get; }
         public IRelayCommand<object> CreateTestCommand{ get; }
@@ -41,27 +73,30 @@ namespace TestDesigner.ViewModels
 
         private readonly ITestService _testService;
 
-        private ObservableCollection<Question> _questions = new ObservableCollection<Question>();
-
-        public ObservableCollection<Question> Questions
-        {
-            get { return _questions; }
-            set { SetProperty(ref _questions, value); }
-        }
-
-
         public QuestionsViewModel(ITestService testService)
         {
             _testService = testService;
 
             OpenTestCommand = new AsyncRelayCommand(OnOpenTestClick);
             SaveTestCommand = new AsyncRelayCommand(OnSaveTestClick);
-            CreateTestCommand = new RelayCommand<object>(OnCreateClick);
+            CreateTestCommand = new RelayCommand<object>(OnCreateTestClick);
+
             AddQuestionCommand = new RelayCommand<object>(OnAddQuestionClick);
             EditQuestionCommand = new RelayCommand<object>(OnEditQuestionClick);
             DeleteQuestionCommand = new RelayCommand<object>(OnDeleteQuestionClick);
-            
+
         }
+
+
+        private void UpdateQuestionCountAndMaxPoints()
+        {
+            if (Test != null)
+            {
+                QuestionCount = Test.Questions?.Question.Count.ToString() ?? string.Empty;
+                MaxPoints = Test.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
+            }
+        }
+
 
 
         private void OnAddQuestionClick(object? obj)
@@ -90,42 +125,10 @@ namespace TestDesigner.ViewModels
             }
         }
 
-
-        private void OnCreateClick(object? obj)
+        private void OnCreateTestClick(object? obj)
         {
             Test = new Test { Questions = new() { Question = new() { } } };
-            QuestionCount = string.Empty;
-            MaxPoints = string.Empty;
             Questions.Clear();
-        }
-
-        
-
-        private Test _test = new Test();
-
-        public Test Test
-        {
-            get { return _test; }
-            set { SetProperty(ref _test, value); UpdateQuestionCountAndMaxPoints(); }
-        }
-        private void UpdateQuestionCountAndMaxPoints()
-        {
-            if (Test != null)
-            {
-                QuestionCount = Test.Questions?.Question.Count.ToString() ?? string.Empty;
-                MaxPoints = Test.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
-            }
-        }
-
-
-
-       
-
-        private Question _selectedQuestion;
-        public  Question SelectedQuestion
-        {
-            get { return _selectedQuestion; }
-            set { SetProperty(ref _selectedQuestion, value); }
         }
 
         private async Task OnOpenTestClick()
