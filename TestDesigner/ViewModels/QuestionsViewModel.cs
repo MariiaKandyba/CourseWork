@@ -31,8 +31,10 @@ namespace TestDesigner.ViewModels
         public ObservableCollection<Question> Questions
         {
             get { return _questions; }
-            set { SetProperty(ref _questions, value); 
-                UpdateQuestionCountAndMaxPoints();
+            set 
+            { 
+                SetProperty(ref _questions, value); 
+                UpdateQuestionCountAndMaxPoints();  
             }
         }
 
@@ -92,8 +94,8 @@ namespace TestDesigner.ViewModels
         {
             if (Test != null)
             {
-                QuestionCount = Test.Questions?.Question.Count.ToString() ?? string.Empty;
-                MaxPoints = Test.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
+                QuestionCount = Questions.Count.ToString() ?? string.Empty;
+                MaxPoints = Questions.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
             }
         }
 
@@ -103,7 +105,12 @@ namespace TestDesigner.ViewModels
         {
             NewQuestionWindow window = new();
             if (window.ShowDialog() == true)
+            {
                 Questions.Add(window.Question);
+                UpdateQuestionCountAndMaxPoints();
+
+
+            }
         }
       
 
@@ -111,7 +118,10 @@ namespace TestDesigner.ViewModels
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete the question?", "Підтвердження видалення", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
+            {
                 Questions.Remove(SelectedQuestion);
+                UpdateQuestionCountAndMaxPoints();
+            }
         }
 
 
@@ -122,6 +132,8 @@ namespace TestDesigner.ViewModels
             {
                 int index = Questions.IndexOf(SelectedQuestion);
                 if (index >= 0)  Questions[index] = window.Question;
+                UpdateQuestionCountAndMaxPoints();
+
             }
         }
 
