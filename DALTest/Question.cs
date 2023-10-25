@@ -9,7 +9,6 @@ namespace DALTest
 {
     public class Question
     {
-        [Key]
         public int Id { get; set; }
         public string QuestionText { get; set; }
         public string Img { get; set; }

@@ -17,6 +17,6 @@ namespace DALTest
 
         public bool IsAdminGroup { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

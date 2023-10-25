@@ -19,7 +19,6 @@ namespace DALTest
         public bool IsArchived { get; set; }
         public DateTime LoadedDate { get; set; }
 
-        // Один до багатьох з питаннями
         public virtual ICollection<Question> Questions { get; set; }
     }
 }

@@ -9,7 +9,6 @@ namespace DALTest
 {
     public class UserTest
     {
-        [Key]
         public int Id { get; set; }
         public int PointsGrade { get; set; }
         public bool IsPassed { get; set; }
