@@ -17,8 +17,8 @@
                         <Image Source="/Resources/new-document.png" Width="50" Height="25" />
                     </StackPanel>
                 </Button>
-                <Button>
-                    <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding SaveTestCommand}" CommandParameter="{Binding}">
+                    <StackPanel Orientation="Horizontal" >
                         <Image Source="/TestDesigner;component/Resources/diskette.png" Width="50" Height="30" />
                     </StackPanel>
                 </Button>
@@ -35,25 +35,32 @@
 
                 <UniformGrid Rows="7" Columns="2">
                     <Label Content="Title:" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Title}" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Title, Mode=TwoWay}" />
 
                     <Label Content="Author:" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Author}" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Author, Mode=TwoWay}" />
 
                     <Label Content="Description:" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Description}" />
-
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Description, Mode=TwoWay}" />
+                    <Label Content="Min passage:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.PassPercent, Mode=TwoWay}" />
+                    
+                    
                     <Label Content="Additional Information:" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Info}" />
-
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.Info, Mode=TwoWay}" />
+                    
+                     <!--<Label Content="Additional Information:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBox Width="180" Height="20" HorizontalAlignment="Right"  />-->
+                    
+                    
+                    
                     <Label  Content="Count of questions:" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox IsReadOnly="True" Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding QuestionCount}" />
 
                     <Label Content="Max points for the test:" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox  IsReadOnly="True" Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding MaxPoints}" />
 
-                    <Label Content="Min passage:" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox Width="180" Height="20" HorizontalAlignment="Right" Text="{Binding Test.PassPercent}" />
+                   
                 </UniformGrid>
 
             </StackPanel>

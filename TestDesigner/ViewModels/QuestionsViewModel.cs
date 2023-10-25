@@ -20,6 +20,8 @@ namespace TestDesigner.ViewModels
         public IRelayCommand<object> AddQuestionCommand{ get; }
         public IRelayCommand<object> OpenClickCommand { get; }
         public IRelayCommand<object> EditQuestionCommand { get; }
+        public IRelayCommand<object> DeleteQuestionCommand { get; }
+        public IRelayCommand<object> SaveTestCommand { get; }
 
 
         public QuestionsViewModel()
@@ -28,24 +30,45 @@ namespace TestDesigner.ViewModels
             CreateTestCommand = new RelayCommand<object>(OnCreateClick);
             AddQuestionCommand = new RelayCommand<object>(OnAddQuestionClick);
             EditQuestionCommand = new RelayCommand<object>(OnEditQuestionClick);
-            //Test = new Test();
-            //Test.Questions = new();
-            //Test.Questions.Question = new();
+            DeleteQuestionCommand = new RelayCommand<object>(OnDeleteQuestionClick);
+            SaveTestCommand = new RelayCommand<object>(OnSaveTestClick);
+            Test = new Test();
+            Test.Questions = new();
+            Test.Questions.Question = new();
         }
 
 
-
+        // питання
         private void OnAddQuestionClick(object? obj)
         {
             NewQuestionWindow window = new NewQuestionWindow();
             if (window.ShowDialog() == true)
-            {
                 Questions.Add(window.Question);
+        }
+        private void OnSaveTestClick(object? obj)
+        {
+            string testInfo = $"Author: {Test.Author}\n" +
+                  $"Title: {Test.Title}\n" +
+                  $"Description: {Test.Description}\n" +
+                  $"Passing Percent: {Test.PassPercent}\n" +
+                  $"Additional Information: {Test.Info}\n";
+
+            MessageBox.Show(testInfo);
+
+        }
+        private void OnDeleteQuestionClick(object? obj)
+        {
+            MessageBoxResult result = MessageBox.Show("Ви впевнені, що хочете видалити це питання?", "Підтвердження видалення", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                Questions.Remove(SelectedQuestion);
             }
         }
+
+
         private void OnEditQuestionClick(object? obj)
         {
-            NewQuestionWindow window = new NewQuestionWindow(SelectedQuestion);
+            var window = new NewQuestionWindow(SelectedQuestion);
             if (window.ShowDialog() == true)
             {
                 int index = Questions.IndexOf(SelectedQuestion);
@@ -61,6 +84,7 @@ namespace TestDesigner.ViewModels
             Test.Questions.Question = new();
             QuestionCount = string.Empty;
             MaxPoints = string.Empty;
+
             Questions.Clear();
             
            
@@ -85,16 +109,19 @@ namespace TestDesigner.ViewModels
         public Test Test
         {
             get { return _test; }
-            set
+            set { SetProperty(ref _test, value);  }
+        }
+        private void UpdateQuestionCountAndMaxPoints()
+        {
+            if (Test != null)
             {
-                SetProperty(ref _test, value);
-                if (value != null)
-                {
-                    QuestionCount = value.Questions?.Question.Count.ToString() ?? string.Empty;
-                    MaxPoints = value.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
-                }
+                QuestionCount = Test.Questions?.Question.Count.ToString() ?? string.Empty;
+                MaxPoints = Test.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
             }
         }
+
+
+
         private ObservableCollection<Question> _questions = new ObservableCollection<Question>();
 
         public ObservableCollection<Question> Questions
@@ -143,3 +170,23 @@ namespace TestDesigner.ViewModels
 
     }
 }
+
+//QuestionCount = string.Empty;
+//MaxPoints = string.Empty;
+
+//private void UpdateQuestionCountAndMaxPoints()
+//{
+//    if (Test != null)
+//    {
+//        QuestionCount = Test.Questions?.Question.Count.ToString() ?? string.Empty;
+//        MaxPoints = Test.Questions?.Question.Sum(q => int.Parse(q.Points)).ToString() ?? string.Empty;
+//        PassPercent = Test.PassPercent;
+//    }
+//}
+
+//private string _passPercent;
+//public string PassPercent
+//{
+//    get { return _passPercent; }
+//    set { SetProperty(ref _passPercent, value); }
+//}
