@@ -1,8 +1,10 @@
 ﻿using Azure;
 using DALTest;
+using DALTest.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repository;
+using Server.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +34,9 @@ namespace Server
         private readonly IGenericRepository<Question> _questionRepository;
         private readonly IGenericRepository<Answer> _answerRepository;
         private readonly GenericUnitOfWork _unitOfWork;
+
+        private readonly UsersViewModel _usersViewModel;
+        private readonly GroupViewModel _groupViewModel;
         public MainWindow()
         {
             InitializeComponent();
@@ -49,6 +54,12 @@ namespace Server
             _testRepository = _unitOfWork.Repository<Test>();
             _questionRepository = _unitOfWork.Repository<Question>();
             _answerRepository = _unitOfWork.Repository<Answer>();
+
+            _usersViewModel = new UsersViewModel(_userRepository);
+            _groupViewModel = new GroupViewModel(_groupRepository);
+
+            usersTab.DataContext = _usersViewModel;
+            groupsTab.DataContext = _groupViewModel;
         }
     }
 }
