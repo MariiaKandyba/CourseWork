@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Win32;
-using TestDesigner.Models;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,9 +11,11 @@ using System.Text;
 using TestDesigner.Views;
 using static System.Net.Mime.MediaTypeNames;
 using System.IO;
-using TestDesigner.Services;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TestServices;
+using Test = TestServices.Test;
+using Question = TestServices.Question;
 
 namespace TestDesigner.ViewModels
 {
