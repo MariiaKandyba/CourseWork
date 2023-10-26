@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TestServices;
 
 namespace DALTest
 {
@@ -134,17 +135,20 @@ namespace DALTest
               new Dictionary<string, object> { ["GroupId"] = 3, ["UsersId"] = 1 }
             );
 
+            ISerializationService _serializationService = new SerializationService();
+            TestServices.Test test = _serializationService.DeserializeObjectFromXml<TestServices.Test>(Properties.Resources.EnglishA1); ;
+          
 
             var tests = new List<Test>
             {
                 new Test
                 {
                     Id = 1,
-                    Title = "English Grammar Test",
-                    Author = "John Doe",
-                    Description = "Test your English grammar skills.",
-                    Info = "This test covers various aspects of English grammar.",
-                    PassPercent = 70,
+                    Title = test.Title,
+                    Author = test.Author,
+                    Description = test.Description,
+                    Info = test.Info,
+                    PassPercent = Convert.ToInt32(test.PassPercent),
                     IsArchived = false,
                     LoadedDate = DateTime.Now,
                 }
@@ -152,28 +156,32 @@ namespace DALTest
 
             modelBuilder.Entity<Test>().HasData(tests);
 
-
-            var questions = new List<Question>
+            var questions = new List<Question>();
+            var answers = new List<Answer>();
+            int questionIndex = 0;
+            int answerIndex = 0;
+            foreach (var question in test.Questions.Question)
             {
-                new Question
+                questions.Add(new Question
                 {
-                    Id = 1,
-                    QuestionText = "What is the plural form of 'child'?",
-                    Img = "",
-                    Points = 10,
+                    Id = ++questionIndex,
+                    QuestionText = question.QuestionText,
+                    Img = string.Empty,
+                    Points = Convert.ToInt32(question.Points),
                     TestId = 1
-                },
-                new Question
+                });
+                foreach (var answer in question.Answers.Answer)
                 {
-                    Id = 2,
-                    QuestionText = "Which of the following is a preposition: on, table, quickly?",
-                    Img = "",
-                    Points = 15,
-                    TestId = 1
-                },
-                
-                
-            };
+                    answers.Add(new Answer
+                    {
+                        Id = ++answerIndex,
+                        AnswerText = answer.TextAnswer,
+                        IsRight = Convert.ToBoolean(answer.IsRight),
+                        QuestionId = questionIndex
+                    });
+                }
+            }
+          
 
 
             modelBuilder.Entity<Question>().HasData(questions);
@@ -182,55 +190,78 @@ namespace DALTest
                 .WithMany(t => t.Questions)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-            var answers = new List<Answer>
-            {
-                new Answer
-                {
-                    Id = 1,
-                    AnswerText = "children",
-                    IsRight = true,
-                    QuestionId = 1
-                },
-                new Answer
-                {
-                    Id = 2,
-                    AnswerText = "childs",
-                    IsRight = true,
-                    QuestionId = 1
-                },
-                new Answer
-                {
-                    Id = 3,
-                    AnswerText = "kinder",
-                    IsRight = false,
-                    QuestionId = 1
-                },
-                 new Answer
-                {
-                    Id = 4,
-                    AnswerText = "table",
-                    IsRight = false,
-                    QuestionId = 2
-                },
-                new Answer
-                {
-                    Id = 5,
-                    AnswerText = "on",
-                    IsRight = true,
-                    QuestionId = 2
-                },
-                 new Answer
-                {
-                    Id = 6,
-                    AnswerText = "quickly",
-                    IsRight = false,
-                    QuestionId = 2
-                },
-               
-            };
-
             modelBuilder.Entity<Answer>().HasData(answers);
+
+            //};
+            //var questions = new List<Question>
+            //{
+            //    new Question
+            //    {
+            //        Id = 1,
+            //        QuestionText = "What is the plural form of 'child'?",
+            //        Img = "",
+            //        Points = 10,
+            //        TestId = 1
+            //    },
+            //    new Question
+            //    {
+            //        Id = 2,
+            //        QuestionText = "Which of the following is a preposition: on, table, quickly?",
+            //        Img = "",
+            //        Points = 15,
+            //        TestId = 1
+            //    },
+
+
+            //};
+
+            //var answers = new List<Answer>
+            //{
+            //    new Answer
+            //    {
+            //        Id = 1,
+            //        AnswerText = "children",
+            //        IsRight = true,
+            //        QuestionId = 1
+            //    },
+            //    new Answer
+            //    {
+            //        Id = 2,
+            //        AnswerText = "childs",
+            //        IsRight = true,
+            //        QuestionId = 1
+            //    },
+            //    new Answer
+            //    {
+            //        Id = 3,
+            //        AnswerText = "kinder",
+            //        IsRight = false,
+            //        QuestionId = 1
+            //    },
+            //     new Answer
+            //    {
+            //        Id = 4,
+            //        AnswerText = "table",
+            //        IsRight = false,
+            //        QuestionId = 2
+            //    },
+            //    new Answer
+            //    {
+            //        Id = 5,
+            //        AnswerText = "on",
+            //        IsRight = true,
+            //        QuestionId = 2
+            //    },
+            //     new Answer
+            //    {
+            //        Id = 6,
+            //        AnswerText = "quickly",
+            //        IsRight = false,
+            //        QuestionId = 2
+            //    },
+
+            //};
+
 
             var userTests = new List<UserTest>
             {
@@ -244,7 +275,7 @@ namespace DALTest
                     UserId = 1,
                     TestId = 1,
                 },
-               
+
             };
 
             modelBuilder.Entity<UserTest>().HasData(userTests);
@@ -264,10 +295,31 @@ namespace DALTest
                     Id = 2,
                     IsChecked = true,
                     UserTestId = 1,
-                    AnswerId = 2,
+                    AnswerId = 6,
+                },
+                new UserAnswer
+                {
+                    Id = 3,
+                    IsChecked = true,
+                    UserTestId = 1,
+                    AnswerId = 7,
+                },
+                new UserAnswer
+                {
+                    Id = 4,
+                    IsChecked = true,
+                    UserTestId = 1,
+                    AnswerId = 10,
+                },
+                new UserAnswer
+                {
+                    Id = 5,
+                    IsChecked = true,
+                    UserTestId = 1,
+                    AnswerId = 13,
                 },
             };
-           
+
 
 
 
@@ -281,7 +333,22 @@ namespace DALTest
         }
     }
 }
+// Зараз ви можете розпарсити xmlContent за допомогою XmlTextReader або інших методів для роботи з XML-даними.
 
+//var tests = new List<Test>
+//{
+//    new Test
+//    {
+//        Id = 1,
+//        Title = "English Grammar Test",
+//        Author = "John Doe",
+//        Description = "Test your English grammar skills.",
+//        Info = "This test covers various aspects of English grammar.",
+//        PassPercent = 70,
+//        IsArchived = false,
+//        LoadedDate = DateTime.Now,
+//    }
+//};
 
 
 //using Microsoft.EntityFrameworkCore;

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Author>Кандиба Марія</Author>
+  <Title>Англійська А1</Title>
+  <Description>Проміжний тест</Description>
+  <Info>Оберіть один із варіантів</Info>
+  <PassPercent>80</PassPercent>
+  <Questions>
+    <Question>
+      <QuestionText>That's _____. It's very expensive.</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>Anna's car</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>the car of Anna</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Anna car</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>I can't find my keys. I don't know where ____ are.</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>it</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>them</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>they</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>A: "Is he a teacher?" B: "Yes, he _____."</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>is</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>'s</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>does</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>A: "_____ brush your teeth?" B: "Three times a day."</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>How often do you</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>When you</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>How often are you</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>Please, can you stop making noise? I _____ a book.</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer> 'm reading</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>read</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>reading</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+  </Questions>
+</Test>

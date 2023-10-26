@@ -86,6 +86,8 @@ namespace TestDesigner.ViewModels
             AddQuestionCommand = new RelayCommand<object>(OnAddQuestionClick);
             EditQuestionCommand = new RelayCommand<object>(OnEditQuestionClick);
             DeleteQuestionCommand = new RelayCommand<object>(OnDeleteQuestionClick);
+            Test = new Test { Questions = new() { Question = new() { } } };
+
 
         }
 
@@ -133,7 +135,6 @@ namespace TestDesigner.ViewModels
                 int index = Questions.IndexOf(SelectedQuestion);
                 if (index >= 0)  Questions[index] = window.Question;
                 UpdateQuestionCountAndMaxPoints();
-
             }
         }
 
@@ -141,6 +142,7 @@ namespace TestDesigner.ViewModels
         {
             Test = new Test { Questions = new() { Question = new() { } } };
             Questions.Clear();
+            UpdateQuestionCountAndMaxPoints();
         }
 
         private async Task OnOpenTestClick()
