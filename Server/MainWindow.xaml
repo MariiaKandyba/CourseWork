@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Server"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="800" FontSize="11">
     <Window.Resources>
         <Style TargetType="Button" x:Key="ButtonStyle">
             <Setter Property="Background" Value="#FFE8E8E8"/>
@@ -23,6 +23,7 @@
             <Setter Property="MaxHeight" Value="245"/>
             <Setter Property="IsReadOnly" Value="true"/>
         </Style>
+
     </Window.Resources>
     <Grid>
         <TabControl x:Name="a" Grid.ColumnSpan="2" >
@@ -34,11 +35,32 @@
                 </TabItem.Header>
                 <TabItem.Content>
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="71*"/>
+                            <ColumnDefinition Width="723*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="140"/>
-                            <RowDefinition Height="400"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="300"/>
                         </Grid.RowDefinitions>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
+                        <ToolBar Background="White" Grid.ColumnSpan="2">
+                            <Button Name="CreateTestButton" Command="{Binding AddUserCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/plus.png" Width="25" Height="25" />
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding EditUserCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Source="/Resources/pencil.png" Width="25" Height="25" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="OpenButton" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/delete.png" Width="25" Height="25" />
+                                </StackPanel>
+                            </Button>
+                        </ToolBar>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.ColumnSpan="2">
                             <DataGrid 
                             VerticalAlignment="Top"
                             ItemsSource="{Binding Users}" 
@@ -55,16 +77,31 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
-                        <Grid Grid.Row="1">
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10 20">
+                            <!--<WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10 20">
                                 <Button x:Name="deleteUserBTN" Content="Delete"  Command="{Binding DeleteUserCommand}" Style="{StaticResource ButtonStyle}"/>
                                 <Button Content="Edit" Name="editUserBTN" Style="{StaticResource ButtonStyle}" Command="{Binding EditUserCommand}"/>
                                 <Button x:Name="createBTN"  Style="{StaticResource ButtonStyle}" Content="Create"  Command="{Binding AddUserCommand}"/>
                             </WrapPanel>
+                            <Button x:Name="AddToGroupBTN" Width="100"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15 70 0 0" Style="{StaticResource ButtonStyle}" Content="Add to Group"  Command="{Binding AddUserCommand}"/>-->
+                            <!--<ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                                <DataGrid 
+                                VerticalAlignment="Top"
+                                ItemsSource="{Binding SelectedUser.Groups}"  
+                                AutoGenerateColumns="False"
+                                MaxHeight="250" IsReadOnly="True" >     
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                        <DataGridTextColumn Header="Admin Group" Binding="{Binding IsAdminGroup}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>-->
+
                         </Grid>
                     </Grid>
                 </TabItem.Content>
@@ -80,10 +117,34 @@
                 <TabItem.Content>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="150"/>
-                            <RowDefinition Height="200"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="300"/>
                         </Grid.RowDefinitions>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
+                        <ToolBar Background="White">
+                            <Button Name="groupButton" Command="{Binding AddGroupCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/plus.png" Width="25" Height="25" />
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding EditGroupCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Source="/Resources/pencil.png" Width="25" Height="25" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="editButton" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/delete.png" Width="25" Height="25" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="addtoGroupButton" Margin="20 0 0 0" Command="{Binding AddUserToGroupCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/add-group.png" Width="25" Height="25"/>
+                                </StackPanel>
+                            </Button>
+
+
+                        </ToolBar>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
                             <DataGrid  ItemsSource="{Binding Groups}"  SelectedItem="{Binding SelectedGroup}" >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
@@ -92,15 +153,7 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
-                        
-                        <StackPanel Grid.Row="1" Margin=" 0 10">
-                            <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15 0">
-                                <Button x:Name="deleteAuthorBTN" Content="Delete" Style="{StaticResource ButtonStyle}" Command="{Binding DeleteGroupCommand}"/>
-                                <Button x:Name="editAuthorBTN" Content="Edit" Style="{StaticResource ButtonStyle}" Command="{Binding EditGroupCommand}"/>
-                                <Button x:Name="createAuthorBTN" Content="Create" Style="{StaticResource ButtonStyle}" Command="{Binding AddGroupCommand}"/>
-                            </WrapPanel>
-                            
-                        </StackPanel>
+
 
                     </Grid>
                 </TabItem.Content>
@@ -108,16 +161,49 @@
             <TabItem x:Name="assignedTestTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="3">Assigments</TextBlock>
+                        <TextBlock Margin="3">Assign</TextBlock>
                     </StackPanel>
                 </TabItem.Header>
                 <TabItem.Content>
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
                             <RowDefinition Height="150"/>
-                            <RowDefinition Height="200"/>
+                            <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
+                        <ToolBar Background="White">
+                            <Button Name="assignToOneButton" Command="{Binding AssignToUsersCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/assign.png" Width="35" Height="35" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="assignToGrounButton" Command="{Binding AssignToGroupCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/delegation.png" Width="40" Height="40" Margin="15 0 0 0 " />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="ConfirmAssignmentButton" Command="{Binding ConfirmAssignmentCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/approve.png" Width="40" Height="40" Margin="30 0 0 0 " />
+                                </StackPanel>
+                            </Button>
+                            
+
+
+                        </ToolBar>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                            <DataGrid  ItemsSource="{Binding Tests}"  SelectedItem="{Binding SelectedTest}" >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Title}" Width="*"/>
+                                    <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                    <DataGridTextColumn Header="Info" Binding="{Binding Info}" Width="*"/>
+                                    <DataGridTextColumn Header="Pass Percent" Binding="{Binding PassPercent}" Width="*"/>
+                                    <DataGridTextColumn Header="Loaded Date" Binding="{Binding LoadedDate}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Visibility="{Binding GroupsVisibility}">
                             <DataGrid  ItemsSource="{Binding Groups}"  SelectedItem="{Binding SelectedGroup}" >
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
@@ -126,6 +212,24 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Visibility="{Binding UsersVisibility}">
+                            <DataGrid 
+        VerticalAlignment="Top"
+        ItemsSource="{Binding Users}" 
+        AutoGenerateColumns="False"
+        SelectedItem="{Binding SelectedUser}"
+        MaxHeight="250" IsReadOnly="True" >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="First name" Binding="{Binding FirstName}" Width="*"/>
+                                    <DataGridTextColumn Header="Last name" Binding="{Binding LastName}" Width="*"/>
+                                    <DataGridTextColumn Header="Username" Binding="{Binding Login}" Width="*"/>
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                    <DataGridTextColumn Header="Admin" Binding="{Binding IsAdmin}" Width="*"/>
+                                    <DataGridTextColumn Header="Register Date" Binding="{Binding RegisterDate}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+
                         <!--<StackPanel Grid.Row="1" Margin=" 0 10">
                             <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15 0">
                                 <Button x:Name="deleteAuthorBTN" Content="Delete" Style="{StaticResource ButtonStyle}" Command="{Binding DeleteAuthorCommand}"/>

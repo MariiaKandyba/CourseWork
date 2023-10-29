@@ -33,10 +33,12 @@ namespace Server
         private readonly IGenericRepository<Test> _testRepository;
         private readonly IGenericRepository<Question> _questionRepository;
         private readonly IGenericRepository<Answer> _answerRepository;
+        private readonly IGenericRepository<UserTest> _userTestRepository;
         private readonly GenericUnitOfWork _unitOfWork;
 
         private readonly UsersViewModel _usersViewModel;
         private readonly GroupViewModel _groupViewModel;
+        private readonly AssigmentViewModel _assigmentViewModel;
         public MainWindow()
         {
             InitializeComponent();
@@ -54,12 +56,15 @@ namespace Server
             _testRepository = _unitOfWork.Repository<Test>();
             _questionRepository = _unitOfWork.Repository<Question>();
             _answerRepository = _unitOfWork.Repository<Answer>();
+            _userTestRepository = _unitOfWork.Repository<UserTest>();
 
             _usersViewModel = new UsersViewModel(_userRepository);
-            _groupViewModel = new GroupViewModel(_groupRepository);
+            _groupViewModel = new GroupViewModel(_groupRepository, _userRepository);
+            _assigmentViewModel = new AssigmentViewModel(_userTestRepository, _testRepository, _groupRepository, _userRepository);
 
             usersTab.DataContext = _usersViewModel;
             groupsTab.DataContext = _groupViewModel;
+            assignedTestTab.DataContext = _assigmentViewModel;
         }
     }
 }
