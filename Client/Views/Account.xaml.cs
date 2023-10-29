@@ -30,12 +30,15 @@ namespace Client.Views
         IGenericRepository<Answer> _answerRepository;
         IGenericRepository<UserTest> _userTestRepository;
         private readonly AssigmentViewModel _assigmentViewModel;
+        private readonly HistoryViewModel _historyViewModel;
 
         public Account(GenericUnitOfWork _unitOfWork, User user)
         {
             InitializeComponent();
-            _assigmentViewModel = new AssigmentViewModel(user,_unitOfWork.Repository<UserTest>(), _unitOfWork.Repository<Test>(), _unitOfWork.Repository<Group>(), _unitOfWork.Repository<User>());
+            _assigmentViewModel = new AssigmentViewModel(user,_unitOfWork.Repository<UserTest>(), _unitOfWork.Repository<Test>());
+            _historyViewModel = new HistoryViewModel(user,_unitOfWork.Repository<UserTest>(), _unitOfWork.Repository<Test>());
             assignedTestTab.DataContext = _assigmentViewModel;
+            HistoryTab.DataContext = _historyViewModel;
         }
     }
 }

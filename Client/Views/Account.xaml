@@ -11,7 +11,39 @@
             <TabItem x:Name="assignedTestTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="3">Assign</TextBlock>
+                        <TextBlock Margin="3">Assigned</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="150"/>
+                        </Grid.RowDefinitions>
+                        <ToolBar Background="White">
+
+                        </ToolBar>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                            <DataGrid  ItemsSource="{Binding Tests}"  SelectedItem="{Binding SelectedTest}"  VerticalAlignment="Top"
+ AutoGenerateColumns="False"
+ MaxHeight="250" IsReadOnly="True" >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Title}" Width="*"/>
+                                    <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                    <DataGridTextColumn Header="Info" Binding="{Binding Info}" Width="*"/>
+                                    <DataGridTextColumn Header="Pass Percent" Binding="{Binding PassPercent}" Width="*"/>
+                                    <DataGridTextColumn Header="Loaded Date" Binding="{Binding LoadedDate}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+         <TabItem x:Name="HistoryTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="3">History</TextBlock>
                     </StackPanel>
                 </TabItem.Header>
                 <TabItem.Content>

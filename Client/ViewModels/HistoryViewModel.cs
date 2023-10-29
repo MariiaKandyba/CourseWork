@@ -8,11 +8,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Client.ViewModels
 {
-    public class AssigmentViewModel : ObservableObject
+    public class HistoryViewModel : ObservableObject
     {
 
         #region TestProps
@@ -43,12 +42,12 @@ namespace Client.ViewModels
         #endregion
 
 
-        public AssigmentViewModel(User user, IGenericRepository<UserTest> userTestRepository, IGenericRepository<Test> testRepository)
+        public HistoryViewModel(User user, IGenericRepository<UserTest> userTestRepository, IGenericRepository<Test> testRepository)
         {
             _testRepository = testRepository;
             _userTestRepository = userTestRepository;
 
-            UserTests = new ObservableCollection<UserTest>(_userTestRepository.FindAll(x => x.UserId == user.Id && !x.IsTaken));
+            UserTests = new ObservableCollection<UserTest>(_userTestRepository.FindAll(x => x.UserId == user.Id && x.IsTaken));
             List<int> testId = new();
 
             foreach (var item in UserTests)
@@ -60,21 +59,21 @@ namespace Client.ViewModels
             AssignToUsersCommand = new RelayCommand(OnAssignToUsersClick);
             ConfirmAssignmentCommand = new RelayCommand(OnConfirmAssignmentCommandClick);
         }
-        
+
 
         private void OnConfirmAssignmentCommandClick()
         {
-            
+
 
         }
 
         private void OnAssignToGroupClick()
         {
-            
+
         }
         private void OnAssignToUsersClick()
         {
-            
+
 
 
         }
