@@ -16,18 +16,39 @@ namespace Server.ViewModels
     public class GroupViewModel : ObservableObject
     {
         private readonly IGenericRepository<Group> _groupRepository;
-
+        private readonly IGenericRepository<User> _userRepository;
         private ObservableCollection<Group> _groups = new();
         private Group _selectedGroup;
+        private ObservableCollection<User> _users = new();
 
-        public GroupViewModel(IGenericRepository<Group> groupRepository)
+        public GroupViewModel(IGenericRepository<Group> groupRepository, IGenericRepository<User> userRepository)
         {
             _groupRepository = groupRepository;
+            _userRepository = userRepository;
             Groups = new ObservableCollection<Group>(_groupRepository.GetAll());
+            Users = new ObservableCollection<User>(_userRepository.GetAll());
 
             AddGroupCommand = new RelayCommand(OnAddGroupClick);
             EditGroupCommand = new RelayCommand(OnEditGroupClick);
             DeleteGroupCommand = new RelayCommand(OnDeleteGroupClick);
+            AddUserToGroupCommand = new RelayCommand(OnAddUserToGroupClick);
+        }
+
+        private void OnAddUserToGroupClick()
+        {
+            if(SelectedGroup != null)
+            {
+                List<User> usersInGroup = SelectedGroup.Users.ToList();
+                List<User> otherUsers = (Users.ToList().Except(usersInGroup).ToList());
+                ManageGroupsWindow window = new(usersInGroup, otherUsers);
+                if (window.ShowDialog() == true)
+                {
+                    SelectedGroup.Users = new ObservableCollection<User>( window.UsersInGroup);
+                    _groupRepository.Update(SelectedGroup);
+                }
+
+            }
+
         }
 
         public Group SelectedGroup
@@ -42,9 +63,15 @@ namespace Server.ViewModels
             set { SetProperty(ref _groups, value); }
         }
 
+        public ObservableCollection<User> Users // Властивість для користувачів
+        {
+            get { return _users; }
+            set { SetProperty(ref _users, value); }
+        }
+
         private void OnDeleteGroupClick()
         {
-            if (MessageBox.Show("Are you sure you want to delete this product?", "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to delete this group?", "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 _groupRepository.Remove(SelectedGroup);
                 Groups = new ObservableCollection<Group>(_groupRepository.GetAll());
@@ -78,5 +105,6 @@ namespace Server.ViewModels
         public IRelayCommand AddGroupCommand { get; }
         public IRelayCommand EditGroupCommand { get; }
         public IRelayCommand DeleteGroupCommand { get; }
+        public IRelayCommand AddUserToGroupCommand { get; }
     }
 }

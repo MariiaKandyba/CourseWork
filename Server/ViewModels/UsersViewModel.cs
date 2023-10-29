@@ -23,19 +23,25 @@ namespace Server.ViewModels
         public UsersViewModel(IGenericRepository<User> userRepository)
         {
             _userRepository = userRepository;
-            Users = new ObservableCollection<User>( _userRepository.GetAll());
+            LoadActualList();
 
             AddUserCommand = new RelayCommand<object>(OnAddUserClick);
             EditUserCommand = new RelayCommand<object>(OnEditUserClick);
             DeleteUserCommand = new RelayCommand(OnDeleteUserClick);
         }
+        private void LoadActualList()
+        {
+            Users = new ObservableCollection<User>(_userRepository.GetAll().Where(x => !x.IsArchived));
 
+        }
         private void OnDeleteUserClick()
         {
             if (MessageBox.Show("Are you sure you want to delete this product?", "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                _userRepository.Remove(SelectedUser);
-                Users = new ObservableCollection<User>(_userRepository.GetAll());
+                SelectedUser.IsArchived = true;
+                _userRepository.Update(SelectedUser);
+                LoadActualList();
+
             }
 
         }
@@ -43,11 +49,12 @@ namespace Server.ViewModels
         private void OnEditUserClick(object? obj)
         {
             CreateEditUser window = new(SelectedUser);
+            
             window.ShowDialog();
             if (window.DialogResult ?? false)
             {
                 _userRepository.Update(window.User);
-                Users = new ObservableCollection<User>(_userRepository.GetAll());
+                LoadActualList();
             }
         }
 
@@ -58,7 +65,7 @@ namespace Server.ViewModels
             if (window.DialogResult ?? false)
             {
                 _userRepository.Add(window.User);
-                Users = new ObservableCollection<User>(_userRepository.GetAll());
+                LoadActualList();
             }
 
         }
@@ -77,6 +84,7 @@ namespace Server.ViewModels
         public IRelayCommand<object> AddUserCommand { get; }
         public IRelayCommand<object> EditUserCommand { get; }
         public IRelayCommand DeleteUserCommand { get; }
+
 
 
     }
