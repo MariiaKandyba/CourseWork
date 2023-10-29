@@ -125,6 +125,7 @@ namespace DALTest
 
             ISerializationService _serializationService = new SerializationService();
             TestServices.Test test = _serializationService.DeserializeObjectFromXml<TestServices.Test>(Properties.Resources.EnglishA1); ;
+            TestServices.Test test2 = _serializationService.DeserializeObjectFromXml<TestServices.Test>(Properties.Resources.EnglishA2); ;
 
 
             var tests = new List<Entities.Test>
@@ -137,6 +138,17 @@ namespace DALTest
                     Description = test.Description,
                     Info = test.Info,
                     PassPercent = Convert.ToInt32(test.PassPercent),
+                    IsArchived = false,
+                    LoadedDate = DateTime.Now,
+                },
+                new Entities.Test
+                {
+                    Id = 2,
+                    Title = test2.Title,
+                    Author = test2.Author,
+                    Description = test.Description,
+                    Info = test2.Info,
+                    PassPercent = Convert.ToInt32(test2.PassPercent),
                     IsArchived = false,
                     LoadedDate = DateTime.Now,
                 }
@@ -169,6 +181,28 @@ namespace DALTest
                     });
                 }
             }
+            foreach (var question in test2.Questions.Question)
+            {
+                questions.Add(new Entities.Question
+                {
+                    Id = ++questionIndex,
+                    QuestionText = question.QuestionText,
+                    Img = string.Empty,
+                    Points = Convert.ToInt32(question.Points),
+                    TestId = 2
+                });
+                foreach (var answer in question.Answers.Answer)
+                {
+                    answers.Add(new  Entities.Answer
+                    {
+                        Id = ++answerIndex,
+                        AnswerText = answer.TextAnswer,
+                        IsRight = Convert.ToBoolean(answer.IsRight),
+                        QuestionId = questionIndex
+                    });
+                }
+            }
+
 
 
 

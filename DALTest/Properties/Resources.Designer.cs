@@ -81,5 +81,27 @@ namespace DALTest.Properties {
                 return ResourceManager.GetString("EnglishA1", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;
+        ///&lt;Test xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;Author&gt;John Smith&lt;/Author&gt;
+        ///  &lt;Title&gt;English A2 Test&lt;/Title&gt;
+        ///  &lt;Description&gt;Intermediate English Test&lt;/Description&gt;
+        ///  &lt;Info&gt;Choose the correct answer&lt;/Info&gt;
+        ///  &lt;PassPercent&gt;70&lt;/PassPercent&gt;
+        ///  &lt;Questions&gt;
+        ///    &lt;Question&gt;
+        ///      &lt;QuestionText&gt;What is the capital of France?&lt;/QuestionText&gt;
+        ///      &lt;Points&gt;10&lt;/Points&gt;
+        ///      &lt;Answers&gt;
+        ///        &lt;Answer&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EnglishA2 {
+            get {
+                return ResourceManager.GetString("EnglishA2", resourceCulture);
+            }
+        }
     }
 }
