@@ -35,8 +35,8 @@ namespace Client.Views
         public Account(GenericUnitOfWork _unitOfWork, User user)
         {
             InitializeComponent();
-            _assigmentViewModel = new AssigmentViewModel(user,_unitOfWork.Repository<UserTest>(), _unitOfWork.Repository<Test>());
-            _historyViewModel = new HistoryViewModel(user,_unitOfWork.Repository<UserTest>(), _unitOfWork.Repository<Test>());
+            _assigmentViewModel = new AssigmentViewModel(user, _unitOfWork);
+            _historyViewModel = new HistoryViewModel(user, _unitOfWork);
             assignedTestTab.DataContext = _assigmentViewModel;
             HistoryTab.DataContext = _historyViewModel;
         }

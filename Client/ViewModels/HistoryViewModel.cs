@@ -34,7 +34,7 @@ namespace Client.ViewModels
         #region UserTestProps
         private readonly IGenericRepository<UserTest> _userTestRepository;
         private ObservableCollection<UserTest> _userTests = new();
-        public ObservableCollection<UserTest> UserTests // Властивість для користувачів
+        public ObservableCollection<UserTest> UserTests 
         {
             get { return _userTests; }
             set { SetProperty(ref _userTests, value); }
@@ -42,10 +42,10 @@ namespace Client.ViewModels
         #endregion
 
 
-        public HistoryViewModel(User user, IGenericRepository<UserTest> userTestRepository, IGenericRepository<Test> testRepository)
+        public HistoryViewModel(User user, GenericUnitOfWork _unitOfWork)
         {
-            _testRepository = testRepository;
-            _userTestRepository = userTestRepository;
+            _testRepository = _unitOfWork.Repository<Test>();
+            _userTestRepository = _unitOfWork.Repository<UserTest>();
 
             UserTests = new ObservableCollection<UserTest>(_userTestRepository.FindAll(x => x.UserId == user.Id && x.IsTaken));
             List<int> testId = new();

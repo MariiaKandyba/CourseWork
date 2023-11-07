@@ -39,6 +39,7 @@ namespace Server
         private readonly UsersViewModel _usersViewModel;
         private readonly GroupViewModel _groupViewModel;
         private readonly AssigmentViewModel _assigmentViewModel;
+        private readonly ServerViewModel _serverViewModel;
         public MainWindow()
         {
             InitializeComponent();
@@ -61,10 +62,12 @@ namespace Server
             _usersViewModel = new UsersViewModel(_userRepository);
             _groupViewModel = new GroupViewModel(_groupRepository, _userRepository);
             _assigmentViewModel = new AssigmentViewModel(_userTestRepository, _testRepository, _groupRepository, _userRepository);
+            _serverViewModel = new ServerViewModel();
 
             usersTab.DataContext = _usersViewModel;
             groupsTab.DataContext = _groupViewModel;
             assignedTestTab.DataContext = _assigmentViewModel;
+            serversTab.DataContext = _serverViewModel;
         }
     }
 }

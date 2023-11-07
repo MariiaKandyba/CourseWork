@@ -16,7 +16,9 @@
     <None Remove="Resources\diskette.png" />
     <None Remove="Resources\minus-sign.png" />
     <None Remove="Resources\pencil.png" />
+    <None Remove="Resources\play.png" />
     <None Remove="Resources\plus.png" />
+    <None Remove="Resources\stop-button.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,8 +46,14 @@
     <Content Include="Resources\pencil.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\play.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\plus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\stop-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
