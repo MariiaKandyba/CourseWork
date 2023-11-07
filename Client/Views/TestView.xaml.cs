@@ -16,6 +16,7 @@ using TestServices;
 using Question = DALTest.Entities.Question;
 using Answer = DALTest.Entities.Answer;
 using Client.ViewModels;
+using System.Windows.Annotations;
 
 namespace Client.Views
 {
@@ -25,11 +26,9 @@ namespace Client.Views
     /// 
     public class QuestionPage
     {
-        public string QuestionText { get; set; }
-        public int Points{ get; set; }
-        public List<Answer> Answers { get; set; }
+        public Question Question { get; set; }
         public int SelectedAnswerIndex { get; set; }
-        public int SelectedRadioButton{ get; set; }
+        public int SelectedRadioButton { get; set; }
 
     }
 
@@ -41,6 +40,8 @@ namespace Client.Views
         private List<QuestionPage> questionPages;
         private int currentPageIndex = 0;
 
+
+        double pass;
         public List<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
 
 
@@ -48,9 +49,10 @@ namespace Client.Views
         StackPanel questionStackPanel = new StackPanel();
         Label questionLabel = new Label();
         Label markLabel = new Label();
-        public TestView(List<Question> questions)
+        public TestView(List<Question> questions, double pass = 80)
         {
             InitializeComponent();
+            this.pass = pass;
             _questions = questions;
             Init();
             InitializePageInfos();
@@ -64,9 +66,7 @@ namespace Client.Views
             {
                 QuestionPage questionPage = new()
                 {
-                    QuestionText = question.QuestionText,
-                    Points = question.Points,
-                    Answers = question.Answers.ToList(),
+                    Question = question,
                     SelectedRadioButton = -1 
                 };
                 questionPages.Add(questionPage);
@@ -101,8 +101,8 @@ namespace Client.Views
 
 
 
-            questionLabel.Content = "AAAAA";
-            markLabel.Content = "AAAAA";
+            questionLabel.Content = "";
+            markLabel.Content = "";
 
             Button confirmButton = new Button
             {
@@ -138,13 +138,13 @@ namespace Client.Views
                 questionStackPanel.Children.Add(questionLabel);
                 questionStackPanel.Children.Add(markLabel);
 
-                questionLabel.Content = (currentPageIndex + 1).ToString() + ". " + questionPages[currentPageIndex].QuestionText;
-                markLabel.Content = questionPages[currentPageIndex].Points + " points";
-                for (int i = 0; i < questionPages[currentPageIndex].Answers.Count; i++)
+                questionLabel.Content = (currentPageIndex + 1).ToString() + ". " + questionPages[currentPageIndex].Question.QuestionText;
+                markLabel.Content = questionPages[currentPageIndex].Question.Points + " points";
+                for (int i = 0; i < questionPages[currentPageIndex].Question.Answers.Count; i++)
                 {
                     RadioButton radio1 = new RadioButton
                     {
-                        Content = questionPages[currentPageIndex].Answers[i].AnswerText,
+                        Content = questionPages[currentPageIndex].Question.Answers.ToList()[i].AnswerText,
                         IsChecked = questionPages[currentPageIndex].SelectedRadioButton == i // Встановлення відповідності обраній відповіді
                     };
                     radioButtons.Add(radio1);
@@ -180,21 +180,33 @@ namespace Client.Views
 
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-            
 
-            foreach (var item in questionPages)
-            {
-                UserAnswers.Add(new UserAnswer()
-                {
-                    UserTestId = 2,
-                    AnswerId = item.SelectedAnswerIndex,
-                    IsChecked = item.SelectedRadioButton != -1,
-                });
-                //a += item.QuestionText + Environment.NewLine;
-                //a += item.SelectedAnswerIndex + Environment.NewLine;
-                //a += " IS CHECKED: " + item.SelectedRadioButton + Environment.NewLine + Environment.NewLine;
-                Close();
-            }
+            int points = questionPages.Sum(page => page.Question.Answers
+                .Where(answer => page.SelectedAnswerIndex == answer.Id && answer.IsRight)
+                .Sum(answer => page.Question.Points));
+
+            int max = _questions.Select(x => x.Points).Sum();
+
+
+            double takenProc = (double)points / (double)max * 100.0;
+
+            string res = takenProc < pass 
+                ? takenProc + "% - You didn't pass" 
+                : takenProc + "% - You passed";
+
+
+            string toShow = "You scored: " + points + " points." + Environment.NewLine + "It's " + res;
+            MessageBox.Show(toShow);
+            //UserAnswers.Add(new UserAnswer()
+            //{
+            //    UserTestId = 2,
+            //    AnswerId = item.SelectedAnswerIndex,
+            //    IsChecked = item.SelectedRadioButton != -1,
+            //});
+            //a += item.QuestionText + Environment.NewLine;
+            //a += item.SelectedAnswerIndex + Environment.NewLine;
+            //a += " IS CHECKED: " + item.SelectedRadioButton + Environment.NewLine + Environment.NewLine;
+            Close();
         }
 
     }

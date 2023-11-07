@@ -57,23 +57,16 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="150"/>
-                            <RowDefinition Height="150"/>
+                            <!--<RowDefinition Height="150"/>-->
                         </Grid.RowDefinitions>
                         <ToolBar Background="White">
-
+                            <Button Name="TestInfoButton" Command="{Binding GetInfoCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/information.png" Width="50" Height="30" />
+                                </StackPanel>
+                            </Button>
                         </ToolBar>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2">
-                            <DataGrid  ItemsSource="{Binding SelectedTest.Questions}"    VerticalAlignment="Top"
- AutoGenerateColumns="False"
- MaxHeight="250" IsReadOnly="True" >
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Binding="{Binding QuestionText}" Width="*"/>
-                                    <DataGridTextColumn Header="Author" Binding="{Binding Img}" Width="*"/>
-                                    <DataGridTextColumn Header="Description" Binding="{Binding Points}" Width="*"/>
-                                    <DataGridTextColumn Header="Description" Binding="{Binding IsCorrect}" Width="*"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
+                        
                      <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
                             <DataGrid  ItemsSource="{Binding Tests}"  SelectedItem="{Binding SelectedTest}"  VerticalAlignment="Top"
  AutoGenerateColumns="False"

@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Client.Models;
+using Client.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DALTest.Entities;
 using Repository;
@@ -8,6 +10,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+
 
 namespace Client.ViewModels
 {
@@ -41,12 +45,16 @@ namespace Client.ViewModels
         }
         #endregion
 
+        private readonly IGenericRepository<UserAnswer> _userAnswerRepository;
 
+        User me;
         public HistoryViewModel(User user, GenericUnitOfWork _unitOfWork)
         {
             _testRepository = _unitOfWork.Repository<Test>();
             _userTestRepository = _unitOfWork.Repository<UserTest>();
+            _userAnswerRepository = _unitOfWork.Repository<UserAnswer>();
 
+            me = user;
             UserTests = new ObservableCollection<UserTest>(_userTestRepository.FindAll(x => x.UserId == user.Id && x.IsTaken));
             List<int> testId = new();
 
@@ -55,15 +63,38 @@ namespace Client.ViewModels
 
             Tests = new ObservableCollection<Test>(_testRepository.FindAll(x => testId.Contains(x.Id)));
 
-            AssignToGroupCommand = new RelayCommand(OnAssignToGroupClick);
+            GetInfoCommand = new RelayCommand(OnGetInfoClick);
             AssignToUsersCommand = new RelayCommand(OnAssignToUsersClick);
-            ConfirmAssignmentCommand = new RelayCommand(OnConfirmAssignmentCommandClick);
+            //ConfirmAssignmentCommand = new RelayCommand(OnConfirmAssignmentCommandClick);
         }
 
 
-        private void OnConfirmAssignmentCommandClick()
+        private void OnGetInfoClick()
         {
 
+            var testToCheck = UserTests.FirstOrDefault(x => x.TestId == SelectedTest.Id);
+            TestResult testResult = new()
+            {
+                Test = SelectedTest,
+                UserAnswers = (List<UserAnswer>)_userAnswerRepository.FindAll(x => x.UserTestId == testToCheck.Id),
+            };
+            //foreach (var item in SelectedTest.Questions)
+            //{
+            //    MessageBox.Show(item.QuestionText);
+            //    foreach (var ritem in item.Answers)
+            //    {
+            //        MessageBox.Show(ritem.AnswerText);
+
+            //    }
+
+            //}
+            //foreach (var item in _userAnswerRepository.FindAll(x => x.UserTestId == testToCheck.Id))
+            //{
+            //    MessageBox.Show(item.Answer.AnswerText);
+            //}
+
+            PassedTestInfo testInfo = new(testResult);
+            testInfo.ShowDialog();
 
         }
 
@@ -78,10 +109,10 @@ namespace Client.ViewModels
 
         }
 
-        private List<int> AssignedUsersId()
-            => UserTests.Where(x => x.TestId == SelectedTest.Id)
-                 .Select(x => x.UserId)
-                 .ToList();
+        //private List<int> AssignedUsersId()
+        //    => UserTests.Where(x => x.TestId == SelectedTest.Id)
+        //         .Select(x => x.UserId)
+        //         .ToList();
 
 
 
@@ -91,7 +122,7 @@ namespace Client.ViewModels
 
 
 
-        public IRelayCommand AssignToGroupCommand { get; }
+        public IRelayCommand GetInfoCommand { get; }
         public IRelayCommand AssignToUsersCommand { get; }
         public IRelayCommand ConfirmAssignmentCommand { get; }
 

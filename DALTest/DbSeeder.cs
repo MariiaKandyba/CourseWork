@@ -260,7 +260,7 @@ namespace DALTest
                     Id = 4,
                     IsChecked = true,
                     UserTestId = 1,
-                    AnswerId = 10,
+                    AnswerId = 9,
                 },
                 new UserAnswer
                 {
