@@ -94,7 +94,8 @@
                         </ToolBar>
                         
                      <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
-                            <DataGrid  ItemsSource="{Binding Tests}"  SelectedItem="{Binding SelectedTest}"  VerticalAlignment="Top"
+                            <DataGrid  ItemsSource="{Binding Tests}"  SelectedItem="{Binding SelectedTest}"  
+                                       VerticalAlignment="Top"
  AutoGenerateColumns="False"
  MaxHeight="250" IsReadOnly="True" >
                                 <DataGrid.Columns>

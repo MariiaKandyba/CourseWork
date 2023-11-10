@@ -1,5 +1,4 @@
-﻿using Client.Models;
-using Client.Views;
+﻿using Client.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DALTest.Entities;
@@ -148,8 +147,8 @@ namespace Client.ViewModels
             get { return _tests; }
             set { SetProperty(ref _tests, value); }
         }
-        private Test _selectedTest;
-        public Test SelectedTest
+        private TestResults _selectedTest;
+        public TestResults SelectedTest
         {
             get { return _selectedTest; }
             set { SetProperty(ref _selectedTest, value); }
@@ -166,81 +165,57 @@ namespace Client.ViewModels
 
         private async void OnGetInfoClick()
         {
+            PassedTestInfo passedTestInfo = new(SelectedTest);
+            passedTestInfo.ShowDialog();
 
-            try
-            {
-                using (tcpClient = new TcpClient())
-                {
-                    await tcpClient.ConnectAsync(serverIpAddress, serverPort);
-                    using NetworkStream stream = tcpClient.GetStream();
-                    NetworkData request = new()
-                    {
-                        MessageType = "TaskenQuestions",
-                        Data = SelectedTest.Id
-                    };
-                    string requestJson = JsonConvert.SerializeObject(request);
-                    byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);
-                    stream.Write(requestBuffer, 0, requestBuffer.Length);
+            //string outputString = string.Join(Environment.NewLine, takenToSend.Select(testResult =>
+            //{
+            //    string testInfo = $"Title: {testResult.Title}\n" +
+            //                      $"Possible points: {testResult.TotalPossiblePoints}\n" +
+            //                      $"Your Grade: {testResult.PointsGrade}\n" +
+            //                      $"Author: {testResult.Author}\n" +
+            //                      $"Description: {testResult.Description}\n" +
+            //                      $"Info: {testResult.Info}\n" +
+            //                      $"Pass Percent: {testResult.PassPercent}\n" +
+            //                      $"Loaded Date: {testResult.LoadedDate}\n" +
+            //                      $"Is Passed: {testResult.IsPassed}\n" +
+            //                      $"Taken Date: {testResult.TakenDate}\n" +
+            //                      $"Is Taken: {testResult.IsTaken}\n" +
+            //                      "-------------\n";
 
+            //    string questionsInfo = string.Join(Environment.NewLine, testResult.Questions.Select(question =>
+            //    {
+            //        string questionInfo = $"  Question Text: {question.QuestionText}\n" +
+            //                              $"  Img: {question.Img}\n";
 
+            //        string answersInfo = string.Join(Environment.NewLine, question.Answers.Select(answer =>
+            //            $"    Answer Text: {answer.AnswerText}\n" +
+            //            $"    Is Checked: {answer.IsChecked}\n"));
 
-                    byte[] responseBuffer = new byte[2500];
-                    int bytesRead = stream.Read(responseBuffer, 0, responseBuffer.Length);
-                    string responseJson = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
+            //        return $"{questionInfo} " +
+            //        $" Answers:\n{answersInfo}\n";
+            //    }));
 
+            //    return $"{testInfo}Questions:\n{questionsInfo}\n";
+            //}));
+            //string check = outputString;
+            //MessageBox.Show(outputString);
 
-                    NetworkData response = JsonConvert.DeserializeObject<NetworkData>(responseJson);
+            //string outputString = string.Join(Environment.NewLine, takenToSend.Select(test =>
+            //    $"Test ID: {test.Id}\n" +
+            //    $"Title: {test.Title}\n" +
+            //    $"Author: {test.Author}\n" +
+            //    $"Description: {test.Description}\n" +
+            //    $"Info: {test.Info}\n" +
+            //    $"Pass Percent: {test.PassPercent}\n" +
+            //    $"Loaded Date: {test.LoadedDate}\n" +
+            //    $"Points Grade: {test.PointsGrade}\n" +
+            //    $"Is Passed: {test.IsPassed}\n" +
+            //    $"Taken Date: {test.TakenDate}\n" +
+            //    $"Is Taken: {test.IsTaken}\n" +
+            //    "-------------"));
 
-                    if (response.MessageType == "QuestionsResponse" && response.Data != null)
-                    {
-                        var questionAnswerPairs = JsonConvert.DeserializeObject<List<TestResult>>(response.Data.ToString());
-                                             //var resultString = ""; // Рядок для накопичення всіх даних
-
-                        //foreach (var pair in questionAnswerPairs)
-                        //{
-                        //    var questionData = pair["Question"];
-                        //    var answerData = pair["Answers"];
-                        //    var userAnswerData = pair["UserAnswers"];
-                        //    var question = new Question
-                        //    {
-                        //        Id = questionData.Value<int>("Id"),
-                        //        QuestionText = questionData.Value<string>("QuestionText"),
-                        //        Points = questionData.Value<int>("Points"),
-                        //        Img = questionData.Value<string>("Img"),
-                        //        Answers = answerData
-                        //            .Select(answer => new Answer
-                        //            {
-                        //                Id = answer.Value<int>("Id"),
-                        //                AnswerText = answer.Value<string>("AnswerText")
-                        //            })
-                        //            .ToList()
-                        //    };
-
-                        //    // Додаємо дані питання та відповідей до рядка
-                        //    resultString += $"Питання: {question.QuestionText}\n";
-                        //    foreach (var answer in question.Answers)
-                        //    {
-                        //        resultString += $"- {answer.AnswerText}\n";
-                        //        // Перевіряємо, чи відповідь користувача попадається в циклі
-                        //        if (userAnswerData.Any(userAnswer => userAnswer.Value<int>("AnswerId") == answer.Id))
-                        //        {
-                        //            resultString += "  (ви відповіли)\n";
-                        //        }
-                        //    }
-
-                        //    resultString += "\n"; // Порожній рядок для розділення питань
-                        //}
-
-                        //// Результат містить всі питання та відповіді в потрібному форматі
-                        //MessageBox.Show(resultString); // Виведення результату на консоль
-                    }
-
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            //MessageBox.Show(outputString);
 
         }
 

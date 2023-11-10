@@ -199,7 +199,6 @@ namespace Server.ViewModels
 
                     var questions = _questionRepository.FindAll(x => taken.Select(x =>x.Id).Contains(x.TestId));
 
-                    // знайшла всі userAnswer
                     var userAnswers = _userAnswerRepository
                         .FindAll(x => takenTests
                         .Select(test => test.Id)
@@ -340,52 +339,7 @@ namespace Server.ViewModels
                     //await stream.WriteAsync(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response)));
                 }
 
-                if (request.MessageType == "TaskenQuestions")
-                {
-                    if (request.MessageType == "TaskenQuestions")
-                    {
-                        //long index = (long)request.Data;
-                        //var questionsByTestId = _questionRepository.FindAll(x => x.TestId == index).ToList();
-                        //var userTest = _userTestRepository.GetAll().FirstOrDefault(x => x.TestId == index && x.UserId == currentUser.Id && !x.IsTaken);
-
-
-                        //var userAnswers = _userAnswerRepository.FindAll(x => x.UserTestId == userTest.Id).ToList();
-                        //var questionAnswerPairs = questionsByTestId.Select(item => new
-                        //{
-                        //    Question = new
-                        //    {
-                        //        item.Id,
-                        //        item.QuestionText,
-                        //        item.Points,
-                        //        item.Img
-                        //    },
-                        //    Answers = item.Answers.Select(value => new
-                        //    {
-                        //        value.Id,
-                        //        value.AnswerText
-                        //    }),
-                        //    UserAnswers = userAnswers
-                        //        .Where(userAnswer => userAnswer.Answer.QuestionId == item.Id)
-                        //        .Select(userAnswer => new
-                        //        {
-                        //            AnswerId = userAnswer.Answer.Id,
-                        //            IsChecked = userAnswer.IsChecked,
-                        //        })
-                        //}).ToList();
-
-                        //NetworkData response = new()
-                        //{
-                        //    MessageType = "QuestionsResponse",
-                        //    Data = questionAnswerPairs
-                        //};
-
-                        //string r = JsonConvert.SerializeObject(response);
-                        //await stream.WriteAsync(Encoding.UTF8.GetBytes(r));
-
-
-                    }
-
-                }
+                
             }
             catch (Exception) { }
         }

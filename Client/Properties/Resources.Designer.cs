@@ -63,6 +63,26 @@ namespace Client.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] check {
+            get {
+                object obj = ResourceManager.GetObject("check", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] file {
+            get {
+                object obj = ResourceManager.GetObject("file", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] information {
             get {
                 object obj = ResourceManager.GetObject("information", resourceCulture);
