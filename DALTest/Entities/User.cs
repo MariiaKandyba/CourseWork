@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace DALTest.Entities
 {
+    [Serializable]
     public class User
     {
         public int Id { get; set; }
@@ -13,7 +15,7 @@ namespace DALTest.Entities
         public bool IsAdmin { get; set; }
         public bool IsArchived { get; set; }
         public DateTime RegisterDate { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Group> Groups { get; set; }
     }
 }

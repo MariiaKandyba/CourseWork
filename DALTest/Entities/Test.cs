@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DALTest.Entities
 {
+    [Serializable]
     public class Test
     {
-        [Key]
         public int Id { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
@@ -18,6 +19,8 @@ namespace DALTest.Entities
         public int PassPercent { get; set; }
         public bool IsArchived { get; set; }
         public DateTime LoadedDate { get; set; }
+
+        [JsonIgnore]
 
         public virtual ICollection<Question> Questions { get; set; }
     }

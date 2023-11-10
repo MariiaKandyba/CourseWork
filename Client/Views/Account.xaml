@@ -8,6 +8,32 @@
         Title="Account" Height="450" Width="800">
     <Grid>
         <TabControl x:Name="a" Grid.ColumnSpan="2" >
+            <TabItem x:Name="myInfoTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="3">Personal Info</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="150"/>
+                        </Grid.RowDefinitions>
+                        <Label Name="infoLbl" Grid.Row="1"></Label>
+                        <ToolBar Background="White">
+                            <Button Click="Button_Click" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/logout.png" Width="61" Height="40" />
+                                </StackPanel>
+                            </Button>
+                            <Label Content="{Binding ServerState}"></Label>
+
+                        </ToolBar>
+                        
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
             <TabItem x:Name="assignedTestTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -65,6 +91,7 @@
                                     <Image Source="/Resources/information.png" Width="50" Height="30" />
                                 </StackPanel>
                             </Button>
+                            
                         </ToolBar>
                         
                      <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
