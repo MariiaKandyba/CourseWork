@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Repository;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -19,6 +20,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TestServices;
+using Test = DALTest.Entities.Test;
 
 namespace Client.Views
 {
@@ -87,19 +90,20 @@ namespace Client.Views
 
 
 
-                    byte[] responseBuffer = new byte[1024];
-                    int bytesRead = stream.Read(responseBuffer, 0, responseBuffer.Length);
+                    byte[] responseBuffer = new byte[8192];
+                    int bytesRead = await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length);
                     string responseJson = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
+
 
                     NetworkData response = JsonConvert.DeserializeObject<NetworkData>(responseJson);
 
                     if (response.MessageType == "TestListResponse" && (response.Data != null))
                     {
 
-                        List<List<Test>> tests = JsonConvert.DeserializeObject<List<List<Test>>>(response.Data.ToString());
-                        _assigmentViewModel = new AssigmentViewModel(tests[0]);
-                        _historyViewModel = new HistoryViewModel(tests[1]);
-                        assignedTestTab.DataContext = _assigmentViewModel;
+                        List<TestResults> tests = JsonConvert.DeserializeObject<List<TestResults>>(response.Data.ToString());
+                        //_assigmentViewModel = new AssigmentViewModel(null);
+                        _historyViewModel = new HistoryViewModel(tests);
+                        //assignedTestTab.DataContext = _assigmentViewModel;
                         HistoryTab.DataContext = _historyViewModel;
                     }
 
@@ -110,6 +114,9 @@ namespace Client.Views
                 throw;
             }
         }
+
+      
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MainWindow main = new();

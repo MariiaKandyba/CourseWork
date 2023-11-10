@@ -142,8 +142,8 @@ namespace Client.ViewModels
         private string serverIpAddress = "127.0.0.1";
         private int serverPort = 12345;
 
-        private ObservableCollection<Test> _tests = new();
-        public ObservableCollection<Test> Tests
+        private ObservableCollection<TestResults> _tests = new();
+        public ObservableCollection<TestResults> Tests
         {
             get { return _tests; }
             set { SetProperty(ref _tests, value); }
@@ -156,9 +156,9 @@ namespace Client.ViewModels
         }
 
 
-        public HistoryViewModel(List<Test> tests)
+        public HistoryViewModel(List<TestResults> tests)
         {
-            _tests = new ObservableCollection<Test>(tests);
+            _tests = new ObservableCollection<TestResults>(tests);
             GetInfoCommand = new RelayCommand(OnGetInfoClick);
 
 
@@ -193,47 +193,46 @@ namespace Client.ViewModels
 
                     if (response.MessageType == "QuestionsResponse" && response.Data != null)
                     {
-                        var questionAnswerPairs = JsonConvert.DeserializeObject<List<JObject>>(response.Data.ToString());
+                        var questionAnswerPairs = JsonConvert.DeserializeObject<List<TestResult>>(response.Data.ToString());
+                                             //var resultString = ""; // Рядок для накопичення всіх даних
 
-                        var resultString = ""; // Рядок для накопичення всіх даних
+                        //foreach (var pair in questionAnswerPairs)
+                        //{
+                        //    var questionData = pair["Question"];
+                        //    var answerData = pair["Answers"];
+                        //    var userAnswerData = pair["UserAnswers"];
+                        //    var question = new Question
+                        //    {
+                        //        Id = questionData.Value<int>("Id"),
+                        //        QuestionText = questionData.Value<string>("QuestionText"),
+                        //        Points = questionData.Value<int>("Points"),
+                        //        Img = questionData.Value<string>("Img"),
+                        //        Answers = answerData
+                        //            .Select(answer => new Answer
+                        //            {
+                        //                Id = answer.Value<int>("Id"),
+                        //                AnswerText = answer.Value<string>("AnswerText")
+                        //            })
+                        //            .ToList()
+                        //    };
 
-                        foreach (var pair in questionAnswerPairs)
-                        {
-                            var questionData = pair["Question"];
-                            var answerData = pair["Answers"];
-                            var userAnswerData = pair["UserAnswers"];
-                            var question = new Question
-                            {
-                                Id = questionData.Value<int>("Id"),
-                                QuestionText = questionData.Value<string>("QuestionText"),
-                                Points = questionData.Value<int>("Points"),
-                                Img = questionData.Value<string>("Img"),
-                                Answers = answerData
-                                    .Select(answer => new Answer
-                                    {
-                                        Id = answer.Value<int>("Id"),
-                                        AnswerText = answer.Value<string>("AnswerText")
-                                    })
-                                    .ToList()
-                            };
+                        //    // Додаємо дані питання та відповідей до рядка
+                        //    resultString += $"Питання: {question.QuestionText}\n";
+                        //    foreach (var answer in question.Answers)
+                        //    {
+                        //        resultString += $"- {answer.AnswerText}\n";
+                        //        // Перевіряємо, чи відповідь користувача попадається в циклі
+                        //        if (userAnswerData.Any(userAnswer => userAnswer.Value<int>("AnswerId") == answer.Id))
+                        //        {
+                        //            resultString += "  (ви відповіли)\n";
+                        //        }
+                        //    }
 
-                            // Додаємо дані питання та відповідей до рядка
-                            resultString += $"Питання: {question.QuestionText}\n";
-                            foreach (var answer in question.Answers)
-                            {
-                                resultString += $"- {answer.AnswerText}\n";
-                                // Перевіряємо, чи відповідь користувача попадається в циклі
-                                if (userAnswerData.Any(userAnswer => userAnswer.Value<int>("AnswerId") == answer.Id))
-                                {
-                                    resultString += "  (ви відповіли)\n";
-                                }
-                            }
+                        //    resultString += "\n"; // Порожній рядок для розділення питань
+                        //}
 
-                            resultString += "\n"; // Порожній рядок для розділення питань
-                        }
-
-                        // Результат містить всі питання та відповіді в потрібному форматі
-                        MessageBox.Show(resultString); // Виведення результату на консоль
+                        //// Результат містить всі питання та відповіді в потрібному форматі
+                        //MessageBox.Show(resultString); // Виведення результату на консоль
                     }
 
                 }

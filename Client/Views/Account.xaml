@@ -27,7 +27,6 @@
                                     <Image Source="/Resources/logout.png" Width="61" Height="40" />
                                 </StackPanel>
                             </Button>
-                            <Label Content="{Binding ServerState}"></Label>
 
                         </ToolBar>
                         
@@ -101,11 +100,14 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Name" Binding="{Binding Title}" Width="*"/>
                                     <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
-                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                                    <DataGridTextColumn Header="Info" Binding="{Binding Info}" Width="*"/>
                                     <DataGridTextColumn Header="Pass Percent" Binding="{Binding PassPercent}" Width="*"/>
-                                    <DataGridTextColumn Header="Loaded Date" Binding="{Binding LoadedDate}" Width="*"/>
+                                    <DataGridTextColumn Header="Scored Percent" Binding="{Binding ScoredPercent}" Width="*"/>
+                                    <DataGridTextColumn Header="Total Possible Points" Binding="{Binding TotalPossiblePoints}" Width="*"/>
+                                    <DataGridTextColumn Header="Your score" Binding="{Binding PointsGrade}" Width="*"/>
+                                    <DataGridTextColumn Header="Is Passed" Binding="{Binding IsPassed}" Width="*"/>
+                                    <DataGridTextColumn Header="Taken Date" Binding="{Binding TakenDate}" Width="*"/>
                                 </DataGrid.Columns>
+                                
                             </DataGrid>
                         </ScrollViewer>
                     </Grid>
