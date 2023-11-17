@@ -30,28 +30,13 @@ namespace Client.Views
     /// </summary>
     public partial class Account : Window
     {
-        //IGenericRepository<User> _userRepository;
-        //IGenericRepository<Group> _groupRepository;
-        //IGenericRepository<Test> _testRepository;
-        //IGenericRepository<Question> _questionRepository;
-        //IGenericRepository<Answer> _answerRepository;
-        //IGenericRepository<UserTest> _userTestRepository;
-          AssigmentViewModel _assigmentViewModel;
-         HistoryViewModel _historyViewModel;
+        AssigmentViewModel _assigmentViewModel;
+        HistoryViewModel _historyViewModel;
         private TcpClient tcpClient;
         private string serverIpAddress = "127.0.0.1";
         private int serverPort = 12345;
-        //public Account(GenericUnitOfWork _unitOfWork, User user)
-        //{
-        //    InitializeComponent();
-        //    _assigmentViewModel = new AssigmentViewModel(user, _unitOfWork);
-        //    //_historyViewModel = new HistoryViewModel(user, _unitOfWork);
-        //    assignedTestTab.DataContext = _assigmentViewModel;
-        //    //HistoryTab.DataContext = _historyViewModel;
-        //}
         private readonly User _user;
 
-        List<Test> tests = new List<Test>();
         public Account(User user)
         {
             InitializeComponent();
@@ -90,7 +75,7 @@ namespace Client.Views
 
 
 
-                    byte[] responseBuffer = new byte[8192];
+                    byte[] responseBuffer = new byte[50000192];
                     int bytesRead = await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length);
                     string responseJson = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
 
@@ -101,7 +86,7 @@ namespace Client.Views
                     {
 
                         List<List<TestResults>> tests = JsonConvert.DeserializeObject<List<List<TestResults>>>(response.Data.ToString());
-                        _assigmentViewModel = new AssigmentViewModel(tests[0]);
+                        _assigmentViewModel = new AssigmentViewModel(tests[0], _user.Id);
                         _historyViewModel = new HistoryViewModel(tests[1]);
                         assignedTestTab.DataContext = _assigmentViewModel;
                         HistoryTab.DataContext = _historyViewModel;

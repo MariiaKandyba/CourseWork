@@ -6,6 +6,7 @@ using DALTest.Entities;
 using iText.Layout.Element;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic.Logging;
 using NetworkDataDll;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,34 +24,28 @@ using System.Windows;
 using TestServices;
 using static System.Net.Mime.MediaTypeNames;
 using Answer = DALTest.Entities.Answer;
+using Application = System.Windows.Application;
 using Question = DALTest.Entities.Question;
 using Test = DALTest.Entities.Test;
 
 namespace Server.ViewModels
 {
-    public class ServerViewModel : ObservableObject
+
+
+    public class RepositoryHelper
     {
-        private TcpListener tcpListener;
-
-        private readonly IGenericRepository<User> _userRepository;
-        private readonly IGenericRepository<Test> _testRepository;
-        private readonly IGenericRepository<UserTest> _userTestRepository;
-        private readonly IGenericRepository<Question> _questionRepository;
-        private readonly IGenericRepository<Answer> _answerRepository;
-        private readonly IGenericRepository<UserAnswer> _userAnswerRepository;
-
-        private readonly RepositoryFilter _repositoryFilter;
-        User user;
+        public IGenericRepository<User> UserRepository { get; set; }
+        public IGenericRepository<Test> TestRepository { get; set; }
+        public IGenericRepository<UserTest> UserTestRepository { get; set; }
+        public IGenericRepository<Question> QuestionRepository { get; set; }
+        public IGenericRepository<Answer> AnswerRepository { get; set; }
+        public IGenericRepository<UserAnswer> UserAnswerRepository { get; set; }
         GenericUnitOfWork _unitOfWork;
+        private readonly RepositoryFilter _repositoryFilter;
 
 
-        public ObservableCollection<string> ConnectedClients { get; } = new ObservableCollection<string>();
-
-        public ServerViewModel()
+        public RepositoryHelper()
         {
-            StartServerCommand = new RelayCommand(OnStartServerClick);
-            StopServerCommand = new RelayCommand(OnStopServerClick);
-
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("appsettings.json");
@@ -59,37 +54,115 @@ namespace Server.ViewModels
             var optionsBuilder = new DbContextOptionsBuilder<Context>();
             var options = optionsBuilder.UseLazyLoadingProxies().UseSqlServer(conStr).Options;
             _unitOfWork = new GenericUnitOfWork(new Context(options));
-            _userRepository = _unitOfWork.Repository<User>();
-            _testRepository = _unitOfWork.Repository<Test>();
-            _userTestRepository = _unitOfWork.Repository<UserTest>();
-            _questionRepository = _unitOfWork.Repository<Question>();
-            _answerRepository = _unitOfWork.Repository<Answer>();
-            _userAnswerRepository = _unitOfWork.Repository<UserAnswer>();
+            UserRepository = _unitOfWork.Repository<User>();
+            TestRepository = _unitOfWork.Repository<Test>();
+            UserTestRepository = _unitOfWork.Repository<UserTest>();
+            QuestionRepository = _unitOfWork.Repository<Question>();
+            AnswerRepository = _unitOfWork.Repository<Answer>();
+            UserAnswerRepository = _unitOfWork.Repository<UserAnswer>();
 
-            _repositoryFilter = new(_testRepository, _userTestRepository, _questionRepository, _answerRepository, _userAnswerRepository);
+            _repositoryFilter = new(TestRepository, UserTestRepository, QuestionRepository, AnswerRepository, UserAnswerRepository);
 
         }
-
-
-
-        private async void OnStartServerClick()
-            {
-                int port = 12345;
-                try
+        public List<List<TestResults>> GetAssignedAndUnassignedTestLists(int userId)
+        {
+            return new()
                 {
-                    tcpListener = new TcpListener(IPAddress.Any, port);
-                    tcpListener.Start();
+                    _repositoryFilter.GetTestResults(userId, false),
+                    _repositoryFilter.GetTestResults(userId, true)
+                };
 
-                    while (true) 
-                    {
-                        //string clientIpAddress = ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString();
-                        HandleClient(await tcpListener.AcceptTcpClientAsync()); 
-
-                    }
-                } catch (Exception) { }
         }
+        private List<Test> GetAssignedTestList(int userId)
+        {
+            var assignedtestIds = UserTestRepository.FindAll(x => x.UserId == userId && !x.IsTaken)
+                                           .Select(ut => ut.TestId)
+                                           .ToList();
+            List<Test> assigned = TestRepository.FindAll(test => assignedtestIds.Contains(test.Id)).ToList();
+            return assigned.Select(value => new Test
+            {
+                Id = value.Id,
+                Title = value.Title,
+                Author = value.Author,
+                Description = value.Description,
+                Info = value.Info,
+                PassPercent = value.PassPercent,
+                IsArchived = value.IsArchived,
+                LoadedDate = value.LoadedDate,
+            }).ToList();
+        }
+
+        public TestResults GetResultsAfterTakingTest(int userId, TestResults gottenTest)
+        {
+            UserTest userTestId = UserTestRepository.FindAll(x => x.UserId == userId && x.TestId == gottenTest.Id).FirstOrDefault();
+
+            string aa = string.Empty;
+
+            List<UserAnswer> actualAnswers = new();
+            foreach (var item in gottenTest.Questions)
+            {
+                foreach (var ans in item.Answers)
+                {
+                    if (ans.IsChecked)
+                    {
+                        UserAnswer answer = new UserAnswer()
+                        {
+                            IsChecked = true,
+                            AnswerId = ans.Id,
+                            UserTestId = userTestId.Id,
+                        };
+                        actualAnswers.Add(answer);
+                    }
+
+                }
+
+            }
+
+
+            double grade = _repositoryFilter.CalculateGrade(actualAnswers, gottenTest.Id);
+            userTestId.PointsGrade = (int)grade;
+            userTestId.IsPassed = _repositoryFilter.IsPassed(gottenTest.Id, grade);
+            userTestId.TakenDate = DateTime.Now;
+            userTestId.IsTaken = true;
+            userTestId.UserId = userId;
+            userTestId.TestId = gottenTest.Id;
+
+
+
+
+
+
+            UserTestRepository.Update(userTestId);
+            foreach (var answer in actualAnswers)
+                UserAnswerRepository.Add(answer);
+
+            return _repositoryFilter.GetTestResultsToShow(gottenTest, userTestId, actualAnswers);
+
+        }
+
+        public User GetCurrentUser(string login, string password)
+        {
+            return UserRepository.GetAll().FirstOrDefault(x => x.Login == login && x.Password == password);
+        }
+    }
+
+    public class ClientHandler
+    {
+        private TcpClient _tcpClient;
+        private readonly ServerViewModel _serverViewModel;
+        public int UserId { get; private set; }
+
+        private RepositoryHelper helper;
+
+        public ClientHandler(TcpClient tcpClient, ServerViewModel serverViewModel)
+        {
+            _tcpClient = tcpClient;
+            _serverViewModel = serverViewModel;
+            helper = new RepositoryHelper();
+        }
+
         User currentUser;
-        private async void HandleClient(TcpClient client)
+        public async Task HandleClient(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
             byte[] buffer = new byte[5024];
@@ -108,82 +181,39 @@ namespace Server.ViewModels
                     Data = VerifyLoginData(username, password) ? currentUser : null
                 };
 
+                _serverViewModel.AddConnectedClient(UserId, currentUser.FirstName + " " + currentUser.LastName);
+
                 await stream.WriteAsync(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response)));
             }
 
             if (request.MessageType == "TestList")
             {
-                List<List<TestResults>> tests = new()
-                {
-                    _repositoryFilter.GetTestResults(currentUser.Id, false),
-                    _repositoryFilter.GetTestResults(currentUser.Id, true)
-                };
+                List<List<TestResults>> test =  helper.GetAssignedAndUnassignedTestLists(Convert.ToInt32(request.Data));
 
-                NetworkData response = new()
-                {
-                    MessageType = "TestListResponse",
-                    Data = tests
-                };
+                    NetworkData response = new()
+                    {
+                        MessageType = "TestListResponse",
+                        Data = test
+                    };
 
-                string ch = JsonConvert.SerializeObject(response);
-                await stream.WriteAsync(Encoding.UTF8.GetBytes(ch));
+                    string ch = JsonConvert.SerializeObject(response);
+                    await stream.WriteAsync(Encoding.UTF8.GetBytes(ch));
+              
 
 
-                   
+
             }
             if (request.MessageType == "TestCompleted")
             {
                 TestResults gottenTest = JsonConvert.DeserializeObject<TestResults>(JsonConvert.SerializeObject(request.Data));
+                TestResults test = helper.GetResultsAfterTakingTest(gottenTest.UserId, gottenTest);
 
-                UserTest userTestId = _userTestRepository.FindAll(x => x.UserId == currentUser.Id && x.TestId == gottenTest.Id).FirstOrDefault();
-
-                string aa = string.Empty;
-
-                List<UserAnswer> actualAnswers = new();
-                foreach (var item in gottenTest.Questions)
-                {
-                    foreach (var ans in item.Answers)
-                    {
-                        if (ans.IsChecked)
-                        {
-                            UserAnswer answer = new UserAnswer()
-                            {
-                                IsChecked = true,
-                                AnswerId = ans.Id,
-                                UserTestId = userTestId.Id,
-                            };
-                            actualAnswers.Add(answer);
-                        }
-
-                    }
-
-                }
-                
-
-                double grade = _repositoryFilter.CalculateGrade(actualAnswers, gottenTest.Id);
-                userTestId.PointsGrade = (int)grade;
-                userTestId.IsPassed = _repositoryFilter.IsPassed(gottenTest.Id, grade);
-                userTestId.TakenDate = DateTime.Now;
-                userTestId.IsTaken = true;
-                userTestId.UserId = currentUser.Id;
-                userTestId.TestId = gottenTest.Id;
-
-
-
-
-
-
-                _userTestRepository.Update(userTestId);
-                foreach (var answer in actualAnswers)
-                {
-                    _userAnswerRepository.Add(answer);
-                }
 
 
                 NetworkData response = new()
                 {
                     MessageType = "CurrentTestResults",
-                    Data = _repositoryFilter.GetTestResultsToShow(gottenTest, userTestId, actualAnswers)
+                    Data = test
                 };
 
                 string ch = JsonConvert.SerializeObject(response);
@@ -192,34 +222,81 @@ namespace Server.ViewModels
 
         }
 
-        private List<Test> GetAssignedTestList() 
-        {
-            var assignedtestIds = _userTestRepository.FindAll(x => x.UserId == currentUser.Id && !x.IsTaken)
-                                           .Select(ut => ut.TestId)
-                                           .ToList();
-            List<Test> assigned = _testRepository.FindAll(test => assignedtestIds.Contains(test.Id)).ToList();
-            return assigned.Select(value => new Test
-            {
-                Id = value.Id,
-                Title = value.Title,
-                Author = value.Author,
-                Description = value.Description,
-                Info = value.Info,
-                PassPercent = value.PassPercent,
-                IsArchived = value.IsArchived,
-                LoadedDate = value.LoadedDate,
-            }).ToList();
-        }
+
 
         private bool VerifyLoginData(string login, string password)
         {
-            currentUser = _userRepository.GetAll().FirstOrDefault(x => x.Login == login && x.Password == password);
+            UserId = helper.GetCurrentUser(login, password).Id;
+            currentUser = helper.GetCurrentUser(login, password);
             return currentUser != null;
+        }
+    }
+
+
+    public class ServerViewModel : ObservableObject
+    {
+        
+        public ObservableCollection<string> ConnectedClients { get; } = new ObservableCollection<string>();
+
+        public void AddConnectedClient(int userId, string username)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ConnectedClients.Add($"{userId}: {username}");
+            });
+        }
+
+        public void RemoveClientHandler(ClientHandler clientHandler)
+        {
+            // Видалити зі списку при відключенні клієнта або помилці
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ConnectedClients.Remove($"{clientHandler.UserId}: Username");
+            });
+
+            _clientHandlers.Remove(clientHandler);
+        }
+
+
+
+        RepositoryHelper helper;
+
+        public ServerViewModel()
+        {
+            helper = new();
+            StartServerCommand = new AsyncRelayCommand(OnStartServerClick);
+            StopServerCommand = new RelayCommand(OnStopServerClick);
+        }
+
+
+        private TcpListener _tcpListener;
+        private readonly List<ClientHandler> _clientHandlers = new List<ClientHandler>();
+
+
+        private async Task OnStartServerClick()
+            {
+                int port = 12345;
+                try
+                {
+                _tcpListener = new TcpListener(IPAddress.Any, port);
+                _tcpListener.Start();
+
+                    while (true) 
+                    {
+                    TcpClient client = await _tcpListener.AcceptTcpClientAsync();
+                    ClientHandler clientHandler = new ClientHandler(client, this);
+                    _clientHandlers.Add(clientHandler);
+
+                    await Task.Run(async () => await clientHandler.HandleClient(client));
+
+
+                }
+                } catch (Exception) { }
         }
         
         private void OnStopServerClick()
         {
-            tcpListener?.Stop();
+            _tcpListener?.Stop();
         }
 
 

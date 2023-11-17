@@ -57,11 +57,11 @@ namespace Client
                 {
                     questionIndex++;
                     document.Add(new Paragraph($"\n{questionIndex}. {question.QuestionText}"));
-                    if (question.Img != string.Empty)
-                    {
-                        document.Add(new Paragraph($"{question.Img}"));
+                    //if (question.Img != string.Empty)
+                    //{
+                    //    document.Add(new Paragraph($"{question.Img}"));
 
-                    }
+                    //}
                     foreach (var answer in question.Answers)
                     {
 

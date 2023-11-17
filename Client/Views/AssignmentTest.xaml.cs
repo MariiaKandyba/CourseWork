@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -30,10 +31,11 @@ namespace Client.Views
         private int serverPort = 12345;
         public TestResults TestResult { get; set; }
 
-        public AssignmentTest(TestResults test)
+        public AssignmentTest(TestResults test, int userId)
         {
             InitializeComponent();
             TestResult = test;
+            TestResult.UserId = userId;
             DataContext = TestResult;
 
         }
@@ -52,7 +54,6 @@ namespace Client.Views
             {
                 if (item is QuestionModel testResults)
                 {
-                   
                     allTestResults.Add(testResults);
                 }
             }
@@ -103,6 +104,42 @@ namespace Client.Views
 
                 }
             }
+            
+
+        }
+        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                ImageViewerWindow imageViewerWindow = new(GetImageDataFromImage(sender as Image));
+                imageViewerWindow.Show();
+            }
+            catch (Exception)
+            {
+
+            }
+
+        }
+        private static byte[] GetImageDataFromImage(Image image)
+        {
+            try
+            {
+                if (image.Source is BitmapSource bitmapSource)
+                {
+                    using MemoryStream memoryStream = new MemoryStream();
+                    BitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                    encoder.Save(memoryStream);
+                    return memoryStream.ToArray();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+
+            }
+            return null;
+
 
         }
 

@@ -36,10 +36,11 @@ namespace Client.ViewModels
             set { SetProperty(ref _selectedTest, value); }
         }
 
-     
-        public AssigmentViewModel(List<TestResults> tests)
+        int userId;
+        public AssigmentViewModel(List<TestResults> tests, int userId)
         {
             _tests = new ObservableCollection<TestResults>(tests);
+            this.userId = userId;
             StartTestCommand = new RelayCommand(OnStartTestClick);
         }
 
@@ -47,7 +48,7 @@ namespace Client.ViewModels
         {
 
 
-            AssignmentTest passedTest = new(SelectedTest);
+            AssignmentTest passedTest = new(SelectedTest, userId);
             passedTest.ShowDialog();
 
           

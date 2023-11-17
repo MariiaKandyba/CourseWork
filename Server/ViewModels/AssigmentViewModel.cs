@@ -282,21 +282,21 @@ namespace Server.ViewModels
 
         private ObservableCollection<Group> GetUnassignedGroups()
         {
-            return new ObservableCollection<Group>(Groups.Where(group => group.Users.Any(user => !AssignedUsersId().Contains(user.Id))));
+            return new ObservableCollection<Group>(_groupRepository.GetAll().Where(group => group.Users.Any(user => !AssignedUsersId().Contains(user.Id))));
         }
 
         private ObservableCollection<Group> GetAssignedGroups()
         {
-            return new ObservableCollection<Group>(Groups.Where(group => group.Users.All(user => AssignedUsersId().Contains(user.Id))));
+            return new ObservableCollection<Group>(_groupRepository.GetAll().Where(group => group.Users.All(user => AssignedUsersId().Contains(user.Id))));
         }
         private ObservableCollection<User> GetUnassignedUsers()
         {
-            return new ObservableCollection<User>(Users.Where(user => !AssignedUsersId().Contains(user.Id)));
+            return new ObservableCollection<User>(_userRepository.GetAll().Where(user => !AssignedUsersId().Contains(user.Id)));
         }
 
         private ObservableCollection<User> GetAssignedUsers()
         {
-            return new ObservableCollection<User>(Users.Where(user => AssignedUsersId().Contains(user.Id)));
+            return new ObservableCollection<User>(_userRepository.GetAll().Where(user => AssignedUsersId().Contains(user.Id)));
         }
     }
 

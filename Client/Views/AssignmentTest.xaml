@@ -48,10 +48,14 @@
             MaxHeight="450"
             IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn 
-                    Header="Img" 
-                    Binding="{Binding Img}" 
-                    Width="1*"/>
+                        <DataGridTemplateColumn Header="Img" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Img}" 
+                   MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn 
                     Header="Question Text" 
                     ElementStyle="{StaticResource WrapText}" 
