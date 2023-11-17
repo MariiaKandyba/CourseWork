@@ -61,7 +61,7 @@ namespace Server
 
             _usersViewModel = new UsersViewModel(_userRepository);
             _groupViewModel = new GroupViewModel(_groupRepository, _userRepository);
-            _assigmentViewModel = new AssigmentViewModel(_userTestRepository, _testRepository, _groupRepository, _userRepository);
+            _assigmentViewModel = new AssigmentViewModel(_userTestRepository, _testRepository, _groupRepository, _userRepository, _questionRepository, _answerRepository);
             _serverViewModel = new ServerViewModel();
 
             usersTab.DataContext = _usersViewModel;

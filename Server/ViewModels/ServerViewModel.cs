@@ -70,77 +70,11 @@ namespace Server.ViewModels
 
         }
 
-    //private async void OnStartServerClick()
-    //{
-    //    int port = 12345; // Ваш порт
-    //    try
-    //    {
-    //        tcpListener = new TcpListener(IPAddress.Any, port);
-    //        tcpListener.Start();
 
-    //        try
-    //        {
-    //            TcpClient client = await tcpListener.AcceptTcpClientAsync();
-    //            string clientIpAddress = ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString();
-    //            ConnectedClients.Add(clientIpAddress);
-    //            client.Close();
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //        }
-    //    }
-    //    catch (Exception)
-    //    {
-    //    }
-
-
-    //}
-
-    //private async void OnStartServerClick()
-    //{
-    //    int port = 12345; // Ваш порт
-    //    try
-    //    {
-    //        tcpListener = new TcpListener(IPAddress.Any, port);
-    //        tcpListener.Start();
-
-    //        try
-    //        {
-    //            TcpClient client = await tcpListener.AcceptTcpClientAsync();
-    //            string clientIpAddress = ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString();
-
-    //            NetworkStream stream = client.GetStream();
-    //            byte[] buffer = new byte[1024];
-    //            int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-    //            string loginData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-    //            if (VerifyLoginData(loginData))
-    //            {
-    //                string response = "Login successful";
-    //                byte[] responseBuffer = Encoding.UTF8.GetBytes(response);
-    //                await stream.WriteAsync(responseBuffer, 0, responseBuffer.Length);
-    //            }
-    //            else
-    //            {
-    //                string response = "Login failed";
-    //                byte[] responseBuffer = Encoding.UTF8.GetBytes(response);
-    //                await stream.WriteAsync(responseBuffer, 0, responseBuffer.Length);
-    //            }
-
-    //            client.Close();
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //        }
-    //    }
-    //    catch (Exception)
-    //    {
-    //    }
-    //}
 
         private async void OnStartServerClick()
             {
-                int port = 12345; // Ваш порт
+                int port = 12345;
                 try
                 {
                     tcpListener = new TcpListener(IPAddress.Any, port);
@@ -224,12 +158,7 @@ namespace Server.ViewModels
                     }
 
                 }
-                foreach (var answer in actualAnswers)
-                {
-                    //aa += $"IsChecked: {answer.IsChecked}\n" +
-                    //    $"UserTestId: {answer.UserTestId}" +
-                    //    $"\nAnswerId: {answer.AnswerId}";
-                }
+                
 
                 double grade = _repositoryFilter.CalculateGrade(actualAnswers, gottenTest.Id);
                 userTestId.PointsGrade = (int)grade;
@@ -242,20 +171,6 @@ namespace Server.ViewModels
 
 
 
-                //string userTest = $"Id: {userTestId.Id}" +
-                //    $"\n" +
-                //    $"PointsGrade: {userTestId.PointsGrade}" +
-                //    $"\n" +
-                //    $"IsPassed: {userTestId.IsPassed}" +
-                //    $"\n" +
-                //    $"TakenDate: {userTestId.TakenDate}" +
-                //    $"\n" +
-                //    $"IsTaken: {userTestId.IsTaken}" +
-                //    $"\n" +
-                //    $"UserId: {userTestId.UserId}" +
-                //    $"\n" +
-                //    $"TestId: {userTestId.TestId}"
-                //    ;
 
 
                 _userTestRepository.Update(userTestId);

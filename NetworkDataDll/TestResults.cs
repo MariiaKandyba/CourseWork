@@ -35,7 +35,7 @@ namespace NetworkDataDll
         public int Id { get; set; }
         public int TestId { get; set; }
         public string QuestionText { get; set; }
-        public string Img { get; set; }
+        public byte[]? Img { get; set; }
         public List<AnswerModel>  Answers { get; set; }
     }
     [Serializable]

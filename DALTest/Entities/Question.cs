@@ -13,7 +13,7 @@ namespace DALTest.Entities
     {
         public int Id { get; set; }
         public string QuestionText { get; set; }
-        public string Img { get; set; }
+        public byte[]? Img { get; set; }
         public int Points { get; set; }
 
         public int TestId { get; set; }

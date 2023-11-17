@@ -124,9 +124,13 @@ namespace TestDesigner.Views
 
                 imgPreview.Source = bitmapImage;
 
+                // Зчитуємо бінарне представлення зображення
+
+                // Закодоване у Base64 представлення для збереження в ImgBase64
                 Question.Img = File.ReadAllBytes(imagePath);
             }
         }
+
 
     }
 }

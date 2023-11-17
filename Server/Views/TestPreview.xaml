@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Server.Views"
         mc:Ignorable="d"
-        Title="TestPreview" Height="450" Width="800">
+        Title="TestPreview" Height="700" Width="800">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
+        
     </Window.Resources>
     <Grid>
         <StackPanel Margin="10">
             <ToolBar Background="White">
-                <Button Background="White" Name="CreateTestButton" Command="{Binding StartTestCommand}" CommandParameter="{Binding}" Width="61" BorderBrush="White">
+                <Button Background="White" Name="ExitButton" Click="ConfirmBtn_Click" Width="61" BorderBrush="White">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/check.png" Width="61" Height="40"/>
                     </StackPanel>
@@ -24,20 +25,17 @@
             <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="18" Margin="0,0,0,10"/>
             <TextBlock Text="{Binding Author}" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding Description}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
-
+            <TextBlock Text="{Binding Info}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding PassPercent, StringFormat='Pass Percent: {0}%'}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding ScoredPercent, StringFormat='Scored Percent: {0}%'}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding PointsGrade, StringFormat='Points Grade: {0}'}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding TotalPossiblePoints, StringFormat='Total Possible Points: {0}'}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding IsPassed, StringFormat='Is Passed: {0}'}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding IsArchived, StringFormat='Is Archived: {0}%'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding LoadedDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
 
 
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
 
                 <DataGrid 
+                    
             AutoGenerateColumns="False" 
             ItemsSource="{Binding Questions}" 
             Margin="0,10,0,0"
@@ -45,10 +43,14 @@
             MaxHeight="450"
             IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn 
-                    Header="Img" 
-                    Binding="{Binding Img}" 
-                    Width="1*"/>
+                        <DataGridTemplateColumn Header="Img" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Img}" 
+                                           MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn 
                     Header="Question Text" 
                     ElementStyle="{StaticResource WrapText}" 
@@ -71,21 +73,16 @@
                                             Width="*"/>
                                             <DataGridCheckBoxColumn 
                                         IsReadOnly="True" 
-                                        Header="Your Answer" 
-                                        Binding="{Binding IsChecked}" Width="100"/>
+                                        Header="Right Answer" 
+                                        Binding="{Binding IsRight}" Width="100"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DataTemplate>
-
-
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
-
-
-
         </StackPanel>
     </Grid>
 </Window>

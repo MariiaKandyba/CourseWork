@@ -166,7 +166,7 @@ namespace DALTest
                 {
                     Id = ++questionIndex,
                     QuestionText = question.QuestionText,
-                    Img = string.Empty,
+                    Img = null,
                     Points = Convert.ToInt32(question.Points),
                     TestId = 1
                 });
@@ -187,7 +187,7 @@ namespace DALTest
                 {
                     Id = ++questionIndex,
                     QuestionText = question.QuestionText,
-                    Img = string.Empty,
+                    Img = null,
                     Points = Convert.ToInt32(question.Points),
                     TestId = 2
                 });

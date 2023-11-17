@@ -12,11 +12,14 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using TestServices;
+using Answer = DALTest.Entities.Answer;
+using Question = DALTest.Entities.Question;
 using Test = DALTest.Entities.Test;
 
 namespace Server.ViewModels
@@ -46,6 +49,8 @@ namespace Server.ViewModels
 
         #region TestProps
         private readonly IGenericRepository<Test> _testRepository;
+        private readonly IGenericRepository<Question> _questionRepository;
+        private readonly IGenericRepository<Answer> _answerRepository;
         private ObservableCollection<Test> _tests = new();
         private Test _selectedTest;
         public Test SelectedTest
@@ -111,12 +116,16 @@ namespace Server.ViewModels
         }
         #endregion
 
-        public AssigmentViewModel(IGenericRepository<UserTest> userTestRepository, IGenericRepository<Test> testRepository,  IGenericRepository<Group> groupRepository, IGenericRepository<User> userRepository)
+        public AssigmentViewModel(IGenericRepository<UserTest> userTestRepository, 
+            IGenericRepository<Test> testRepository,  IGenericRepository<Group> groupRepository, 
+            IGenericRepository<User> userRepository, IGenericRepository<Question> questionRepository, IGenericRepository<Answer> answerRepository)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
             _testRepository = testRepository;
             _userTestRepository = userTestRepository;
+            _questionRepository = questionRepository;
+            _answerRepository = answerRepository;
 
             Groups = new ObservableCollection<Group>(_groupRepository.GetAll());
             Users = new ObservableCollection<User>(_userRepository.GetAll());
@@ -128,6 +137,15 @@ namespace Server.ViewModels
             ConfirmAssignmentCommand = new RelayCommand(OnConfirmAssignmentCommandClick);
             InfoAssignmentCommand = new RelayCommand(OnInfoAssignmentClick);
             UploadTestCommand = new RelayCommand(OnUploadTestClick);
+            _questionRepository = questionRepository;
+
+            PreviewTestCommand = new RelayCommand(OnPreviewClcik);
+        }
+
+        private void OnPreviewClcik()
+        {
+            TestPreview test = new TestPreview(SelectedTest);
+            test.Show();
         }
 
         private async void OnUploadTestClick()
@@ -143,9 +161,52 @@ namespace Server.ViewModels
             string xmlContent = await fileService.LoadFileAsync(openFileDialog.FileName);
             SerializationService service = new();
             TestServices.Test test = service.DeserializeObjectFromXml<TestServices.Test>(xmlContent);
+            var testDb = new Test
+            {
+                Title = test.Title,
+                Author = test.Author,
+                Description = test.Description,
+                Info = test.Info,
+                PassPercent = Convert.ToInt32(test.PassPercent),
+                IsArchived = false,
+                LoadedDate = DateTime.Now,
+
+            };
+
+            _testRepository.Add(testDb);
+
+
+            foreach (var question in test.Questions.Question)
+            {
+                var newQuestion = new Question
+                {
+                    QuestionText = question.QuestionText,
+                    Img = question.Img,
+                    Points = Convert.ToInt32(question.Points),
+                    Test = testDb // Посилання на об'єкт Test
+                };
+
+                _questionRepository.Add(newQuestion);
+
+                foreach (var answer in question.Answers.Answer)
+                {
+                    var newAnswer = new Answer
+                    {
+                        AnswerText = answer.TextAnswer,
+                        IsRight = Convert.ToBoolean(answer.IsRight),
+                        Question = newQuestion 
+                    };
+                    _answerRepository.Add(newAnswer);
+                }
+
+            }
+            TestPreview testPreview = new(testDb);
+            testPreview.Show();
+
 
 
         }
+
 
         private void OnInfoAssignmentClick()
         {
@@ -214,6 +275,7 @@ namespace Server.ViewModels
         public IRelayCommand ConfirmAssignmentCommand { get; }
         public IRelayCommand InfoAssignmentCommand { get; }
         public IRelayCommand UploadTestCommand { get; }
+        public IRelayCommand PreviewTestCommand { get; }
 
 
 
