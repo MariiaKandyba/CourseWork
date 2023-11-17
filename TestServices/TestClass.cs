@@ -33,8 +33,15 @@ namespace TestServices
         public string QuestionText { get; set; }
         [XmlElement(ElementName = "Points")]
         public string Points { get; set; }
+        [XmlIgnore]
+        public byte[] Img { get; set; }
+
         [XmlElement(ElementName = "Img")]
-        public string Img { get; set; }
+        public string ImgBase64
+        {
+            get { return Convert.ToBase64String(Img); }
+            set { Img = Convert.FromBase64String(value); }
+        }
         [XmlElement(ElementName = "Answers")]
         public Answers Answers { get; set; }
     }

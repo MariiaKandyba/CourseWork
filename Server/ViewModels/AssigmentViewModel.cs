@@ -1,17 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DALTest.Entities;
+using iText.StyledXmlParser.Jsoup.Nodes;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using Repository;
 using Server.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using TestServices;
+using Test = DALTest.Entities.Test;
 
 namespace Server.ViewModels
 {
@@ -120,6 +126,31 @@ namespace Server.ViewModels
             AssignToGroupCommand = new RelayCommand(OnAssignToGroupClick);
             AssignToUsersCommand = new RelayCommand(OnAssignToUsersClick);
             ConfirmAssignmentCommand = new RelayCommand(OnConfirmAssignmentCommandClick);
+            InfoAssignmentCommand = new RelayCommand(OnInfoAssignmentClick);
+            UploadTestCommand = new RelayCommand(OnUploadTestClick);
+        }
+
+        private async void OnUploadTestClick()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "XML Files (*.xml)|*.xml",
+                Title = "Select an XML file"
+            };
+
+            openFileDialog.ShowDialog();
+            FileService fileService = new();
+            string xmlContent = await fileService.LoadFileAsync(openFileDialog.FileName);
+            SerializationService service = new();
+            TestServices.Test test = service.DeserializeObjectFromXml<TestServices.Test>(xmlContent);
+
+
+        }
+
+        private void OnInfoAssignmentClick()
+        {
+            AssignedUsersAndGroups assigned = new(GetAssignedGroups().ToList(), GetAssignedUsers().ToList()) ;
+            assigned.Show();
         }
 
         private void OnConfirmAssignmentCommandClick()
@@ -178,20 +209,32 @@ namespace Server.ViewModels
 
 
 
-       
         public IRelayCommand AssignToGroupCommand { get; }
         public IRelayCommand AssignToUsersCommand { get; }
         public IRelayCommand ConfirmAssignmentCommand { get; }
-      
+        public IRelayCommand InfoAssignmentCommand { get; }
+        public IRelayCommand UploadTestCommand { get; }
+
+
 
 
         private ObservableCollection<Group> GetUnassignedGroups()
         {
             return new ObservableCollection<Group>(Groups.Where(group => group.Users.Any(user => !AssignedUsersId().Contains(user.Id))));
         }
+
+        private ObservableCollection<Group> GetAssignedGroups()
+        {
+            return new ObservableCollection<Group>(Groups.Where(group => group.Users.All(user => AssignedUsersId().Contains(user.Id))));
+        }
         private ObservableCollection<User> GetUnassignedUsers()
         {
             return new ObservableCollection<User>(Users.Where(user => !AssignedUsersId().Contains(user.Id)));
+        }
+
+        private ObservableCollection<User> GetAssignedUsers()
+        {
+            return new ObservableCollection<User>(Users.Where(user => AssignedUsersId().Contains(user.Id)));
         }
     }
 

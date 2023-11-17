@@ -22,6 +22,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Drawing;
 using System.IO;
 using System.Reflection.Metadata;
+using Microsoft.Win32;
 
 namespace Client.Views
 {
@@ -39,17 +40,8 @@ namespace Client.Views
             DataContext = _testResult;
         }
         
-
-
-
-
-
-       
-
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-
-            
             Close();
         }
 
@@ -57,12 +49,14 @@ namespace Client.Views
         {
 
             var dialog = new VistaFolderBrowserDialog();
-            dialog.ShowDialog();
-            string a =  dialog.SelectedPath;
+            if (dialog.ShowDialog() == true)
+            {
+                string folderPath = dialog.SelectedPath;
+                string fileName = $"{_testResult.Title}.pdf";
+                string filePath = System.IO.Path.Combine(folderPath, fileName);
+                PdfGenerator.GeneratePdf(_testResult, filePath, null);
 
-            PdfGenerator.GeneratePdf(_testResult, a);
-
-
+            }
 
         }
     }

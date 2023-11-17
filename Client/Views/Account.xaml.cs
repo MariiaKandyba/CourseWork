@@ -100,10 +100,10 @@ namespace Client.Views
                     if (response.MessageType == "TestListResponse" && (response.Data != null))
                     {
 
-                        List<TestResults> tests = JsonConvert.DeserializeObject<List<TestResults>>(response.Data.ToString());
-                        //_assigmentViewModel = new AssigmentViewModel(null);
-                        _historyViewModel = new HistoryViewModel(tests);
-                        //assignedTestTab.DataContext = _assigmentViewModel;
+                        List<List<TestResults>> tests = JsonConvert.DeserializeObject<List<List<TestResults>>>(response.Data.ToString());
+                        _assigmentViewModel = new AssigmentViewModel(tests[0]);
+                        _historyViewModel = new HistoryViewModel(tests[1]);
+                        assignedTestTab.DataContext = _assigmentViewModel;
                         HistoryTab.DataContext = _historyViewModel;
                     }
 

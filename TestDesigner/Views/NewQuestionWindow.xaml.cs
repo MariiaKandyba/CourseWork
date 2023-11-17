@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +33,17 @@ namespace TestDesigner.Views
             if (question != null)
             {
                 Question = question;
+                if (question.Img != null && question.Img.Length > 0)
+                {
+                    using MemoryStream stream = new MemoryStream(question.Img);
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.StreamSource = stream;
+                    bitmapImage.EndInit();
+                    imgPreview.Source = bitmapImage;
+                }
+
                 TextTB.Text = question.QuestionText;
                 PointsTB.Text = question.Points;
                 Answers = new BindingList<Answer>( question.Answers.Answer);
@@ -59,6 +72,7 @@ namespace TestDesigner.Views
             Question.Points = PointsTB.Text;
             Question.Answers = new();
             Question.Answers.Answer = Answers.ToList();
+
             DialogResult = true;
             Close();
         }
@@ -92,6 +106,26 @@ namespace TestDesigner.Views
             if (MessageBox.Show("Ви впевнені, що бажаєте видалити цей елемент?", "Підтвердження видалення", 
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 Answers.Remove(selectedAnswer);
+        }
+
+        private void AddimageButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string imagePath = openFileDialog.FileName;
+
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.UriSource = new Uri(imagePath);
+                bitmapImage.EndInit();
+
+                imgPreview.Source = bitmapImage;
+
+                Question.Img = File.ReadAllBytes(imagePath);
+            }
         }
 
     }

@@ -100,6 +100,7 @@ namespace TestServices
                 {
                     QuestionText = question.QuestionText,
                     Points = question.Points,
+                    Img = question.Img,
                     Answers = new Answers()
                 };
                 testQuestion.Answers.Answer = new List<Answer>();

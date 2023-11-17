@@ -8,22 +8,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\add-group-color.png" />
     <None Remove="Resources\add-group.png" />
+    <None Remove="Resources\add-user_color.png" />
     <None Remove="Resources\approve.png" />
     <None Remove="Resources\assign.png" />
+    <None Remove="Resources\check.png" />
     <None Remove="Resources\delegation.png" />
     <None Remove="Resources\delete.png" />
+    <None Remove="Resources\delete_color.png" />
     <None Remove="Resources\diskette.png" />
+    <None Remove="Resources\edit_color.png" />
+    <None Remove="Resources\file.png" />
+    <None Remove="Resources\information.png" />
     <None Remove="Resources\minus-sign.png" />
     <None Remove="Resources\pencil.png" />
     <None Remove="Resources\play.png" />
     <None Remove="Resources\plus.png" />
+    <None Remove="Resources\preview.png" />
     <None Remove="Resources\stop-button.png" />
+    <None Remove="Resources\submit.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\add-group-color.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\add-group.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\add-user_color.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\approve.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -31,14 +46,29 @@
     <Content Include="Resources\assign.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\check.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\delegation.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\delete.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\delete_color.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\diskette.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\edit_color.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\file.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\information.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\minus-sign.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -52,7 +82,13 @@
     <Content Include="Resources\plus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\preview.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\stop-button.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\submit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -73,6 +109,7 @@
     <ProjectReference Include="..\DALTest\DALTest.csproj" />
     <ProjectReference Include="..\NetworkDataDll\NetworkDataDll.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\TestServices\TestServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

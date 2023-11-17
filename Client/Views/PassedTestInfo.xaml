@@ -29,8 +29,17 @@
             <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="18" Margin="0,0,0,10"/>
             <TextBlock Text="{Binding Author}" FontWeight="Bold" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding Description}" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding LoadedDate, StringFormat='Loaded Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
+
+            <TextBlock Text="{Binding PassPercent, StringFormat='Pass Percent: {0}%'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding ScoredPercent, StringFormat='Scored Percent: {0}%'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding PointsGrade, StringFormat='Points Grade: {0}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding TotalPossiblePoints, StringFormat='Total Possible Points: {0}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding IsPassed, StringFormat='Is Passed: {0}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
+
+
+
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
                 
             <DataGrid 
@@ -72,7 +81,9 @@
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
+                               
+
+                            </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
