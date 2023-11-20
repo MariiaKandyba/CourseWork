@@ -29,55 +29,6 @@ namespace Client
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    //public partial class MainWindow : Window
-    //{
-    //    IGenericRepository<User> _userRepository;
-    //    User user;
-    //    GenericUnitOfWork _unitOfWork;
-
-    //    public MainWindow()
-    //    {
-    //        InitializeComponent();
-
-    //    }
-
-    //    private void LoginButton_Click(object sender, RoutedEventArgs e)
-    //    {
-    //        string username = UsernameTextBox.Text;
-    //        string password = PasswordBox.Password;
-    //        var builder = new ConfigurationBuilder();
-    //        builder.SetBasePath(Directory.GetCurrentDirectory());
-    //        builder.AddJsonFile("appsettings.json");
-    //        string conStr = builder.Build().GetConnectionString("DefaultConnection")!;
-
-    //        var optionsBuilder = new DbContextOptionsBuilder<Context>();
-    //        var options = optionsBuilder.UseLazyLoadingProxies().UseSqlServer(conStr).Options;
-    //        _unitOfWork = new GenericUnitOfWork(new Context(options));
-    //        _userRepository = _unitOfWork.Repository<User>();
-
-
-
-    //        if (YourAuthenticationLogic(username, password))
-    //        {
-    //            Account account = new(_unitOfWork, user);
-    //            account.Show();
-    //            Close();
-    //        }
-    //        else
-    //        {
-    //            ErrorMessageText.Text = "Невірний логін або пароль. Спробуйте ще раз.";
-    //        }
-    //    }
-
-    //    private bool YourAuthenticationLogic(string username, string password)
-    //    {
-    //        user = _userRepository.GetAll().FirstOrDefault(x => x.Login == username && x.Password == password);
-    //        return user == null? false : true;
-    //    }
-
-    //}
-
-
     public partial class MainWindow : Window
     {
         private TcpClient tcpClient;
@@ -122,6 +73,15 @@ namespace Client
                         if (response.Data != null)
                         {
                             User user = JsonConvert.DeserializeObject<User>(response.Data.ToString());
+                            NetworkData sendLog = new NetworkData
+                            {
+                                MessageType = "NewClient",
+                                Data = user 
+                            };
+                            string sendLogJson = JsonConvert.SerializeObject(sendLog);
+                            byte[] sendLogBuffer = Encoding.UTF8.GetBytes(sendLogJson);
+                            stream.Write(sendLogBuffer, 0, sendLogBuffer.Length);
+
 
                             Account window = new(user);
                             window.Show();

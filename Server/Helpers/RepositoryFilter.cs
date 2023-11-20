@@ -11,9 +11,9 @@ using Answer = DALTest.Entities.Answer;
 using Test = DALTest.Entities.Test;
 using Question = DALTest.Entities.Question;
 
-namespace Server
+namespace Server.Helpers
 {
-    public  class RepositoryFilter
+    public class RepositoryFilter
     {
         private readonly IGenericRepository<Test> _testRepository;
         private readonly IGenericRepository<UserTest> _userTestRepository;
@@ -22,10 +22,10 @@ namespace Server
         private readonly IGenericRepository<UserAnswer> _userAnswerRepository;
 
         public RepositoryFilter(
-            IGenericRepository<Test> testRepository, 
-            IGenericRepository<UserTest> userTestRepository, 
-            IGenericRepository<Question> questionRepository, 
-            IGenericRepository<Answer> answerRepository, 
+            IGenericRepository<Test> testRepository,
+            IGenericRepository<UserTest> userTestRepository,
+            IGenericRepository<Question> questionRepository,
+            IGenericRepository<Answer> answerRepository,
             IGenericRepository<UserAnswer> userAnswerRepository)
         {
             _testRepository = testRepository;
@@ -49,7 +49,7 @@ namespace Server
                             ut.IsTaken
                         })
                         .ToList();
-            List<Test> taken = _testRepository.FindAll(test => takenTests.Select(x => x.TestId).Contains(test.Id)).ToList();
+            List<Test> taken = _testRepository.FindAll(test => takenTests.Select(x => x.TestId).Contains(test.Id) && !test.IsArchived).ToList();
 
 
             var questions = _questionRepository.FindAll(x => taken.Select(x => x.Id).Contains(x.TestId));
@@ -86,24 +86,6 @@ namespace Server
 
 
 
-            //List<TestResults> takenToSend = taken.Select(value => new TestResults
-            //{
-            //    Id = value.Id,
-            //    Title = value.Title,
-            //    Author = value.Author,
-            //    Description = value.Description,
-            //    Info = value.Info,
-            //    PassPercent = value.PassPercent,
-            //    LoadedDate = value.LoadedDate,
-            //    TotalPossiblePoints = value.Questions.Sum(x => x.Points),
-            //    PointsGrade = takenTests.FirstOrDefault(x => x.TestId == value.Id)?.PointsGrade ?? 0,
-            //    IsPassed = takenTests.FirstOrDefault(x => x.TestId == value.Id)?.IsPassed ?? false,
-            //    TakenDate = takenTests.FirstOrDefault(x => x.TestId == value.Id)?.TakenDate ?? DateTime.MinValue,
-            //    IsTaken = takenTests.FirstOrDefault(x => x.TestId == value.Id)?.IsTaken ?? false,
-            //    Questions = selectedData.Where(x => x.TestId == value.Id).ToList(),
-
-            //}).ToList();
-
             List<TestResults> takenToSend = taken
                 .Select(value => new TestResults
                 {
@@ -115,9 +97,9 @@ namespace Server
                     PassPercent = value.PassPercent,
                     LoadedDate = value.LoadedDate,
                     TotalPossiblePoints = value.Questions.Sum(x => x.Points),
-                    PointsGrade = isTaken ? (takenTests.FirstOrDefault(x => x.TestId == value.Id)?.PointsGrade ?? 0) : 0,
-                    IsPassed = isTaken ? (takenTests.FirstOrDefault(x => x.TestId == value.Id)?.IsPassed ?? false) : false,
-                    TakenDate = isTaken ? (takenTests.FirstOrDefault(x => x.TestId == value.Id)?.TakenDate ?? DateTime.MinValue) : DateTime.MinValue,
+                    PointsGrade = isTaken ? takenTests.FirstOrDefault(x => x.TestId == value.Id)?.PointsGrade ?? 0 : 0,
+                    IsPassed = isTaken ? takenTests.FirstOrDefault(x => x.TestId == value.Id)?.IsPassed ?? false : false,
+                    TakenDate = isTaken ? takenTests.FirstOrDefault(x => x.TestId == value.Id)?.TakenDate ?? DateTime.MinValue : DateTime.MinValue,
                     IsTaken = isTaken,
                     Questions = selectedData.Where(x => x.TestId == value.Id).ToList(),
 
@@ -127,18 +109,18 @@ namespace Server
             {
                 foreach (var item in takenToSend)
                 {
-                    item.ScoredPercent = (double)item.PointsGrade / (double)item.TotalPossiblePoints * 100;
+                    item.ScoredPercent = item.PointsGrade / (double)item.TotalPossiblePoints * 100;
                 }
             }
 
-           
+
 
             return takenToSend;
         }
 
         public double CalculateGrade(List<UserAnswer> userAnswers, int testId)
         {
-            var testQuestion = _questionRepository.FindAll(x =>x.TestId == testId);
+            var testQuestion = _questionRepository.FindAll(x => x.TestId == testId);
             var UsersAnswersIds = userAnswers.Select(x => x.AnswerId);
 
             var userPoints = UsersAnswersIds.Sum(answerId => testQuestion.FirstOrDefault(question => question.Answers.Any(answer => answer.Id == answerId && answer.IsRight))?.Points ?? 0);

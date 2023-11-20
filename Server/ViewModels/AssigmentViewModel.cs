@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using Repository;
 using Server.Views;
+using Server.Views.Tests;
+using Server.Views.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -126,25 +128,60 @@ namespace Server.ViewModels
             _userTestRepository = userTestRepository;
             _questionRepository = questionRepository;
             _answerRepository = answerRepository;
+            _questionRepository = questionRepository;
 
-            Groups = new ObservableCollection<Group>(_groupRepository.GetAll());
-            Users = new ObservableCollection<User>(_userRepository.GetAll());
-            Tests = new ObservableCollection<Test>(_testRepository.GetAll());
-            UserTests = new ObservableCollection<UserTest>(_userTestRepository.GetAll());
+
+            LoadData();
 
             AssignToGroupCommand = new RelayCommand(OnAssignToGroupClick);
             AssignToUsersCommand = new RelayCommand(OnAssignToUsersClick);
             ConfirmAssignmentCommand = new RelayCommand(OnConfirmAssignmentCommandClick);
             InfoAssignmentCommand = new RelayCommand(OnInfoAssignmentClick);
             UploadTestCommand = new RelayCommand(OnUploadTestClick);
-            _questionRepository = questionRepository;
-
             PreviewTestCommand = new RelayCommand(OnPreviewClcik);
+            DeleteTestCommand = new RelayCommand(OnDeleteTestClcik);
+            UpdateTestCommand = new RelayCommand(LoadData);
+            RestoreTestCommand = new RelayCommand(OnRestoreTestClick);
+        }
+
+        private void OnRestoreTestClick()
+        {
+            RestoreTest window = new(_testRepository.FindAll(x => x.IsArchived).ToList());
+            window.ShowDialog();
+
+            if (window.DialogResult == true)
+            {
+                foreach (var selectedItem in window.SelectedTests)
+                {
+                    var testToUpdate = _testRepository.FindById(selectedItem.Id);
+                    if (testToUpdate != null && testToUpdate.IsArchived)
+                    {
+                        testToUpdate.IsArchived = false;
+                        _testRepository.Update(testToUpdate);
+                    }
+                }
+                LoadData();
+            }
+        }
+
+        private void LoadData()
+        {
+            Groups = new ObservableCollection<Group>(_groupRepository.GetAll());
+            Users = new ObservableCollection<User>(_userRepository.FindAll(x => !x.IsArchived));
+            Tests = new ObservableCollection<Test>(_testRepository.FindAll(x => !x.IsArchived));
+            UserTests = new ObservableCollection<UserTest>(_userTestRepository.GetAll());
+
+        }
+        private void OnDeleteTestClcik()
+        {
+            SelectedTest.IsArchived = true;
+            _testRepository.Update(SelectedTest);
+            LoadData();
         }
 
         private void OnPreviewClcik()
         {
-            TestPreview test = new TestPreview(SelectedTest);
+            TestPreview test = new(SelectedTest);
             test.Show();
         }
 
@@ -156,52 +193,55 @@ namespace Server.ViewModels
                 Title = "Select an XML file"
             };
 
-            openFileDialog.ShowDialog();
-            FileService fileService = new();
-            string xmlContent = await fileService.LoadFileAsync(openFileDialog.FileName);
-            SerializationService service = new();
-            TestServices.Test test = service.DeserializeObjectFromXml<TestServices.Test>(xmlContent);
-            var testDb = new Test
+            if (openFileDialog.ShowDialog() == true)
             {
-                Title = test.Title,
-                Author = test.Author,
-                Description = test.Description,
-                Info = test.Info,
-                PassPercent = Convert.ToInt32(test.PassPercent),
-                IsArchived = false,
-                LoadedDate = DateTime.Now,
-
-            };
-
-            _testRepository.Add(testDb);
-
-
-            foreach (var question in test.Questions.Question)
-            {
-                var newQuestion = new Question
+                FileService fileService = new();
+                string xmlContent = await fileService.LoadFileAsync(openFileDialog.FileName);
+                SerializationService service = new();
+                TestServices.Test test = service.DeserializeObjectFromXml<TestServices.Test>(xmlContent);
+                var testDb = new Test
                 {
-                    QuestionText = question.QuestionText,
-                    Img = question.Img,
-                    Points = Convert.ToInt32(question.Points),
-                    Test = testDb // Посилання на об'єкт Test
+                    Title = test.Title,
+                    Author = test.Author,
+                    Description = test.Description,
+                    Info = test.Info,
+                    PassPercent = Convert.ToInt32(test.PassPercent),
+                    IsArchived = false,
+                    LoadedDate = DateTime.Now,
+
                 };
 
-                _questionRepository.Add(newQuestion);
+                _testRepository.Add(testDb);
 
-                foreach (var answer in question.Answers.Answer)
+
+                foreach (var question in test.Questions.Question)
                 {
-                    var newAnswer = new Answer
+                    var newQuestion = new Question
                     {
-                        AnswerText = answer.TextAnswer,
-                        IsRight = Convert.ToBoolean(answer.IsRight),
-                        Question = newQuestion 
+                        QuestionText = question.QuestionText,
+                        Img = question.Img,
+                        Points = Convert.ToInt32(question.Points),
+                        Test = testDb
                     };
-                    _answerRepository.Add(newAnswer);
-                }
 
+                    _questionRepository.Add(newQuestion);
+
+                    foreach (var answer in question.Answers.Answer)
+                    {
+                        var newAnswer = new Answer
+                        {
+                            AnswerText = answer.TextAnswer,
+                            IsRight = Convert.ToBoolean(answer.IsRight),
+                            Question = newQuestion
+                        };
+                        _answerRepository.Add(newAnswer);
+                    }
+
+                }
+                LoadData();
+               
             }
-            TestPreview testPreview = new(testDb);
-            testPreview.Show();
+           
 
 
 
@@ -210,6 +250,8 @@ namespace Server.ViewModels
 
         private void OnInfoAssignmentClick()
         {
+            LoadData();
+
             AssignedUsersAndGroups assigned = new(GetAssignedGroups().ToList(), GetAssignedUsers().ToList()) ;
             assigned.Show();
         }
@@ -224,6 +266,7 @@ namespace Server.ViewModels
                     _userTestRepository.Add(userTest);
                     Users.Remove(user);
                     Groups.Remove(SelectedGroup);
+
                 }
             }
 
@@ -235,6 +278,7 @@ namespace Server.ViewModels
                 Users = new ObservableCollection<User>(Users.Where(user => !AssignedUsersId().Contains(user.Id)));
             }
 
+
         }
 
         private void OnAssignToGroupClick()
@@ -245,6 +289,7 @@ namespace Server.ViewModels
                 UsersVisibility = Visibility.Collapsed;
                 Groups = GetUnassignedGroups();
             }
+
         }
         private void OnAssignToUsersClick()
         {
@@ -276,6 +321,9 @@ namespace Server.ViewModels
         public IRelayCommand InfoAssignmentCommand { get; }
         public IRelayCommand UploadTestCommand { get; }
         public IRelayCommand PreviewTestCommand { get; }
+        public IRelayCommand DeleteTestCommand { get; }
+        public IRelayCommand UpdateTestCommand { get; }
+        public IRelayCommand RestoreTestCommand { get; }
 
 
 

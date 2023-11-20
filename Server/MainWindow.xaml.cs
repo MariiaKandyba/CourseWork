@@ -34,12 +34,14 @@ namespace Server
         private readonly IGenericRepository<Question> _questionRepository;
         private readonly IGenericRepository<Answer> _answerRepository;
         private readonly IGenericRepository<UserTest> _userTestRepository;
+        private readonly IGenericRepository<UserAnswer> _userAnswerRepository;
         private readonly GenericUnitOfWork _unitOfWork;
 
         private readonly UsersViewModel _usersViewModel;
         private readonly GroupViewModel _groupViewModel;
         private readonly AssigmentViewModel _assigmentViewModel;
         private readonly ServerViewModel _serverViewModel;
+        private readonly RepositoryFilter _repositoryWork;
         public MainWindow()
         {
             InitializeComponent();
@@ -58,8 +60,10 @@ namespace Server
             _questionRepository = _unitOfWork.Repository<Question>();
             _answerRepository = _unitOfWork.Repository<Answer>();
             _userTestRepository = _unitOfWork.Repository<UserTest>();
+            _userAnswerRepository = _unitOfWork.Repository<UserAnswer>();
+            _repositoryWork = new(_testRepository, _userTestRepository, _questionRepository, _answerRepository, _userAnswerRepository);
 
-            _usersViewModel = new UsersViewModel(_userRepository);
+            _usersViewModel = new UsersViewModel(_userRepository, _userTestRepository, _repositoryWork);
             _groupViewModel = new GroupViewModel(_groupRepository, _userRepository);
             _assigmentViewModel = new AssigmentViewModel(_userTestRepository, _testRepository, _groupRepository, _userRepository, _questionRepository, _answerRepository);
             _serverViewModel = new ServerViewModel();

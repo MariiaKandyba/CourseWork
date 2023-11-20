@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Views"
         mc:Ignorable="d"
-        Title="Account" Height="450" Width="800">
+        Title="Account" Height="450" Width="800" Closing="Window_Closing">
     <Grid>
         <TabControl x:Name="a" Grid.ColumnSpan="2" >
             <TabItem x:Name="myInfoTab">

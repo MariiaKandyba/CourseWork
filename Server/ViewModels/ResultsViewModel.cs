@@ -1,26 +1,18 @@
-﻿using Client.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DALTest.Entities;
 using NetworkDataDll;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Repository;
+using Server.Views.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
-
-namespace Client.ViewModels
+namespace Server.ViewModels
 {
 
-
-    public class HistoryViewModel : ObservableObject
+    public class ResultsViewModel : ObservableObject
     {
 
         private ObservableCollection<TestResults> _tests = new();
@@ -37,17 +29,16 @@ namespace Client.ViewModels
         }
 
 
-        public HistoryViewModel(List<TestResults> tests)
+        public ResultsViewModel(List<TestResults> tests)
         {
-            _tests = new ObservableCollection<TestResults>(tests);
+            Tests = new ObservableCollection<TestResults>(tests);
             GetInfoCommand = new RelayCommand(OnGetInfoClick);
         }
 
-        private async void OnGetInfoClick()
+        private void OnGetInfoClick()
         {
-            PassedTestInfo passedTestInfo = new(SelectedTest);
-            passedTestInfo.ShowDialog();
-
+            DetailedResultWindow window = new(SelectedTest);
+            window.Show();
 
         }
 

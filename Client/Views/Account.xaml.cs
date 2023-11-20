@@ -108,5 +108,33 @@ namespace Client.Views
             main.Show();
             Close();
         }
+
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                using (tcpClient = new TcpClient())
+                {
+                    await tcpClient.ConnectAsync(serverIpAddress, serverPort);
+                    using NetworkStream stream = tcpClient.GetStream();
+                    NetworkData request = new()
+                    {
+                        MessageType = "ClientDisconnect",
+                        Data = _user
+                    };
+                    string requestJson = JsonConvert.SerializeObject(request);
+                    byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);
+                    await stream.WriteAsync(requestBuffer);
+
+
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
     }
 }

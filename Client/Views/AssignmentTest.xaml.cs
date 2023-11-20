@@ -92,7 +92,7 @@ namespace Client.Views
 
 
 
-                byte[] responseBuffer = new byte[8192];
+                byte[] responseBuffer = new byte[8011155];
                 int bytesRead = await stream.ReadAsync(responseBuffer);
                 string responseJson = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
                 NetworkData response = JsonConvert.DeserializeObject<NetworkData>(responseJson);

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Server"
         mc:Ignorable="d"
-        Title="MainWindow" Height="520" Width="800" ResizeMode="NoResize" FontSize="10" FontFamily="Consolas" 
+        Title="MainWindow" Height="700" Width="1000" ResizeMode="NoResize" FontSize="10" FontFamily="Consolas" 
         Background="White">
     <Window.Resources>
         <Style TargetType="DataGrid" x:Key="ModernDataGridStyle">
@@ -78,15 +78,11 @@
                 </TabItem.Header>
                 <TabItem.Content>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="129*"/>
-                            <ColumnDefinition Width="665*"/>
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="380"/>
+                            <RowDefinition Height="55"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <ToolBar Background="White" Grid.ColumnSpan="2" >
+                        <ToolBar Background="White" >
                             <Button Name="CreateTestButton" Command="{Binding AddUserCommand}" CommandParameter="{Binding}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/add-user_color.png" Width="25" Height="25" />
@@ -100,6 +96,24 @@
                             <Button Name="OpenButton" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/delete_color.png" Width="25" Height="25" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="RestoreButton" Command="{Binding RestoreUserCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/restore.png" Width="25" Height="25" />
+                                    <Label Content="Restore User" FontSize="8"></Label>
+                                </StackPanel>
+                            </Button>
+                            <Button Name="updateButton" Command="{Binding UpdateCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/update.png" Width="25" Height="25" />
+                                    <Label Content="Update Data" FontSize="8"></Label>
+                                </StackPanel>
+                            </Button>
+                            <Button Name="usertestButton" Command="{Binding SeeResultsCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/test.png" Width="25" Height="25" />
+                                    <Label Content="See Results" FontSize="8"></Label>
                                 </StackPanel>
                             </Button>
                         </ToolBar>
@@ -157,42 +171,45 @@
                 <TabItem.Content>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="40"/>
-                            <RowDefinition Height="380"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ToolBar Background="White" >
                             <Button Name="groupButton" Command="{Binding AddGroupCommand}" CommandParameter="{Binding}">
-                                <Button.ToolTip>
-                                    <ToolTip>Add a new group</ToolTip>
-                                </Button.ToolTip>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel>
                                     <Image Source="/Resources/add-group-color.png" Width="30" Height="30" />
+                                    <Label Content="Add group"></Label>
+
                                 </StackPanel>
                             </Button>
                             <Button Command="{Binding EditGroupCommand}" CommandParameter="{Binding}">
-                                <Button.ToolTip>
-                                    <ToolTip>Edit group</ToolTip>
-                                </Button.ToolTip>
-
-                                <StackPanel Orientation="Horizontal" >
+                               
+                                <StackPanel>
                                     <Image Source="/Resources/edit_color.png" Width="30" Height="30" />
+                                    <Label Content="Edit Group"></Label>
+
                                 </StackPanel>
                             </Button>
                             <Button Name="editButton" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding}">
-                                <Button.ToolTip>
-                                    <ToolTip>Delete group</ToolTip>
-                                </Button.ToolTip>
-                                <StackPanel Orientation="Horizontal">
+                               
+                                <StackPanel >
 
                                     <Image Source="/Resources/delete_color.png" Width="30" Height="30" />
+                                    <Label Content="Delete Group"></Label>
+
                                 </StackPanel>
                             </Button>
                             <Button Name="addtoGroupButton" Margin="20 0 0 0" Command="{Binding AddUserToGroupCommand}" CommandParameter="{Binding}">
-                                <Button.ToolTip>
-                                    <ToolTip>Add a user to group</ToolTip>
-                                </Button.ToolTip>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel>
                                     <Image Source="/Resources/assign.png" Width="30" Height="30"/>
+                                    <Label Content="Manage groups" ></Label>
+
+                                </StackPanel>
+                            </Button>
+                            <Button Name="updategroupButton" Command="{Binding UpdateGroupCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/update.png" Width="30" Height="30" />
+                                    <Label Content="Update Data" ></Label>
                                 </StackPanel>
                             </Button>
                         </ToolBar>
@@ -272,7 +289,7 @@
                                     <Label Content="Assigned Members" />
                                 </StackPanel>
                             </Button>
-                            <Button Name="UploadTestBtn"  Margin="190 0 0 0 " Command="{Binding UploadTestCommand}" CommandParameter="{Binding}">
+                            <Button Name="UploadTestBtn"  Margin="110 0 0 0 " Command="{Binding UploadTestCommand}" CommandParameter="{Binding}">
                                 <StackPanel>
                                     <Image Source="/Resources/submit.png"  Width="30" Height="30" />
                                     <Label Content="Upload Test"/>
@@ -282,6 +299,26 @@
                                 <StackPanel>
                                     <Image Source="/Resources/preview.png"  Width="30" Height="30" />
                                     <Label Content="Preview Test"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Name="DeleteTestBtn" Command="{Binding DeleteTestCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/delete_color.png"  Width="30" Height="30" />
+                                    <Label Content="Delete Test"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Name="RestoreTestBtn" Command="{Binding RestoreTestCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/restore.png"  Width="30" Height="30" />
+                                    <Label Content="Restore Test"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="45 0 0 0" Name="UpdateTestBtn" Command="{Binding UpdateTestCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/update.png"  Width="30" Height="30" />
+                                    <Label Content="Update Data"/>
                                 </StackPanel>
                             </Button>
 

@@ -26,8 +26,11 @@
     <None Remove="Resources\play.png" />
     <None Remove="Resources\plus.png" />
     <None Remove="Resources\preview.png" />
+    <None Remove="Resources\restore.png" />
     <None Remove="Resources\stop-button.png" />
     <None Remove="Resources\submit.png" />
+    <None Remove="Resources\test.png" />
+    <None Remove="Resources\update.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,10 +88,19 @@
     <Content Include="Resources\preview.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\restore.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\stop-button.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\submit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\test.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\update.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

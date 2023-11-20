@@ -16,6 +16,11 @@ namespace Repository
         {
             dbSet.Add(entity);
             context.SaveChanges();
+        } 
+        public async Task AddAsync(TEntity entity)
+        {
+            await dbSet.AddAsync(entity);
+            await context.SaveChangesAsync();
         }
 
         public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression)
@@ -26,6 +31,10 @@ namespace Repository
         public TEntity FindById(params object[] id)
         {
             return dbSet.Find(id);
+        }
+        public async Task<IEnumerable<TEntity>> FindByIdAsync(params object[] id)
+        {
+            return (IEnumerable<TEntity>)await dbSet.FindAsync(id);
         }
 
         public IEnumerable<TEntity> GetAll()
@@ -39,10 +48,21 @@ namespace Repository
             context.SaveChanges();
         }
 
+        public async Task RemoveAsync(TEntity entity)
+        {
+            dbSet.Remove(entity);
+            await context.SaveChangesAsync();
+        }
+
         public void Update(TEntity entity)
         {
             context.Entry(entity).State = EntityState.Modified;
             context.SaveChanges();
+        }
+        public async Task  UpdateAsync(TEntity entity)
+        {
+            context.Entry(entity).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
     }
 }
