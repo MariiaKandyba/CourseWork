@@ -1,0 +1,98 @@
+﻿<Window x:Class="Client.Views.PassedTestInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views"
+        mc:Ignorable="d"
+        Title="PassedTestInfo" Height="750" Width="900">
+    <Window.Resources>
+            <Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Margin="10">
+            <ToolBar Background="White">
+                <Button Background="White" Name="TestButton" Click="ConfirmBtn_Click" Width="61" BorderBrush="White">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/check.png" Width="61" Height="40"/>
+                    </StackPanel>
+                </Button>
+                <Button Click="PDFTestButton_Click" Background="White" Name="PDFTestButton" Width="61" BorderBrush="White">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/file.png" Width="61" Height="40"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            
+            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="18" Margin="0,0,0,10"/>
+            <TextBlock Text="{Binding Author}" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding Description}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
+
+            <TextBlock Text="{Binding PassPercent, StringFormat='Pass Percent: {0}%'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding ScoredPercent, StringFormat='Scored Percent: {0}%'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding PointsGrade, StringFormat='Points Grade: {0}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding TotalPossiblePoints, StringFormat='Total Possible Points: {0}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding IsPassed, StringFormat='Is Passed: {0}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                
+            <DataGrid 
+                AutoGenerateColumns="False" 
+                ItemsSource="{Binding Questions}" 
+                Margin="0,10,0,0"
+                VerticalAlignment="Top"
+                MaxHeight="450"
+                IsReadOnly="True">
+                <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Img" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Img}" 
+                                        MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn 
+                        Header="Question Text" 
+                        ElementStyle="{StaticResource WrapText}" 
+                        Binding="{Binding QuestionText}" 
+                        Width="2*"/>
+                        <DataGridTemplateColumn 
+                            Header="Answers" 
+                            Width="3*"
+                            IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <DataGrid 
+                                        AutoGenerateColumns="False"  
+                                        IsReadOnly="True" 
+                                        ItemsSource="{Binding Answers}">
+                                    <DataGrid.Columns>
+                                            <DataGridTextColumn 
+                                                ElementStyle="{StaticResource WrapText}"  
+                                                Header="Answer Text" Binding="{Binding AnswerText}" 
+                                                Width="*"/>
+                                        <DataGridCheckBoxColumn 
+                                            IsReadOnly="True" 
+                                            Header="Your Answer" 
+                                            Binding="{Binding IsChecked}" Width="100"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DataTemplate>
+                               
+
+                            </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            </ScrollViewer>
+            
+
+
+        </StackPanel>
+    </Grid>
+</Window>

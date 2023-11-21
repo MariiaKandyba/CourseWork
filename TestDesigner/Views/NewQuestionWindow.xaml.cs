@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using TestDesigner.Models;
+using TestServices;
 
 namespace TestDesigner.Views
 {
@@ -28,9 +30,34 @@ namespace TestDesigner.Views
         public NewQuestionWindow(Question question = null!)
         {
             InitializeComponent();
-            Question = question ?? new Question();
-            Answers = new BindingList<Answer>();
-            AnswersDataGrid.ItemsSource = Answers;
+            if (question != null)
+            {
+                Question = question;
+                if (question.Img != null && question.Img.Length > 0)
+                {
+                    using MemoryStream stream = new MemoryStream(question.Img);
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.StreamSource = stream;
+                    bitmapImage.EndInit();
+                    imgPreview.Source = bitmapImage;
+                }
+
+                TextTB.Text = question.QuestionText;
+                PointsTB.Text = question.Points;
+                Answers = new BindingList<Answer>( question.Answers.Answer);
+
+            }
+            else
+            {
+                Question =  new Question();
+                Answers = new BindingList<Answer>();
+
+            }
+                AnswersDataGrid.ItemsSource = Answers;
+
+            
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -45,6 +72,7 @@ namespace TestDesigner.Views
             Question.Points = PointsTB.Text;
             Question.Answers = new();
             Question.Answers.Answer = Answers.ToList();
+
             DialogResult = true;
             Close();
         }
@@ -79,6 +107,30 @@ namespace TestDesigner.Views
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 Answers.Remove(selectedAnswer);
         }
+
+        private void AddimageButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string imagePath = openFileDialog.FileName;
+
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.UriSource = new Uri(imagePath);
+                bitmapImage.EndInit();
+
+                imgPreview.Source = bitmapImage;
+
+                // Зчитуємо бінарне представлення зображення
+
+                // Закодоване у Base64 представлення для збереження в ImgBase64
+                Question.Img = File.ReadAllBytes(imagePath);
+            }
+        }
+
 
     }
 }

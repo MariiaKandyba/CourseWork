@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace DALTest.Entities
+{
+    [Serializable]
+    public class Test
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public string Description { get; set; }
+        public string Info { get; set; }
+        public int PassPercent { get; set; }
+        public bool IsArchived { get; set; }
+        public DateTime LoadedDate { get; set; }
+
+        [JsonIgnore]
+
+        public virtual ICollection<Question> Questions { get; set; }
+    }
+}

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Author>John Smith</Author>
+  <Title>English A2 Test</Title>
+  <Description>Intermediate English Test</Description>
+  <Info>Choose the correct answer</Info>
+  <PassPercent>70</PassPercent>
+  <Questions>
+    <Question>
+      <QuestionText>What is the capital of France?</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>Madrid</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>London</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Paris</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>How many days are there in a week?</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>5</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>7</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>10</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>Which of the following animals can fly?</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>Dog</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Cat</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Bird</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>What do you call a group of wolves?</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>Herd</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Pack</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Flock</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+    <Question>
+      <QuestionText>Which of the following is a vegetable?</QuestionText>
+      <Points>10</Points>
+      <Answers>
+        <Answer>
+          <TextAnswer>Apple</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Banana</TextAnswer>
+          <IsRight>False</IsRight>
+        </Answer>
+        <Answer>
+          <TextAnswer>Carrot</TextAnswer>
+          <IsRight>True</IsRight>
+        </Answer>
+      </Answers>
+    </Question>
+  </Questions>
+</Test>

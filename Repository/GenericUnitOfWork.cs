@@ -17,8 +17,7 @@ namespace Repository
         public Dictionary<Type, object> repositories = new();
         public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
-            //if (repositories.ContainsKey(typeof(TEntity)))
-            if (repositories.Keys.Contains(typeof(TEntity)))
+            if (repositories.ContainsKey(typeof(TEntity)))
             {
                 return repositories[typeof(TEntity)] as IGenericRepository<TEntity>;
             }

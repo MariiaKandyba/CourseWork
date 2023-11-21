@@ -22,8 +22,15 @@
             <WrapPanel HorizontalAlignment="Center">
             <Button Content="Cancel"  Name="CancelButton" Click="CancelButton_Click" Width="100" Height="20" Margin="0 20 5 0" />
             <Button Content="Add Question"  Name="AddButton" Click="AddButton_Click" Width="100" Height="20" Margin="5 20 0 0" />
+            <Button Content="Add Image"   Name="AddimageButton" Click="AddimageButton_Click" Width="100" Height="20" Margin="5 20 0 0" />
                 
             </WrapPanel>
+            <Image x:Name="imgPreview" 
+                   Width="310"
+                   Height="220"
+                   
+                   Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="10,40,0,0"  />
         </StackPanel>
         <StackPanel Grid.Column="1" Width="300">
                 <ToolBar Width="Auto">
@@ -43,7 +50,7 @@
                         </StackPanel>
                     </Button>
                 </ToolBar>
-                <DataGrid Name="AnswersDataGrid" Height="200" AutoGenerateColumns="False" 
+                <DataGrid Name="AnswersDataGrid" Height="420" AutoGenerateColumns="False" 
           ItemsSource="{Binding Answers}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Answer" Binding="{Binding TextAnswer}" Width="*" />

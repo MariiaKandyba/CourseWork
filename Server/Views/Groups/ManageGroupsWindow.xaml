@@ -1,0 +1,94 @@
+﻿<Window x:Class="Server.Views.ManageGroupsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Server.Views"
+        mc:Ignorable="d"
+        Title="Group Settings" Height="600" Width="800" FontFamily="Consolas" FontSize="10">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ToolBar Background="White" >
+            
+        <Button Name="groupButton" Click="groupButton_Click" Background="White" VerticalAlignment="Top" HorizontalAlignment="Left" BorderBrush="White">
+            <StackPanel>
+                <Image Source="/Resources/approve.png" Width="25" Height="25" />
+                    <Label Content="Save Changes"></Label>
+            </StackPanel>
+        </Button>
+        <Button Name="addButton" Click="addButton_Click" Background="White" Margin="100 0 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" BorderBrush="White">
+            <StackPanel >
+                <Image Source="/Resources/plus.png" Width="25" Height="25" />
+                <Label Content="Add to group"></Label>
+            </StackPanel>
+        </Button> <Button Name="removeButton" Click="removeButton_Click"  Background="White" VerticalAlignment="Top" HorizontalAlignment="Left" BorderBrush="White">
+            <StackPanel>
+                <Image Source="/Resources/minus-sign.png" Width="25" Height="25" />
+                    <Label Content="Remove from group"></Label>
+
+                </StackPanel>
+        </Button>
+        </ToolBar>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <DataGrid x:Name="inGroup"
+                      Style="{StaticResource ModernDataGridStyle}" 
+ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}" 
+RowStyle="{StaticResource ModernDataGridRowStyle}"
+            VerticalAlignment="Top"
+            AutoGenerateColumns="False"
+            MaxHeight="200" IsReadOnly="True" >     
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="First name" Binding="{Binding FirstName}" Width="*"/>
+                    <DataGridTextColumn Header="Last name" Binding="{Binding LastName}" Width="*"/>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Login}" Width="*"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    <DataGridTemplateColumn Header="Admin" Width="50">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox 
+                                    HorizontalAlignment="Center"
+                                    IsChecked="{Binding IsAdminGroup}" 
+                                    IsEnabled="False"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Register Date" Binding="{Binding RegisterDate, StringFormat=d MMMM yyyy}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" >
+            <DataGrid x:Name="others" 
+                                  Style="{StaticResource ModernDataGridStyle}" 
+                ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}" 
+                RowStyle="{StaticResource ModernDataGridRowStyle}"
+                VerticalAlignment="Top"
+                AutoGenerateColumns="False"
+                MaxHeight="200" IsReadOnly="True" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="First name" Binding="{Binding FirstName}" Width="*"/>
+                    <DataGridTextColumn Header="Last name" Binding="{Binding LastName}" Width="*"/>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Login}" Width="*"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    <DataGridTemplateColumn Header="Admin" Width="50">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox 
+                    HorizontalAlignment="Center"
+                    IsChecked="{Binding IsAdmin}" 
+                    IsEnabled="False"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Register Date" Binding="{Binding RegisterDate, StringFormat=d MMMM yyyy}" Width="*"/>
+
+                    
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+    </Grid>
+</Window>
