@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repository;
 using Server.ViewModels;
+using Server.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,50 +29,23 @@ namespace Server
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly IGenericRepository<User> _userRepository;
-        private readonly IGenericRepository<Group> _groupRepository;
-        private readonly IGenericRepository<Test> _testRepository;
-        private readonly IGenericRepository<Question> _questionRepository;
-        private readonly IGenericRepository<Answer> _answerRepository;
-        private readonly IGenericRepository<UserTest> _userTestRepository;
-        private readonly IGenericRepository<UserAnswer> _userAnswerRepository;
-        private readonly GenericUnitOfWork _unitOfWork;
-
-        private readonly UsersViewModel _usersViewModel;
-        private readonly GroupViewModel _groupViewModel;
-        private readonly AssigmentViewModel _assigmentViewModel;
-        private readonly ServerViewModel _serverViewModel;
-        private readonly RepositoryFilter _repositoryWork;
+       
         public MainWindow()
         {
             InitializeComponent();
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("appsettings.json");
-            var config = builder.Build();
-            string conStr = config.GetConnectionString("DefaultConnection")!;
+        }
 
-            var optionsBuilder = new DbContextOptionsBuilder<Context>();
-            var options = optionsBuilder.UseLazyLoadingProxies().UseSqlServer(conStr).Options;
-            _unitOfWork = new GenericUnitOfWork(new Context(options));
-            _userRepository = _unitOfWork.Repository<User>();
-            _groupRepository = _unitOfWork.Repository<Group>();
-            _testRepository = _unitOfWork.Repository<Test>();
-            _questionRepository = _unitOfWork.Repository<Question>();
-            _answerRepository = _unitOfWork.Repository<Answer>();
-            _userTestRepository = _unitOfWork.Repository<UserTest>();
-            _userAnswerRepository = _unitOfWork.Repository<UserAnswer>();
-            _repositoryWork = new(_testRepository, _userTestRepository, _questionRepository, _answerRepository, _userAnswerRepository);
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainInterfaceWindow window = new(UsernameTextBox.Text, PasswordBox.Password);
+            if (window.IsValid)
+            {
+                window.Show();
+                Close();
+            }
+            else
+                ErrorMessageText.Text = "Access deniend!";
 
-            _usersViewModel = new UsersViewModel(_userRepository, _userTestRepository, _repositoryWork);
-            _groupViewModel = new GroupViewModel(_groupRepository, _userRepository);
-            _assigmentViewModel = new AssigmentViewModel(_userTestRepository, _testRepository, _groupRepository, _userRepository, _questionRepository, _answerRepository);
-            _serverViewModel = new ServerViewModel();
-
-            usersTab.DataContext = _usersViewModel;
-            groupsTab.DataContext = _groupViewModel;
-            assignedTestTab.DataContext = _assigmentViewModel;
-            serversTab.DataContext = _serverViewModel;
         }
     }
 }

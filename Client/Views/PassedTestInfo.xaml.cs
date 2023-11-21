@@ -48,15 +48,11 @@ namespace Client.Views
 
         private void PDFTestButton_Click(object sender, RoutedEventArgs e)
         {
-
             var dialog = new VistaFolderBrowserDialog();
             if (dialog.ShowDialog() == true)
             {
-                string folderPath = dialog.SelectedPath;
-                string fileName = $"{_testResult.Title}.pdf";
-                string filePath = System.IO.Path.Combine(folderPath, fileName);
+                string filePath = System.IO.Path.Combine(dialog.SelectedPath, $"{_testResult.Title}.pdf");
                 PdfGenerator.GeneratePdf(_testResult, filePath, null);
-
             }
 
         }
@@ -68,10 +64,7 @@ namespace Client.Views
                 ImageViewerWindow imageViewerWindow = new(GetImageDataFromImage(sender as Image));
                 imageViewerWindow.Show();
             }
-            catch (Exception)
-            {
-
-            }
+            catch (Exception){}
 
         }
         private static byte[] GetImageDataFromImage(Image image)
@@ -87,11 +80,7 @@ namespace Client.Views
                     return memoryStream.ToArray();
                 }
             }
-            catch (Exception)
-            {
-                throw;
-
-            }
+            catch (Exception) { throw; }
             return null;
 
 

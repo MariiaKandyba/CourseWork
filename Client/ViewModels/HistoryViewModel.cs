@@ -18,11 +18,8 @@ using System.Windows;
 
 namespace Client.ViewModels
 {
-
-
     public class HistoryViewModel : ObservableObject
     {
-
         private ObservableCollection<TestResults> _tests = new();
         public ObservableCollection<TestResults> Tests
         {
@@ -45,12 +42,13 @@ namespace Client.ViewModels
 
         private async void OnGetInfoClick()
         {
-            PassedTestInfo passedTestInfo = new(SelectedTest);
-            passedTestInfo.ShowDialog();
-
-
+            if(SelectedTest != null)
+            {
+                PassedTestInfo passedTestInfo = new(SelectedTest);
+                passedTestInfo.ShowDialog();
+            }
+           
         }
-
         public IRelayCommand GetInfoCommand { get; }
 
     }

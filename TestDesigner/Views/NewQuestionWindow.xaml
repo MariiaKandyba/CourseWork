@@ -26,6 +26,9 @@
                 
             </WrapPanel>
             <Image x:Name="imgPreview" 
+                   Width="310"
+                   Height="220"
+                   
                    Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="10,40,0,0"  />
         </StackPanel>
@@ -47,7 +50,7 @@
                         </StackPanel>
                     </Button>
                 </ToolBar>
-                <DataGrid Name="AnswersDataGrid" Height="200" AutoGenerateColumns="False" 
+                <DataGrid Name="AnswersDataGrid" Height="420" AutoGenerateColumns="False" 
           ItemsSource="{Binding Answers}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Answer" Binding="{Binding TextAnswer}" Width="*" />

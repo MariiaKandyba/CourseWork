@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestServices", "TestService
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{3A937197-CBFC-450D-8613-0342475F0C23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkDataDll", "NetworkDataDll\NetworkDataDll.csproj", "{E57678B3-E4E8-4C2A-A223-573D8B0554B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetworkDataDll", "NetworkDataDll\NetworkDataDll.csproj", "{E57678B3-E4E8-4C2A-A223-573D8B0554B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,9 +20,6 @@ namespace Client.ViewModels
     public class AssigmentViewModel : ObservableObject
     {
 
-        private TcpClient tcpClient;
-        private string serverIpAddress = "127.0.0.1";
-        private int serverPort = 12345;
         private ObservableCollection<TestResults> _tests = new();
         public ObservableCollection<TestResults> Tests
         {
@@ -46,41 +43,18 @@ namespace Client.ViewModels
 
         private async void OnStartTestClick()
         {
-
-
-            AssignmentTest passedTest = new(SelectedTest, userId);
-            passedTest.ShowDialog();
-
-          
-           
-
-
+            if(SelectedTest != null)
+            {
+                AssignmentTest passedTest = new(SelectedTest, userId);
+                passedTest.ShowDialog();
+            }
+            
 
         }
-        private void OnConfirmAssignmentCommandClick()
-        {
-
-
-        }
-
-
-        private void OnAssignToUsersClick()
-        {
-
-
-
-        }
-
-
-
 
 
 
         public IRelayCommand StartTestCommand { get; }
-        public IRelayCommand AssignToUsersCommand { get; }
-        public IRelayCommand ConfirmAssignmentCommand { get; }
-
-
 
     }
 }

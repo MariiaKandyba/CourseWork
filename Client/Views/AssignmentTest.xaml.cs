@@ -37,6 +37,7 @@ namespace Client.Views
             TestResult = test;
             TestResult.UserId = userId;
             DataContext = TestResult;
+            
 
         }
 

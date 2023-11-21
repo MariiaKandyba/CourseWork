@@ -1,5 +1,4 @@
-﻿using iText.IO.Image;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,13 +29,12 @@ namespace Server.Views
 
         private Image CreateDynamicImage(byte[] imageData)
         {
-            Image dynamicImage = new Image();
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = new MemoryStream(imageData);
-                bitmapImage.EndInit();
-
-                dynamicImage.Source = bitmapImage;
+            Image dynamicImage = new ();
+            BitmapImage bitmapImage = new();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(imageData);
+            bitmapImage.EndInit();
+            dynamicImage.Source = bitmapImage;
             dynamicImage.Stretch = Stretch.Uniform; 
 
             return dynamicImage;

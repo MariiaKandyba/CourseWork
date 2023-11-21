@@ -219,7 +219,7 @@ namespace DALTest
                 new UserTest
                 {
                     Id = 1,
-                    PointsGrade = 90,
+                    PointsGrade = 50,
                     IsPassed = true,
                     TakenDate = DateTime.Now,
                     IsTaken = true,

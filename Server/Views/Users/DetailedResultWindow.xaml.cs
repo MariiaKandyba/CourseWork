@@ -1,5 +1,6 @@
 ﻿using NetworkDataDll;
 using Ookii.Dialogs.Wpf;
+using Server.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -63,6 +64,21 @@ namespace Server.Views.Users
 
             }
             return null;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void PDFTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new VistaFolderBrowserDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                string filePath = System.IO.Path.Combine(dialog.SelectedPath, $"{_testResult.Title}.pdf");
+                PdfGenerator.GeneratePdf(_testResult, filePath, null);
+            }
         }
     }
 }

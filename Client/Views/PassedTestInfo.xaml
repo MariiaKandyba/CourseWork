@@ -14,12 +14,12 @@
     <Grid>
         <StackPanel Margin="10">
             <ToolBar Background="White">
-                <Button Background="White" Name="CreateTestButton" Command="{Binding StartTestCommand}" CommandParameter="{Binding}" Width="61" BorderBrush="White">
+                <Button Background="White" Name="TestButton" Click="ConfirmBtn_Click" Width="61" BorderBrush="White">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/check.png" Width="61" Height="40"/>
                     </StackPanel>
                 </Button>
-                <Button Click="PDFTestButton_Click" Background="White" Name="PDFTestButton" Command="{Binding StartTestCommand}" CommandParameter="{Binding}" Width="61" BorderBrush="White">
+                <Button Click="PDFTestButton_Click" Background="White" Name="PDFTestButton" Width="61" BorderBrush="White">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/file.png" Width="61" Height="40"/>
                     </StackPanel>
@@ -37,8 +37,6 @@
             <TextBlock Text="{Binding TotalPossiblePoints, StringFormat='Total Possible Points: {0}'}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding IsPassed, StringFormat='Is Passed: {0}'}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
-
-
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
                 

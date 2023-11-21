@@ -54,7 +54,7 @@ namespace Client
                     NetworkData request = new NetworkData
                     {
                         MessageType = "Login",
-                        Data = new string[] { username, password } // Ваші значення логіну та пароля
+                        Data = new string[] { username, password } 
                     };
                     string requestJson = JsonConvert.SerializeObject(request);
                     byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);

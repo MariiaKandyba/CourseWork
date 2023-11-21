@@ -5,470 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Server"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1000" ResizeMode="NoResize" FontSize="10" FontFamily="Consolas" 
-        Background="White">
+        Title="MainWindow" Height="270" Width="300" ResizeMode="NoResize" WindowState="Normal" FontFamily="Consolas" FontSize="14">
     <Window.Resources>
-        <Style TargetType="DataGrid" x:Key="ModernDataGridStyle">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#FFDDDDDD"/>
-            <Setter Property="RowBackground" Value="#FFEFEFEF"/>
-            <Setter Property="RowHeaderWidth" Value="0"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="VerticalGridLinesBrush" Value="#FFCDCDCD"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#FFCDCDCD"/>
+        <Style TargetType="Button" x:Key="ButtonStyle">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="SelectionMode" Value="Single"/>
-            <Setter Property="SelectionUnit" Value="FullRow"/>
-            <Setter Property="AlternationCount" Value="2"/>
-            <Setter Property="GridLinesVisibility" Value="All"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-        </Style>
-
-        <Style TargetType="DataGridColumnHeader" x:Key="ModernDataGridColumnHeaderStyle">
-            <Setter Property="Background" Value="#FFB4B4B4"/>
+            <Setter Property="Background" Value="#FF4CAF50"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#FF9F9F9F"/>
-            <Setter Property="BorderThickness" Value="0,0,0,0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="#FF388E3C"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="DataGridColumnHeader">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- Стиль для виділеного рядка в DataGrid -->
-        <Style TargetType="DataGridRow" x:Key="ModernDataGridRowStyle">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Background" Value="#FFE3EFFF"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="#FFB9B9B9"/>
-            <Setter Property="BorderThickness" Value="0,0,1,1"/>
-            <Setter Property="Height" Value="25"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-
-
-
     </Window.Resources>
-
-
-
     <Grid>
-        <TabControl x:Name="a" Background="White">
-            <TabItem x:Name="usersTab" >
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="3">Users</TextBlock>
-                    </StackPanel>
-                </TabItem.Header>
-                <TabItem.Content>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="55"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <ToolBar Background="White" >
-                            <Button Name="CreateTestButton" Command="{Binding AddUserCommand}" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/add-user_color.png" Width="25" Height="25" />
-                                </StackPanel>
-                            </Button>
-                            <Button Command="{Binding EditUserCommand}" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal" >
-                                    <Image Source="/Resources/edit_color.png" Width="25" Height="25" />
-                                </StackPanel>
-                            </Button>
-                            <Button Name="OpenButton" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/delete_color.png" Width="25" Height="25" />
-                                </StackPanel>
-                            </Button>
-                            <Button Name="RestoreButton" Command="{Binding RestoreUserCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/restore.png" Width="25" Height="25" />
-                                    <Label Content="Restore User" FontSize="8"></Label>
-                                </StackPanel>
-                            </Button>
-                            <Button Name="updateButton" Command="{Binding UpdateCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/update.png" Width="25" Height="25" />
-                                    <Label Content="Update Data" FontSize="8"></Label>
-                                </StackPanel>
-                            </Button>
-                            <Button Name="usertestButton" Command="{Binding SeeResultsCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/test.png" Width="25" Height="25" />
-                                    <Label Content="See Results" FontSize="8"></Label>
-                                </StackPanel>
-                            </Button>
-                        </ToolBar>
-                        <ScrollViewer 
-                            VerticalScrollBarVisibility="Auto"
-                            Grid.Row="1" Grid.ColumnSpan="2" >
-                            <DataGrid 
-                                VerticalAlignment="Top"
-                                ItemsSource="{Binding Users}" 
-                                Style="{StaticResource ModernDataGridStyle}" 
-                                ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}" 
-                                RowStyle="{StaticResource ModernDataGridRowStyle}"
-                                AutoGenerateColumns="False"
-                                SelectedItem="{Binding SelectedUser}"
-                                MaxHeight="400" IsReadOnly="True" >
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Full name" Width="*">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock>
-                                                    <Run Text="{Binding FirstName}"/>
-                                                    <Run Text="{Binding LastName}" />
-                                                </TextBlock>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Margin="10">
+                <TextBlock Text="Login" Margin="0,0,0,5" />
+                <TextBox Text="admin" Name="UsernameTextBox" />
+            </StackPanel>
 
-                                    <DataGridTextColumn Header="Username" Binding="{Binding Login}" Width="*"/>
-                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                                    <DataGridTemplateColumn Header="Admin" Width="50">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox 
-                                                    HorizontalAlignment="Center"
-                                                    IsChecked="{Binding IsAdmin}" 
-                                                    IsEnabled="False"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-
-                                    <DataGridTextColumn Header="Register Date" Binding="{Binding RegisterDate}" Width="*"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
-
-                    </Grid>
-                </TabItem.Content>
-            </TabItem>
-            <TabItem x:Name="groupsTab" >
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="3">Groups</TextBlock>
-                    </StackPanel>
-                </TabItem.Header>
-                <TabItem.Content>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="60"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <ToolBar Background="White" >
-                            <Button Name="groupButton" Command="{Binding AddGroupCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/add-group-color.png" Width="30" Height="30" />
-                                    <Label Content="Add group"></Label>
-
-                                </StackPanel>
-                            </Button>
-                            <Button Command="{Binding EditGroupCommand}" CommandParameter="{Binding}">
-                               
-                                <StackPanel>
-                                    <Image Source="/Resources/edit_color.png" Width="30" Height="30" />
-                                    <Label Content="Edit Group"></Label>
-
-                                </StackPanel>
-                            </Button>
-                            <Button Name="editButton" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding}">
-                               
-                                <StackPanel >
-
-                                    <Image Source="/Resources/delete_color.png" Width="30" Height="30" />
-                                    <Label Content="Delete Group"></Label>
-
-                                </StackPanel>
-                            </Button>
-                            <Button Name="addtoGroupButton" Margin="20 0 0 0" Command="{Binding AddUserToGroupCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/assign.png" Width="30" Height="30"/>
-                                    <Label Content="Manage groups" ></Label>
-
-                                </StackPanel>
-                            </Button>
-                            <Button Name="updategroupButton" Command="{Binding UpdateGroupCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/update.png" Width="30" Height="30" />
-                                    <Label Content="Update Data" ></Label>
-                                </StackPanel>
-                            </Button>
-                        </ToolBar>
-                        <ScrollViewer 
-                            VerticalScrollBarVisibility="Auto"
-                            Grid.Row="1" >
-                            <DataGrid 
-                                VerticalAlignment="Top"
-                                ItemsSource="{Binding Groups}" 
-                                Style="{StaticResource ModernDataGridStyle}" 
-                                ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}" 
-                                RowStyle="{StaticResource ModernDataGridRowStyle}"
-                                AutoGenerateColumns="False"
-                                SelectedItem="{Binding SelectedGroup}"
-                                MaxHeight="400" IsReadOnly="True" >
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                                    <DataGridTemplateColumn Header="Admin" Width="50">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox 
-                                                    HorizontalAlignment="Center"
-                                                    IsChecked="{Binding IsAdminGroup}" 
-                                                    IsEnabled="False"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
-
-                    </Grid>
-                </TabItem.Content>
-            </TabItem>
-
-
-            <TabItem x:Name="assignedTestTab">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="3">Assign</TextBlock>
-                    </StackPanel>
-                </TabItem.Header>
-                <TabItem.Content>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="60"/>
-                            <RowDefinition Height="200"/>
-                            <RowDefinition Height="180"/>
-                        </Grid.RowDefinitions>
-                        <ToolBar Background="White">
-                            <Button Name="assignToOneButton" Command="{Binding AssignToUsersCommand}" CommandParameter="{Binding}">
-                                <StackPanel >
-                                    <Image Source="/Resources/assign.png" Width="30" Height="30" />
-                                    <Label Content="Assign User"  />
-
-                                </StackPanel>
-                            </Button>
-                            <Button Name="assignToGrounButton" Command="{Binding AssignToGroupCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/delegation.png" Width="30" Height="30" Margin="15 0 0 0 " />
-                                    <Label Content="Assign Group"  />
-
-                                </StackPanel>
-                            </Button>
-                            <Button Name="ConfirmAssignmentButton" Margin="30 0 0 0" Command="{Binding ConfirmAssignmentCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/approve.png" Width="30" Height="30" />
-                                    <Label Content="Confirm Assigment"  />
-                                </StackPanel>
-                            </Button>
-
-                            <Button Name="AssignedBtn" Command="{Binding InfoAssignmentCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/information.png"  Width="30" Height="30" />
-                                    <Label Content="Assigned Members" />
-                                </StackPanel>
-                            </Button>
-                            <Button Name="UploadTestBtn"  Margin="110 0 0 0 " Command="{Binding UploadTestCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/submit.png"  Width="30" Height="30" />
-                                    <Label Content="Upload Test"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Name="PreviewTestBtn" Command="{Binding PreviewTestCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/preview.png"  Width="30" Height="30" />
-                                    <Label Content="Preview Test"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Name="DeleteTestBtn" Command="{Binding DeleteTestCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/delete_color.png"  Width="30" Height="30" />
-                                    <Label Content="Delete Test"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Name="RestoreTestBtn" Command="{Binding RestoreTestCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/restore.png"  Width="30" Height="30" />
-                                    <Label Content="Restore Test"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Margin="45 0 0 0" Name="UpdateTestBtn" Command="{Binding UpdateTestCommand}" CommandParameter="{Binding}">
-                                <StackPanel>
-                                    <Image Source="/Resources/update.png"  Width="30" Height="30" />
-                                    <Label Content="Update Data"/>
-                                </StackPanel>
-                            </Button>
-
-
-                        </ToolBar>
-                        <ScrollViewer 
-                            VerticalScrollBarVisibility="Auto" 
-                            Grid.Row="1">
-                            <DataGrid  ItemsSource="{Binding Tests}"  
-                                       SelectedItem="{Binding SelectedTest}"
-                                       
-                                       VerticalAlignment="Top"
-                                        Style="{StaticResource ModernDataGridStyle}" 
-                                        ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}" 
-                                        RowStyle="{StaticResource ModernDataGridRowStyle}"
-                                        AutoGenerateColumns="False"
-                                        IsReadOnly="True">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Binding="{Binding Title}" Width="*"/>
-                                    <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
-                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                                    <DataGridTextColumn Header="Pass Percent" Binding="{Binding PassPercent, StringFormat={}{0}%}" Width="85" />
-                                    <DataGridTextColumn Header="Loaded Date" Binding="{Binding LoadedDate, StringFormat=d MMMM yyyy}" Width="*"/>
-                                </DataGrid.Columns>
-
-                            </DataGrid>
-                        </ScrollViewer>
-
-
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Visibility="{Binding GroupsVisibility}">
-                            <ScrollViewer 
-                             VerticalScrollBarVisibility="Auto"
-                             Grid.Row="1" >
-                                <DataGrid 
-                                 VerticalAlignment="Top"
-                                 ItemsSource="{Binding Groups}" 
-                                 Style="{StaticResource ModernDataGridStyle}" 
-                                 ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}" 
-                                 RowStyle="{StaticResource ModernDataGridRowStyle}"
-                                 AutoGenerateColumns="False"
-                                 SelectedItem="{Binding SelectedGroup}"
-                                 MaxHeight="400" IsReadOnly="True" >
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                                        <DataGridTemplateColumn Header="Admin" Width="50">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <CheckBox 
-                                                     HorizontalAlignment="Center"
-                                                     IsChecked="{Binding IsAdminGroup}" 
-                                                     IsEnabled="False"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </ScrollViewer>
-                        </ScrollViewer>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Visibility="{Binding UsersVisibility}">
-                            <ScrollViewer 
-                            VerticalScrollBarVisibility="Auto"
-                            Grid.Row="1" >
-                                <DataGrid 
-                                VerticalAlignment="Top"
-                                ItemsSource="{Binding Users}" 
-                                Style="{StaticResource ModernDataGridStyle}" 
-                                ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}" 
-                                RowStyle="{StaticResource ModernDataGridRowStyle}"
-                                AutoGenerateColumns="False"
-                                SelectedItem="{Binding SelectedUser}"
-                                 IsReadOnly="True" >
-                                    <DataGrid.Columns>
-                                        <DataGridTemplateColumn Header="Full name" Width="*">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock>
-                                                        <Run Text="{Binding FirstName}"/>
-                                                        <Run Text="{Binding LastName}" />
-                                                    </TextBlock>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-
-                                        <DataGridTextColumn Header="Username" Binding="{Binding Login}" Width="*"/>
-                                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                                        <DataGridTemplateColumn Header="Admin" Width="50">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <CheckBox 
-                                                    HorizontalAlignment="Center"
-                                                    IsChecked="{Binding IsAdmin}" 
-                                                    IsEnabled="False"/>
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-
-                                        <DataGridTextColumn Header="Register Date" Binding="{Binding RegisterDate}" Width="*"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </ScrollViewer>
-                        </ScrollViewer>
-                    </Grid>
-                </TabItem.Content>
-            </TabItem>
+            <StackPanel Grid.Row="1" Margin="10">
+                <TextBlock Text="Password" Margin="0,0,0,5" />
+                <PasswordBox Password="123" Name="PasswordBox" />
+            </StackPanel>
 
 
 
-
-            <TabItem x:Name="serversTab">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="3">Server</TextBlock>
-                    </StackPanel>
-                </TabItem.Header>
-                <TabItem.Content>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="150"/>
-                            <RowDefinition Height="150"/>
-                        </Grid.RowDefinitions>
-                        <ToolBar Background="White">
-                            <Button Name="startServerButton" Command="{Binding StartServerCommand}" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/play.png" Width="30" Height="30" />
-                                </StackPanel>
-                            </Button>
-                            <Button Name="stopServerButton" Command="{Binding StopServerCommand}" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/stop-button.png" Width="30" Height="30" Margin="15 0 0 0 " />
-                                </StackPanel>
-                            </Button>
-
-
-
-
-
-                        </ToolBar>
-
-                        <ListBox Name="ConnectedClientsListBox" Grid.Row="2 " ItemsSource="{Binding ConnectedClients}" Background="AliceBlue">
-
-                        </ListBox>
-
-
-                    </Grid>
-                </TabItem.Content>
-            </TabItem>
-
-        </TabControl>
+            <Button Grid.Row="2" Content="Login" Name="LoginButton" Style="{StaticResource ButtonStyle}" Click="LoginButton_Click" Width="100" Height="30" Margin="10" />
+            <TextBlock 
+                Grid.Row="3" 
+                FontSize="10"
+                Name="ErrorMessageText" 
+                Foreground="Red" 
+                Margin="10" />
+        </Grid>
     </Grid>
 </Window>

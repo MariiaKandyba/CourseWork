@@ -16,13 +16,14 @@ namespace Server.Helpers
     public class RepositoryHelper
     {
         public IGenericRepository<User> UserRepository { get; set; }
+        public IGenericRepository<Group> GroupRepository { get; set; }
         public IGenericRepository<Test> TestRepository { get; set; }
         public IGenericRepository<UserTest> UserTestRepository { get; set; }
         public IGenericRepository<Question> QuestionRepository { get; set; }
         public IGenericRepository<Answer> AnswerRepository { get; set; }
         public IGenericRepository<UserAnswer> UserAnswerRepository { get; set; }
         GenericUnitOfWork _unitOfWork;
-        private readonly RepositoryFilter _repositoryFilter;
+        public RepositoryFilter RepositoryFilter { get; set; }
 
 
         public RepositoryHelper()
@@ -36,42 +37,33 @@ namespace Server.Helpers
             var options = optionsBuilder.UseLazyLoadingProxies().UseSqlServer(conStr).Options;
             _unitOfWork = new GenericUnitOfWork(new Context(options));
             UserRepository = _unitOfWork.Repository<User>();
+            GroupRepository = _unitOfWork.Repository<Group>();
             TestRepository = _unitOfWork.Repository<Test>();
             UserTestRepository = _unitOfWork.Repository<UserTest>();
             QuestionRepository = _unitOfWork.Repository<Question>();
             AnswerRepository = _unitOfWork.Repository<Answer>();
             UserAnswerRepository = _unitOfWork.Repository<UserAnswer>();
 
-            _repositoryFilter = new(TestRepository, UserTestRepository, QuestionRepository, AnswerRepository, UserAnswerRepository);
+            RepositoryFilter = new(TestRepository, UserTestRepository, QuestionRepository, AnswerRepository, UserAnswerRepository, UserRepository);
 
         }
+
+        public bool IsVerifed(string login, string password)
+        {
+            return RepositoryFilter.VerifyAdmin(login, password) != null;
+
+        }
+
         public List<List<TestResults>> GetAssignedAndUnassignedTestLists(int userId)
         {
             return new()
                 {
-                    _repositoryFilter.GetTestResults(userId, false),
-                    _repositoryFilter.GetTestResults(userId, true)
+                    RepositoryFilter.GetTestResults(userId, false),
+                    RepositoryFilter.GetTestResults(userId, true)
                 };
 
         }
-        private List<Test> GetAssignedTestList(int userId)
-        {
-            var assignedtestIds = UserTestRepository.FindAll(x => x.UserId == userId && !x.IsTaken)
-                                           .Select(ut => ut.TestId)
-                                           .ToList();
-            List<Test> assigned = TestRepository.FindAll(test => assignedtestIds.Contains(test.Id)).ToList();
-            return assigned.Select(value => new Test
-            {
-                Id = value.Id,
-                Title = value.Title,
-                Author = value.Author,
-                Description = value.Description,
-                Info = value.Info,
-                PassPercent = value.PassPercent,
-                IsArchived = value.IsArchived,
-                LoadedDate = value.LoadedDate,
-            }).ToList();
-        }
+     
 
         public TestResults GetResultsAfterTakingTest(int userId, TestResults gottenTest)
         {
@@ -100,9 +92,9 @@ namespace Server.Helpers
             }
 
 
-            double grade = _repositoryFilter.CalculateGrade(actualAnswers, gottenTest.Id);
+            double grade = RepositoryFilter.CalculateGrade(actualAnswers, gottenTest.Id);
             userTestId.PointsGrade = (int)grade;
-            userTestId.IsPassed = _repositoryFilter.IsPassed(gottenTest.Id, grade);
+            userTestId.IsPassed = RepositoryFilter.IsPassed(gottenTest.Id, grade);
             userTestId.TakenDate = DateTime.Now;
             userTestId.IsTaken = true;
             userTestId.UserId = userId;
@@ -112,7 +104,7 @@ namespace Server.Helpers
             foreach (var answer in actualAnswers)
                 UserAnswerRepository.Add(answer);
 
-            return _repositoryFilter.GetTestResultsToShow(gottenTest, userTestId, actualAnswers);
+            return RepositoryFilter.GetTestResultsToShow(gottenTest, userTestId, actualAnswers);
 
         }
 

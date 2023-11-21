@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DALTest.Entities;
-using iText.StyledXmlParser.Jsoup.Nodes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using Repository;
@@ -208,11 +207,9 @@ namespace Server.ViewModels
                     PassPercent = Convert.ToInt32(test.PassPercent),
                     IsArchived = false,
                     LoadedDate = DateTime.Now,
-
                 };
 
                 _testRepository.Add(testDb);
-
 
                 foreach (var question in test.Questions.Question)
                 {

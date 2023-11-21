@@ -63,7 +63,7 @@
                                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
                                     <DataGridTextColumn Header="Info" Binding="{Binding Info}" Width="*"/>
                                     <DataGridTextColumn Header="Pass Percent" Binding="{Binding PassPercent}" Width="*"/>
-                                    <DataGridTextColumn Header="Loaded Date" Binding="{Binding LoadedDate}" Width="*"/>
+                                    <DataGridTextColumn Header="Loaded Date" Binding="{Binding LoadedDate, StringFormat=d MMMM yyyy}" Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -102,8 +102,17 @@
                                     <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
                                     <DataGridTextColumn Header="Scored Percent" Binding="{Binding ScoredPercent}" Width="*"/>
                                     <DataGridTextColumn Header="Your score" Binding="{Binding PointsGrade}" Width="*"/>
-                                    <DataGridTextColumn Header="Is Passed" Binding="{Binding IsPassed}" Width="*"/>
-                                    <DataGridTextColumn Header="Taken Date" Binding="{Binding TakenDate}" Width="*"/>
+                                    <DataGridTemplateColumn Header="Passed" Width="50">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox 
+            HorizontalAlignment="Center"
+            IsChecked="{Binding IsPassed}" 
+            IsEnabled="False"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Taken Date" Binding="{Binding TakenDate, StringFormat=d MMMM yyyy}" Width="*"/>
                                 </DataGrid.Columns>
                                 
                             </DataGrid>

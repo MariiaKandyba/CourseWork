@@ -20,19 +20,22 @@ namespace Server.Helpers
         private readonly IGenericRepository<Question> _questionRepository;
         private readonly IGenericRepository<Answer> _answerRepository;
         private readonly IGenericRepository<UserAnswer> _userAnswerRepository;
+        private readonly IGenericRepository<User> _userRepository;
 
         public RepositoryFilter(
             IGenericRepository<Test> testRepository,
             IGenericRepository<UserTest> userTestRepository,
             IGenericRepository<Question> questionRepository,
             IGenericRepository<Answer> answerRepository,
-            IGenericRepository<UserAnswer> userAnswerRepository)
+            IGenericRepository<UserAnswer> userAnswerRepository,
+            IGenericRepository<User> userRepository)
         {
             _testRepository = testRepository;
             _userTestRepository = userTestRepository;
             _questionRepository = questionRepository;
             _answerRepository = answerRepository;
             _userAnswerRepository = userAnswerRepository;
+            _userRepository = userRepository;
         }
 
         public List<TestResults> GetTestResults(int id, bool isTaken)
@@ -175,6 +178,10 @@ namespace Server.Helpers
             return gottenTest;
 
         }
+        public User VerifyAdmin(string login, string password)
+        {
+            return _userRepository.FindAll(x => x.IsAdmin && x.Login == login && x.Password == password).FirstOrDefault();
 
+        }
     }
 }

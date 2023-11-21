@@ -5,18 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestDesigner.Views"
         mc:Ignorable="d"
-        Title="AddAnswerWindow" Height="250" Width="300">
+        Title="AddAnswerWindow" Height="240" Width="300" ResizeMode="NoResize">
     <StackPanel Margin="0 20 0 0">
-        <Label Content="Add Answer:" />
 
-        <TextBox Name="AnswerTextBox" Width="200" Height="30" Margin=" 0 0 0 20" />
+        <Label Content="Add Answer:" Margin=" 50 0 0 0" />
 
-        <CheckBox Name="IsTrueCheckBox" Content="Is True" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBox x:Name="AnswerTextBox" Width="200" Height="30" Margin=" 0 0 0 20" />
+
+        <CheckBox Margin="50 0 0 0"  x:Name="IsTrueCheckBox" Content="Is True" VerticalAlignment="Center" HorizontalAlignment="Left"/>
         <WrapPanel HorizontalAlignment="Center" Margin="0 20 0 0">
-            
-        <Button Content="Cancel" Width="100" Height="30" Margin="0 0 20 0"  />
-        <Button Name="SaveBTN" Content="Save" Width="100" Height="30" Click="SaveBTN_Click"  />
-        </WrapPanel> 
+
+            <Button Content="Cancel" Width="90" Height="30" Margin="0 0 20 0"  />
+            <Button x:Name="SaveBTN" Content="Save" Width="90" Height="30" Click="SaveBTN_Click"  />
+        </WrapPanel>
 
     </StackPanel>
 </Window>

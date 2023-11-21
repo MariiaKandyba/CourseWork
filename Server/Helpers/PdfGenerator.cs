@@ -14,7 +14,7 @@ using Font = iTextSharp.text.Font;
 using DALTest.Entities;
 using Image = iTextSharp.text.Image;
 
-namespace Client
+namespace Server.Helpers
 {
     public class PdfGenerator
     {

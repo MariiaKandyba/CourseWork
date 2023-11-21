@@ -39,17 +39,17 @@
         Width="380" Grid.Column="0">
         <StackPanel>
             <UniformGrid Rows="5" Columns="2" >
-                <Label Margin="0 10 0 0 " Content="First Name:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Label Margin="0 10 0 0 " Content="First Name*:" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <TextBox  x:Name="FirstNameTextBox" Width="180" Height="20" HorizontalAlignment="Right"/>
 
-                <Label Content="Last Name:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Label Content="Last Name*:" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <TextBox x:Name="LastNameTextBox" Width="180" Height="20" HorizontalAlignment="Right" />
 
                 <Label Content="Description:" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <TextBox x:Name="DescriptionTextBox" Width="180" Height="20" HorizontalAlignment="Right" />
-                <Label Content="Login:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Label Content="Login*:" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <TextBox x:Name="LoginTextBox" Width="180" Height="20" HorizontalAlignment="Right" />
-                <Label Content="Password:" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Label Content="Password*:" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <PasswordBox x:Name="PasswordBox" Width="180" Height="20" HorizontalAlignment="Right" PasswordChar="*" />
                 <TextBox x:Name="PasswordTextBox" Width="180" Height="20" HorizontalAlignment="Right" Visibility="Collapsed" />
             </UniformGrid>

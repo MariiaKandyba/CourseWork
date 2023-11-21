@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DALTest;
 using DALTest.Entities;
-using iText.Layout.Element;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic.Logging;
@@ -31,11 +30,6 @@ using Test = DALTest.Entities.Test;
 
 namespace Server.ViewModels
 {
-
-
-    
-    
-
 
     public class ServerViewModel : ObservableObject
     {
@@ -82,10 +76,8 @@ namespace Server.ViewModels
                     while (true) 
                     {
                         TcpClient client = await _tcpListener.AcceptTcpClientAsync();
-                        ClientHandler clientHandler = new ClientHandler(client, this);
+                        ClientHandler clientHandler = new(client, this);
                         await Task.Run(async () => await clientHandler.HandleClient(client));
-
-
                     }
                 } catch (Exception) { }
         }

@@ -61,16 +61,6 @@ namespace Server.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] add_group {
-            get {
-                object obj = ResourceManager.GetObject("add-group", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap add_group_color {
@@ -131,32 +121,12 @@ namespace Server.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] delete {
-            get {
-                object obj = ResourceManager.GetObject("delete", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap delete_color {
             get {
                 object obj = ResourceManager.GetObject("delete_color", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] diskette {
-            get {
-                object obj = ResourceManager.GetObject("diskette", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -191,6 +161,16 @@ namespace Server.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logout {
+            get {
+                object obj = ResourceManager.GetObject("logout", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] minus_sign {
@@ -206,16 +186,6 @@ namespace Server.Properties {
         internal static byte[] pencil {
             get {
                 object obj = ResourceManager.GetObject("pencil", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] play {
-            get {
-                object obj = ResourceManager.GetObject("play", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -251,12 +221,22 @@ namespace Server.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] stop_button {
+        internal static System.Drawing.Bitmap start {
             get {
-                object obj = ResourceManager.GetObject("stop-button", resourceCulture);
-                return ((byte[])(obj));
+                object obj = ResourceManager.GetObject("start", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stop {
+            get {
+                object obj = ResourceManager.GetObject("stop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -14,12 +14,12 @@
     <Grid>
         <StackPanel Margin="10">
             <ToolBar Background="White">
-                <Button Background="White" Name="CreateTestButton" Command="{Binding StartTestCommand}" CommandParameter="{Binding}" Width="61" BorderBrush="White">
+                <Button Background="White" Name="Close" Click="Close_Click" Width="61" BorderBrush="White">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/check.png" Width="61" Height="40"/>
                     </StackPanel>
                 </Button>
-                <Button Background="White" Name="PDFTestButton" Command="{Binding StartTestCommand}" CommandParameter="{Binding}" Width="61" BorderBrush="White">
+                <Button Background="White" Name="PDFTestButton" Click="PDFTestButton_Click"  Width="61" BorderBrush="White">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/file.png" Width="61" Height="40"/>
                     </StackPanel>

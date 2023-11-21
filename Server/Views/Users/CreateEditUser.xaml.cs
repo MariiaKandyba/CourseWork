@@ -1,28 +1,14 @@
 ﻿using DALTest.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using TestServices;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Server.Views
 {
-    /// <summary>
-    /// Interaction logic for CreateEditUser.xaml
-    /// </summary>
     public partial class CreateEditUser : Window
     {
-        public User User{ get; set; }
+        public User User { get; set; }
 
         public CreateEditUser(User user = null!)
         {
@@ -52,15 +38,34 @@ namespace Server.Views
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            User.FirstName = FirstNameTextBox.Text;
-            User.LastName = LastNameTextBox.Text;
-            User.Login = LoginTextBox.Text;
-            User.Password = PasswordBox.Password;
-            User.Description = DescriptionTextBox.Text;
-            User.IsAdmin = AdminCheckBox.IsChecked ?? false;
-            User.IsArchived = false;
-            DialogResult = true;
-            Close();
+            if (ValidateFields())
+            {
+                User.FirstName = FirstNameTextBox.Text;
+                User.LastName = LastNameTextBox.Text;
+                User.Login = LoginTextBox.Text;
+                User.Password = PasswordBox.Password;
+                User.Description = DescriptionTextBox.Text;
+                User.IsAdmin = AdminCheckBox.IsChecked ?? false;
+                User.IsArchived = false;
+                DialogResult = true;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Please fill in all required fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private bool ValidateFields()
+        {
+            if (string.IsNullOrWhiteSpace(FirstNameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(LastNameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(LoginTextBox.Text) ||
+                string.IsNullOrWhiteSpace(PasswordBox.Password))
+            {
+                return false;
+            }
+            return true;
         }
 
         private void ShowPasswordCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -76,6 +81,5 @@ namespace Server.Views
             PasswordBox.Visibility = Visibility.Visible;
             PasswordBox.Password = PasswordTextBox.Text;
         }
-
     }
 }
