@@ -20,6 +20,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Security.Cryptography;
 
 namespace Server.Views
 {
@@ -37,7 +38,7 @@ namespace Server.Views
         public MainInterfaceWindow(string login, string password)
         {
            RepositoryHelper repositoryHelper = new ();
-            IsValid = repositoryHelper.IsVerifed(login, password);
+            IsValid = repositoryHelper.IsVerifed(login, HashPassword(password));
 
             InitializeComponent();
             _usersViewModel = new UsersViewModel(repositoryHelper.UserRepository, repositoryHelper.RepositoryFilter) ;
@@ -63,6 +64,16 @@ namespace Server.Views
             window.Show();
 
             Close();
+        }
+
+        private string HashPassword(string password)
+        {
+            using (var sha256 = new SHA256Managed())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashedPasswordBytes = sha256.ComputeHash(passwordBytes);
+                return Convert.ToBase64String(hashedPasswordBytes);
+            }
         }
     }
 }

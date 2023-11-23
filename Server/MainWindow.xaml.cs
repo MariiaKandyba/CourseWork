@@ -21,6 +21,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Security.Cryptography;
+
 
 namespace Server
 {
@@ -37,7 +39,7 @@ namespace Server
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            MainInterfaceWindow window = new(UsernameTextBox.Text, PasswordBox.Password);
+            MainInterfaceWindow window = new(UsernameTextBox.Text, HashPassword(PasswordBox.Password));
             if (window.IsValid)
             {
                 window.Show();
@@ -46,6 +48,15 @@ namespace Server
             else
                 ErrorMessageText.Text = "Access deniend!";
 
+        }
+        private string HashPassword(string password)
+        {
+            using (var sha256 = new SHA256Managed())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashedPasswordBytes = sha256.ComputeHash(passwordBytes);
+                return Convert.ToBase64String(hashedPasswordBytes);
+            }
         }
     }
 }

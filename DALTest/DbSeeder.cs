@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 using TestServices;
 
 namespace DALTest
@@ -21,7 +22,7 @@ namespace DALTest
                     FirstName = "Mary",
                     LastName = "Smith",
                     Login = "mary_smith",
-                    Password = "pass123",
+                    Password = HashPassword( "pass123"),
                     Description = "Regular user",
                     IsAdmin = false,
                     IsArchived = false,
@@ -33,7 +34,7 @@ namespace DALTest
                     FirstName = "John",
                     LastName = "Doe",
                     Login = "john_doe",
-                    Password = "password123",
+                    Password = HashPassword("password123"),
                     Description = "Regular user",
                     IsAdmin = false,
                     IsArchived = false,
@@ -45,7 +46,7 @@ namespace DALTest
                     FirstName = "Bob",
                     LastName = "Johnson",
                     Login = "bob_johnson",
-                    Password = "password456",
+                    Password = HashPassword("password456"),
                     Description = "Regular user",
                     IsAdmin = false,
                     IsArchived = false,
@@ -57,7 +58,7 @@ namespace DALTest
                     FirstName = "Alice",
                     LastName = "Johnson",
                     Login = "alice_johnson",
-                    Password = "pass456",
+                    Password = HashPassword("pass456"),
                     Description = "Admin user",
                     IsAdmin = true,
                     IsArchived = false,
@@ -69,7 +70,7 @@ namespace DALTest
                     FirstName = "Admin",
                     LastName = "Admin",
                     Login = "admin",
-                    Password = "123",
+                    Password = HashPassword( "123"),
                     Description = "Administrator",
                     IsAdmin = true,
                     IsArchived = false,
@@ -280,6 +281,17 @@ namespace DALTest
             .HasOne(ua => ua.Answer)
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
+        }
+
+
+        private static string HashPassword(string password)
+        {
+            using (var sha256 = new SHA256Managed())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashedPasswordBytes = sha256.ComputeHash(passwordBytes);
+                return Convert.ToBase64String(hashedPasswordBytes);
+            }
         }
     }
 
