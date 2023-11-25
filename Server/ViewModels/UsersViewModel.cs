@@ -13,6 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Security.Cryptography;
+
 
 namespace Server.ViewModels
 {
@@ -100,6 +102,8 @@ namespace Server.ViewModels
                 window.ShowDialog();
                 if (window.DialogResult ?? false)
                 {
+                    if(window.User.Password != string.Empty)
+                        window.User.Password = HashPassword(window.User.Password);
                     _userRepository.Update(window.User);
                     LoadActualList();
                 }
@@ -112,6 +116,7 @@ namespace Server.ViewModels
             window.ShowDialog();
             if (window.DialogResult ?? false)
             {
+                window.User.Password = HashPassword(window.User.Password);
                 _userRepository.Add(window.User);
                 LoadActualList();
             }
@@ -135,5 +140,15 @@ namespace Server.ViewModels
         public IRelayCommand RestoreUserCommand { get; }
         public IRelayCommand UpdateCommand { get; }
         public IRelayCommand SeeResultsCommand { get; }
+
+        private string HashPassword(string password)
+        {
+            using (var sha256 = new SHA256Managed())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashedPasswordBytes = sha256.ComputeHash(passwordBytes);
+                return Convert.ToBase64String(hashedPasswordBytes);
+            }
+        }
     }
 }

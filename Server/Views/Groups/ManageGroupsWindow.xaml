@@ -52,7 +52,7 @@ RowStyle="{StaticResource ModernDataGridRowStyle}"
                             <DataTemplate>
                                 <CheckBox 
                                     HorizontalAlignment="Center"
-                                    IsChecked="{Binding IsAdminGroup}" 
+                                    IsChecked="{Binding IsAdmin}" 
                                     IsEnabled="False"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

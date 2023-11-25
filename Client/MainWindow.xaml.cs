@@ -1,5 +1,6 @@
 ﻿using Client.ViewModels;
 using DALTest.Entities;
+using System.Security.Cryptography;
 using DALTest;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@ using Client.Views;
 using System.Net.Sockets;
 using Newtonsoft.Json;
 using NetworkDataDll;
+using System.Net.Security;
 
 namespace Client
 {
@@ -54,7 +56,7 @@ namespace Client
                     NetworkData request = new NetworkData
                     {
                         MessageType = "Login",
-                        Data = new string[] { username, password } 
+                        Data = new string[] { username, HashPassword(password) } 
                     };
                     string requestJson = JsonConvert.SerializeObject(request);
                     byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);
@@ -98,6 +100,15 @@ namespace Client
             catch (Exception)
             {
                 ErrorMessageText.Text = "Server is not available at the moment";
+            }
+        }
+        private string HashPassword(string password)
+        {
+            using (var sha256 = new SHA256Managed())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashedPasswordBytes = sha256.ComputeHash(passwordBytes);
+                return Convert.ToBase64String(hashedPasswordBytes);
             }
         }
 

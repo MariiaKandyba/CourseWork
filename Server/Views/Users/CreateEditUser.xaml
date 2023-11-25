@@ -67,8 +67,3 @@
     </GroupBox>
 </Window>
 
-<!--<WrapPanel>
-    <CheckBox x:Name="AdminCheckBox" Margin="5 5 0 0" Content="Admin" 
-              IsChecked="False" />
-    <CheckBox x:Name="ShowPasswordCheckBox"  Margin="127 5 0 0" Content="Show Password" HorizontalAlignment="Right" Checked="ShowPasswordCheckBox_Checked" Unchecked="ShowPasswordCheckBox_Unchecked" />
-</WrapPanel>-->

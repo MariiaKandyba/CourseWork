@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using User = DALTest.Entities.User;
 
 namespace Client.ViewModels
 {
@@ -33,19 +34,33 @@ namespace Client.ViewModels
             set { SetProperty(ref _selectedTest, value); }
         }
 
-        int userId;
-        public AssigmentViewModel(List<TestResults> tests, int userId)
+        User _user;
+        public AssigmentViewModel(List<TestResults> tests, User user)
         {
             _tests = new ObservableCollection<TestResults>(tests);
-            this.userId = userId;
+            _user = user;
             StartTestCommand = new RelayCommand(OnStartTestClick);
+            UpdateCommand = new RelayCommand(OnUpadateClick);
         }
 
+        private async void OnUpadateClick()
+        {
+            try
+            {
+                List<List<TestResults>> tests = await UpdateHelper.GetTests(_user);
+                if (tests != null)
+                    Tests = new ObservableCollection<TestResults>(tests[0]);
+            }
+            catch (Exception)
+            {
+            }
+          
+        }
         private async void OnStartTestClick()
         {
             if(SelectedTest != null)
             {
-                AssignmentTest passedTest = new(SelectedTest, userId);
+                AssignmentTest passedTest = new(SelectedTest, _user.Id);
                 passedTest.ShowDialog();
             }
             
@@ -55,6 +70,7 @@ namespace Client.ViewModels
 
 
         public IRelayCommand StartTestCommand { get; }
+        public IRelayCommand UpdateCommand { get; }
 
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Views"
         mc:Ignorable="d"
-        Title="Account" Height="450" Width="800" Closing="Window_Closing">
+        Title="Account" Height="450" Width="800" Closing="Window_Closing" FontFamily="Consolas" >
     <Grid>
         <TabControl x:Name="a" Grid.ColumnSpan="2" >
             <TabItem x:Name="myInfoTab">
@@ -17,14 +17,15 @@
                 <TabItem.Content>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="75"/>
                             <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <Label Name="infoLbl" Grid.Row="1"></Label>
                         <ToolBar Background="White">
-                            <Button Click="Button_Click" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal">
+                            <Button Click="Button_Click">
+                                <StackPanel>
                                     <Image Source="/Resources/logout.png" Width="61" Height="40" />
+                                    <Label Content="Log out"></Label>
                                 </StackPanel>
                             </Button>
 
@@ -42,13 +43,20 @@
                 <TabItem.Content>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="75"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ToolBar Background="White">
                             <Button Name="CreateTestButton" Command="{Binding StartTestCommand}" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/start.png" Width="61" Height="40" />
+                                <StackPanel>
+                                    <Image Source="/Resources/start.png" Width="50" Height="30" />
+                                    <Label Content="Start Test"></Label>
+                                </StackPanel>
+                            </Button>
+                            <Button Name="UpdateButton" Command="{Binding UpdateCommand}" CommandParameter="{Binding}">
+                                <StackPanel >
+                                    <Image Source="/Resources/update.png" Width="50" Height="30" />
+                                    <Label Content="Update"></Label>
                                 </StackPanel>
                             </Button>
 
@@ -74,22 +82,29 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="3">History</TextBlock>
+                        
                     </StackPanel>
                 </TabItem.Header>
                 <TabItem.Content>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="150"/>
-                            <!--<RowDefinition Height="150"/>-->
+                            <RowDefinition Height="65"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ToolBar Background="White">
                             <Button Name="TestInfoButton" Command="{Binding GetInfoCommand}" CommandParameter="{Binding}">
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel>
                                     <Image Source="/Resources/information.png" Width="50" Height="30" />
+                                    <Label Content="Test Info"></Label>
                                 </StackPanel>
                             </Button>
-                            
+                            <Button Name="updateBTN"  Command="{Binding UpdateCommand}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <Image Source="/Resources/update.png" Width="50" Height="30" />
+                                    <Label Content="Update"></Label>
+                                </StackPanel>
+                            </Button>
+
                         </ToolBar>
                         
                      <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">

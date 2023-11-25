@@ -85,6 +85,12 @@ namespace Server.ViewModels
         private void OnStopServerClick()
         {
             _tcpListener?.Stop();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ConnectedClients.Clear();
+
+
+            });
         }
 
 
