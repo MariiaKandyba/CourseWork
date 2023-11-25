@@ -56,39 +56,11 @@ namespace Client.Views
         {
             try
             {
-                using (tcpClient = new TcpClient())
-                {
-                    await tcpClient.ConnectAsync(serverIpAddress, serverPort);
-                    using NetworkStream stream = tcpClient.GetStream();
-                    NetworkData request = new() 
-                    {
-                        MessageType = "TestList",
-                        Data = _user.Id
-                    };
-                    string requestJson = JsonConvert.SerializeObject(request);
-                    byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);
-                    stream.Write(requestBuffer, 0, requestBuffer.Length);
-
-
-
-                    byte[] responseBuffer = new byte[50000192];
-                    int bytesRead = await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length);
-                    string responseJson = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
-
-
-                    NetworkData response = JsonConvert.DeserializeObject<NetworkData>(responseJson);
-
-                    if (response.MessageType == "TestListResponse" && (response.Data != null))
-                    {
-
-                        List<List<TestResults>> tests = JsonConvert.DeserializeObject<List<List<TestResults>>>(response.Data.ToString());
-                        _assigmentViewModel = new AssigmentViewModel(tests[0], _user.Id);
-                        _historyViewModel = new HistoryViewModel(tests[1]);
-                        assignedTestTab.DataContext = _assigmentViewModel;
-                        HistoryTab.DataContext = _historyViewModel;
-                    }
-
-                }
+                
+                _assigmentViewModel = new AssigmentViewModel((await UpdateHelper.GetTests(_user))[0], _user);
+                _historyViewModel = new HistoryViewModel((await UpdateHelper.GetTests(_user))[1], _user);
+                assignedTestTab.DataContext = _assigmentViewModel;
+                HistoryTab.DataContext = _historyViewModel;
             }
             catch (Exception)
             {
@@ -111,16 +83,24 @@ namespace Client.Views
             {
                 using (tcpClient = new TcpClient())
                 {
-                    await tcpClient.ConnectAsync(serverIpAddress, serverPort);
-                    using NetworkStream stream = tcpClient.GetStream();
-                    NetworkData request = new()
+                    try
                     {
-                        MessageType = "ClientDisconnect",
-                        Data = _user
-                    };
-                    string requestJson = JsonConvert.SerializeObject(request);
-                    byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);
-                    await stream.WriteAsync(requestBuffer);
+                        await tcpClient.ConnectAsync(serverIpAddress, serverPort);
+                        using NetworkStream stream = tcpClient.GetStream();
+                        NetworkData request = new()
+                        {
+                            MessageType = "ClientDisconnect",
+                            Data = _user
+                        };
+                        string requestJson = JsonConvert.SerializeObject(request);
+                        byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);
+                        await stream.WriteAsync(requestBuffer);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    
 
 
 
@@ -132,5 +112,7 @@ namespace Client.Views
             }
 
         }
+
+       
     }
 }

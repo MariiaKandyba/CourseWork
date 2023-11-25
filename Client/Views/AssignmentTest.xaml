@@ -13,16 +13,11 @@
     </Window.Resources>
     <Grid>
         <StackPanel Margin="10">
-            
             <ToolBar Background="White">
-                <Button  Background="White" Width="61" BorderBrush="White">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/stop.png" Width="61" Height="40"/>
-                    </StackPanel>
-                </Button>
-                <Button Background="White" Name="CreateTestButton" Click="CreateTestButton_Click" Width="61" BorderBrush="White">
-                    <StackPanel Orientation="Horizontal">
+                <Button Background="White" Name="CreateTestButton" Click="CreateTestButton_Click" Width="105" BorderBrush="White">
+                    <StackPanel>
                         <Image Source="/Resources/check.png" Width="61" Height="40"/>
+                        <Label Content="Confirm answers"></Label>
                     </StackPanel>
                 </Button>
                
@@ -33,20 +28,16 @@
             <TextBlock Text="{Binding Description}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding LoadedDate, StringFormat='Loaded Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
-            <WrapPanel Orientation="Horizontal" >
-                <Image Source="/Resources/clock.png" Width="61" Height="40"/>
-                <Label Content="00:00" VerticalAlignment="Center" FontSize="15"/>
-            </WrapPanel>
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
 
                 <DataGrid 
                     x:Name="dataGrid"
-            AutoGenerateColumns="False" 
-            ItemsSource="{Binding Questions}" 
-            Margin="0,10,0,0"
-            VerticalAlignment="Top"
-            MaxHeight="450"
-            IsReadOnly="True">
+                    AutoGenerateColumns="False" 
+                    ItemsSource="{Binding Questions}" 
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Top"
+                    MaxHeight="450"
+                    IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="Img" Width="1*">
                             <DataGridTemplateColumn.CellTemplate>
@@ -72,23 +63,18 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <RadioButton Content="{Binding AnswerText}" 
-                             IsChecked="{Binding IsChecked, Mode=TwoWay}" 
-                             GroupName="{Binding QuestionId}" 
-                                                    Margin="5"/>
+                                                             IsChecked="{Binding IsChecked, Mode=TwoWay}" 
+                                                             GroupName="{Binding QuestionId}" 
+                                                             Margin="5"/>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </DataTemplate>
-
-
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
-
-
-
         </StackPanel>
     </Grid>
 </Window>

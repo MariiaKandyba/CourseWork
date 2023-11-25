@@ -54,29 +54,24 @@ namespace Client.Views
             foreach (var item in dataGrid.Items)
             {
                 if (item is QuestionModel testResults)
-                {
                     allTestResults.Add(testResults);
-                }
             }
             List<AnswerModel> an= new ();
 
             foreach (var item in allTestResults)
             {
                 foreach (var a in item.Answers)
-                {
                     if(a.IsChecked)  an.Add(a);
-                }
             }
             foreach (var item in TestResult.Questions)
             {
                 foreach (var q in item.Answers)
                 {
                     if (an.Any(a => a.Id == q.Id))
-                    {
                         q.IsChecked = true;
-                    }
                 }
             }
+
             using (tcpClient = new TcpClient())
             {
                 await tcpClient.ConnectAsync(serverIpAddress, serverPort);
@@ -90,7 +85,6 @@ namespace Client.Views
                 string requestJson = JsonConvert.SerializeObject(request);
                 byte[] requestBuffer = Encoding.UTF8.GetBytes(requestJson);
                 await stream.WriteAsync(requestBuffer);
-
 
 
                 byte[] responseBuffer = new byte[8011155];
