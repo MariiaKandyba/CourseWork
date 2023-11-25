@@ -72,9 +72,14 @@ namespace TestDesigner.Views
             Question.Points = PointsTB.Text;
             Question.Answers = new();
             Question.Answers.Answer = Answers.ToList();
-
-            DialogResult = true;
-            Close();
+            
+            if (Answers.Where(x => bool.Parse(x.IsRight) == true).ToList().Count == 1)
+            {
+                DialogResult = true;
+                Close();
+            }
+            else
+                MessageBox.Show("Choose the right amount of answers!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void AddAnswerButton_Click(object sender, RoutedEventArgs e)
@@ -124,9 +129,6 @@ namespace TestDesigner.Views
 
                 imgPreview.Source = bitmapImage;
 
-                // Зчитуємо бінарне представлення зображення
-
-                // Закодоване у Base64 представлення для збереження в ImgBase64
                 Question.Img = File.ReadAllBytes(imagePath);
             }
         }

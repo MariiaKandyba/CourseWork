@@ -66,14 +66,5 @@ namespace Server.Views
             Close();
         }
 
-        private string HashPassword(string password)
-        {
-            using (var sha256 = new SHA256Managed())
-            {
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-                byte[] hashedPasswordBytes = sha256.ComputeHash(passwordBytes);
-                return Convert.ToBase64String(hashedPasswordBytes);
-            }
-        }
     }
 }

@@ -64,7 +64,7 @@ namespace Client
 
 
 
-                    byte[] responseBuffer = new byte[1024];
+                    byte[] responseBuffer = new byte[20000];
                     int bytesRead = stream.Read(responseBuffer, 0, responseBuffer.Length);
                     string responseJson = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
 

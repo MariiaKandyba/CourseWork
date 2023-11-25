@@ -28,6 +28,10 @@
             <TextBlock Text="{Binding Description}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding LoadedDate, StringFormat='Loaded Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
             <TextBlock Text="{Binding TakenDate, StringFormat='Taken Date: {0:yyyy-MM-dd HH:mm}'}" Margin="0,0,0,5"/>
+            <WrapPanel>
+                <Image Source="/Resources/clock.png" Width="61" Height="40"/>
+                <Label  x:Name="timerLabel" Content="00:00" VerticalAlignment="Center"></Label>
+            </WrapPanel>
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
 
                 <DataGrid 
