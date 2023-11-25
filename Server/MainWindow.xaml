@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Server"
         mc:Ignorable="d"
-        Title="MainWindow" Height="270" Width="300" ResizeMode="NoResize" WindowState="Normal" FontFamily="Consolas" FontSize="14">
+        Title="Server" Height="270" Width="300" ResizeMode="NoResize" WindowState="Normal" FontFamily="Consolas" FontSize="14">
     <Window.Resources>
         <Style TargetType="Button" x:Key="ButtonStyle">
             <Setter Property="Width" Value="100"/>

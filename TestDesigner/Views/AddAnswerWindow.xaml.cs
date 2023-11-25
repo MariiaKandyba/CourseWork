@@ -32,7 +32,7 @@ namespace TestDesigner.Views
             {
                 Answer = answer;
                 AnswerTextBox.Text = answer.TextAnswer;
-                IsTrueCheckBox.IsChecked = bool.Parse(answer.IsRight); // Перетворення строки на bool
+                IsTrueCheckBox.IsChecked = bool.Parse(answer.IsRight); 
             }
 
         }

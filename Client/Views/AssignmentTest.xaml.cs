@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Client.Views
 {
@@ -30,6 +31,9 @@ namespace Client.Views
         private string serverIpAddress = "127.0.0.1";
         private int serverPort = 12345;
         public TestResults TestResult { get; set; }
+        private DispatcherTimer timer;
+        private TimeSpan elapsedTime;
+
 
         public AssignmentTest(TestResults test, int userId)
         {
@@ -37,17 +41,24 @@ namespace Client.Views
             TestResult = test;
             TestResult.UserId = userId;
             DataContext = TestResult;
-            
+
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            elapsedTime = TimeSpan.Zero;
+            timer.Start();
+
 
         }
-
-        private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            Close();
+            elapsedTime = elapsedTime.Add(TimeSpan.FromSeconds(1));
+            timerLabel.Content = elapsedTime.ToString(@"mm\:ss");
         }
 
         private async void CreateTestButton_Click(object sender, RoutedEventArgs e)
         {
+            timer.Stop();
 
             List<QuestionModel> allTestResults = new List<QuestionModel>();
 
@@ -56,12 +67,12 @@ namespace Client.Views
                 if (item is QuestionModel testResults)
                     allTestResults.Add(testResults);
             }
-            List<AnswerModel> an= new ();
+            List<AnswerModel> an = new();
 
             foreach (var item in allTestResults)
             {
                 foreach (var a in item.Answers)
-                    if(a.IsChecked)  an.Add(a);
+                    if (a.IsChecked) an.Add(a);
             }
             foreach (var item in TestResult.Questions)
             {
@@ -71,6 +82,9 @@ namespace Client.Views
                         q.IsChecked = true;
                 }
             }
+
+
+
 
             using (tcpClient = new TcpClient())
             {
