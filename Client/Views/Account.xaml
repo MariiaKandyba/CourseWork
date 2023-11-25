@@ -22,7 +22,7 @@
                         </Grid.RowDefinitions>
                         <Label Name="infoLbl" Grid.Row="1"></Label>
                         <ToolBar Background="White">
-                            <Button Click="Button_Click" CommandParameter="{Binding}">
+                            <Button Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/logout.png" Width="61" Height="40" />
                                 </StackPanel>
@@ -47,6 +47,11 @@
                         </Grid.RowDefinitions>
                         <ToolBar Background="White">
                             <Button Name="CreateTestButton" Command="{Binding StartTestCommand}" CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/start.png" Width="61" Height="40" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="UpdateButton" Command="{Binding UpdateCommand}" CommandParameter="{Binding}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/start.png" Width="61" Height="40" />
                                 </StackPanel>

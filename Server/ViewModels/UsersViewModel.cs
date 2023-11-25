@@ -102,7 +102,8 @@ namespace Server.ViewModels
                 window.ShowDialog();
                 if (window.DialogResult ?? false)
                 {
-                    window.User.Password = HashPassword(window.User.Password);
+                    if(window.User.Password != string.Empty)
+                        window.User.Password = HashPassword(window.User.Password);
                     _userRepository.Update(window.User);
                     LoadActualList();
                 }

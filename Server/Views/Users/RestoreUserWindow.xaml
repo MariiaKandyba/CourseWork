@@ -58,7 +58,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTextColumn Header="Register Date" Binding="{Binding RegisterDate}" Width="*"/>
+                        <DataGridTextColumn Header="Register Date" Binding="{Binding RegisterDate, StringFormat=d MMMM yyy}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>

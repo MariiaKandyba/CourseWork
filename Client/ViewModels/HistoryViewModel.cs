@@ -34,10 +34,15 @@ namespace Client.ViewModels
         }
 
 
-        public HistoryViewModel(List<TestResults> tests)
+        public HistoryViewModel(List<TestResults> tests, Account account)
         {
             _tests = new ObservableCollection<TestResults>(tests);
             GetInfoCommand = new RelayCommand(OnGetInfoClick);
+            UpdateCommand = new RelayCommand(OnUptadeClick);
+        }
+
+        private void OnUptadeClick()
+        {
         }
 
         private async void OnGetInfoClick()
@@ -50,6 +55,7 @@ namespace Client.ViewModels
            
         }
         public IRelayCommand GetInfoCommand { get; }
+        public IRelayCommand UpdateCommand { get; }
 
     }
 }

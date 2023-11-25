@@ -52,8 +52,7 @@ namespace Client
                 using (tcpClient = new TcpClient())
                 {
                     await tcpClient.ConnectAsync(serverIpAddress, serverPort);
-                    using SslStream stream = new SslStream(tcpClient.GetStream(), false);
-                    stream.AuthenticateAsClient("server");
+                    using NetworkStream stream = tcpClient.GetStream();
                     NetworkData request = new NetworkData
                     {
                         MessageType = "Login",

@@ -41,14 +41,10 @@ namespace Client.Views
         {
             InitializeComponent();
             _user = user;
-            string userInfo = $"ID: {_user.Id}\n" +
-                 $"Ім'я: {_user.FirstName}\n" +
-                 $"Прізвище: {_user.LastName}\n" +
+            string userInfo =
+                 $"{_user.FirstName} {_user.LastName}\n" +
                  $"Логін: {_user.Login}\n" +
-                 $"Пароль: {_user.Password}\n" +
                  $"Опис: {_user.Description}\n" +
-                 $"Адміністратор: {(_user.IsAdmin ? "Так" : "Ні")}\n" +
-                 $"Архівований: {(_user.IsArchived ? "Так" : "Ні")}\n" +
                  $"Дата реєстрації: {_user.RegisterDate}";
 
             infoLbl.Content = userInfo;

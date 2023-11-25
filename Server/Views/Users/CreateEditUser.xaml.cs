@@ -19,7 +19,7 @@ namespace Server.Views
                 FirstNameTextBox.Text = user.FirstName;
                 LastNameTextBox.Text = user.LastName;
                 LoginTextBox.Text = user.Login;
-                PasswordBox.Password = user.Password;
+                PasswordBox.Password = string.Empty;
                 DescriptionTextBox.Text = user.Description;
                 AdminCheckBox.IsChecked = user.IsAdmin;
             }
@@ -60,8 +60,7 @@ namespace Server.Views
         {
             if (string.IsNullOrWhiteSpace(FirstNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(LastNameTextBox.Text) ||
-                string.IsNullOrWhiteSpace(LoginTextBox.Text) ||
-                string.IsNullOrWhiteSpace(PasswordBox.Password))
+                string.IsNullOrWhiteSpace(LoginTextBox.Text))
             {
                 return false;
             }

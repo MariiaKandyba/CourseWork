@@ -38,7 +38,7 @@ namespace Server.Views
         public MainInterfaceWindow(string login, string password)
         {
            RepositoryHelper repositoryHelper = new ();
-            IsValid = repositoryHelper.IsVerifed(login, HashPassword(password));
+            IsValid = repositoryHelper.IsVerifed(login, password);
 
             InitializeComponent();
             _usersViewModel = new UsersViewModel(repositoryHelper.UserRepository, repositoryHelper.RepositoryFilter) ;
