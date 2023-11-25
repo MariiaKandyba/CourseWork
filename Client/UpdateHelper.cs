@@ -46,10 +46,7 @@ namespace Client
                         NetworkData response = JsonConvert.DeserializeObject<NetworkData>(responseJson);
 
                         if (response.MessageType == "TestListResponse" && (response.Data != null))
-                        {
-
                             return JsonConvert.DeserializeObject<List<List<TestResults>>>(response.Data.ToString());
-                        }
                         return null;
                     }
                     catch (Exception)
